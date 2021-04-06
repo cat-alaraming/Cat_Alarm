@@ -1,7 +1,14 @@
 package android.cs.pusan.ac.myapplication;
 
+import android.content.Intent;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.MenuItem;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,14 +20,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private String imageFilePath;
+    private Uri photoUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +51,27 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.a: //Item의 Id값에 해당하는 것을 누를 시
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        File photoFile = null;
+                        try{
+                            photoFile = createImageFile();
+                        }catch(IOException ex) {
+
+                        }
+                        if(photoFile != null){
+                            photoUri = FileProvider.getUriForFile(getApplicationContext(),getPackageName(), photoFile);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                        }
+                    }
+
                     break;
                 case R.id.b: //Item의 Id값에 해당하는 것을 누를 시
                     break;
@@ -51,6 +81,29 @@ public class MainActivity extends AppCompatActivity
             }
             return true;
         }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            ((ImageView)findViewById(R.id.imageView)).setImageURI(photoUri);
+        }
+    }
+
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "TEST_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,      /* prefix */
+                ".jpg",         /* suffix */
+                storageDir          /* directory */
+        );
+        imageFilePath = image.getAbsolutePath();
+        return image;
     }
 
     @Override
@@ -76,5 +129,7 @@ public class MainActivity extends AppCompatActivity
 
 
     }
+
+
 
 }
