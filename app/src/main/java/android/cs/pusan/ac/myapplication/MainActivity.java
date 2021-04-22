@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+// testing git
 
 public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback {
