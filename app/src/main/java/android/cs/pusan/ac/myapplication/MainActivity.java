@@ -34,13 +34,13 @@ public class MainActivity extends AppCompatActivity
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private String imageFilePath;
     private Uri photoUri;
-    private final int GET_GALLERY_IMAGE = 200;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
         bottomNavigationView.setItemIconTintList(null);
+
 
     }
 
@@ -77,9 +78,8 @@ public class MainActivity extends AppCompatActivity
                     startActivity(information);
                     break;
                 case R.id.c:
-                    Intent gallery = new Intent(Intent.ACTION_PICK);
-                    gallery.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
-                    startActivityForResult(gallery, GET_GALLERY_IMAGE);
+                    Intent gallery = new Intent(getApplicationContext(), Add_Photo.class);
+                    startActivity(gallery);
                     break;
                 case R.id.d:
             }
