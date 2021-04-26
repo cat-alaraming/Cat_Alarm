@@ -1,13 +1,12 @@
 package android.cs.pusan.ac.myapplication;
 
 import android.content.Intent;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MenuItem;
-import android.widget.BaseAdapter;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private String imageFilePath;
     private Uri photoUri;
+    private final int GET_GALLERY_IMAGE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +73,13 @@ public class MainActivity extends AppCompatActivity
                     }
                     break;
                 case R.id.b: //Item의 Id값에 해당하는 것을 누를 시
-
+                    Intent information = new Intent(getApplicationContext(), Add_Information.class);
+                    startActivity(information);
                     break;
                 case R.id.c:
-                    Intent information = new Intent(getApplicationContext(), Subactivity.class);
-                    startActivity(information);
+                    Intent gallery = new Intent(Intent.ACTION_PICK);
+                    gallery.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
+                    startActivityForResult(gallery, GET_GALLERY_IMAGE);
                     break;
                 case R.id.d:
             }
