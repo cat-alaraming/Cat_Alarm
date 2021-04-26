@@ -36,6 +36,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <activity android:name=".Add_Information"/>
+        <activity android:name=".Add_Photo"/>
     </application>
 
 </manifest>
