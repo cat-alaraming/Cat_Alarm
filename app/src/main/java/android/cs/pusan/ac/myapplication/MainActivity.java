@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity
                     Intent gallery = new Intent(Intent.ACTION_PICK);
                     gallery.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*");
                     startActivityForResult(gallery, GET_GALLERY_IMAGE);
-//
                     break;
                 case R.id.d:
             }
