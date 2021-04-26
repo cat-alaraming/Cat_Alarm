@@ -12,6 +12,6 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="정보 추가 탭."
+        android:text="관심고양이 탭."
         android:textSize="40dp"/>
 </LinearLayout>
