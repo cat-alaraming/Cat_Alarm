@@ -71,11 +71,13 @@ public class MainActivity extends AppCompatActivity
                             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                         }
                     }
-
                     break;
                 case R.id.b: //Item의 Id값에 해당하는 것을 누를 시
+
                     break;
                 case R.id.c:
+                    Intent information = new Intent(getApplicationContext(), Subactivity.class);
+                    startActivity(information);
                     break;
                 case R.id.d:
             }
