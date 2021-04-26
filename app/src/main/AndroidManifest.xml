@@ -37,6 +37,8 @@
         </provider>
         <activity android:name=".Add_Information"/>
         <activity android:name=".Add_Photo"/>
+        <activity android:name=".Interesting_Cat"/>
+        <activity android:name=".Take_Photo"/>
     </application>
 
 </manifest>
