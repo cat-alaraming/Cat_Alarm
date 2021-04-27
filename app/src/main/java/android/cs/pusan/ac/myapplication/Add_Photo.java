@@ -31,6 +31,6 @@ public class Add_Photo extends AppCompatActivity {
         if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImageUri = data.getData();
             imageview.setImageURI(selectedImageUri);
-        }
+        } else onBackPressed();
     }
 }
