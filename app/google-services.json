@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "987260118439",
+    "project_id": "cat-alarming",
+    "storage_bucket": "cat-alarming.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987260118439:android:d1284617793ed876428282",
+        "android_client_info": {
+          "package_name": "android.cs.pusan.ac.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987260118439-hdrl69nea18njjan7m650hsj865nngni.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "android.cs.pusan.ac.myapplication",
+            "certificate_hash": "4c52bb0fe273e1d7e94c935d1f2c5b00cd27809e"
+          }
+        },
+        {
+          "client_id": "987260118439-sd94oga624i46bpbhl5urdt5mt4skgos.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1c6D9zJO_PDErqI6Z5pGyA8272ABJM7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987260118439-sd94oga624i46bpbhl5urdt5mt4skgos.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
