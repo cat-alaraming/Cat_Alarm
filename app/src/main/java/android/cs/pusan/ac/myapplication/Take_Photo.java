@@ -25,7 +25,6 @@ public class Take_Photo extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -33,7 +32,7 @@ public class Take_Photo extends AppCompatActivity {
             try{
                 photoFile = createImageFile();
             }catch(IOException ex) {
-
+                onBackPressed();
             }
             if(photoFile != null){
                 photoUri = FileProvider.getUriForFile(getApplicationContext(),getPackageName(), photoFile);
@@ -48,7 +47,7 @@ public class Take_Photo extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             ((ImageView)findViewById(R.id.imageView)).setImageURI(photoUri);
-        }
+        } else onBackPressed();
     }
 
     private File createImageFile() throws IOException {
