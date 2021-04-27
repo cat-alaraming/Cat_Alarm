@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
         bottomNavigationView.setItemIconTintList(null);
     }
-//
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
