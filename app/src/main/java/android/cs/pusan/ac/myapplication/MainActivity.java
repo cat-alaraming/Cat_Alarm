@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,11 +39,14 @@ public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Button LoginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        LoginBtn = (Button)findViewById(R.id.login_button2);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -51,6 +55,13 @@ public class MainActivity extends AppCompatActivity
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
         bottomNavigationView.setItemIconTintList(null);
+
+        LoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,LoginActivity.class ));
+            }
+        });
     }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {

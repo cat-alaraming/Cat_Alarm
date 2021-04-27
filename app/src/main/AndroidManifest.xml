@@ -3,8 +3,11 @@
     package="android.cs.pusan.ac.myapplication">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -13,10 +16,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
+        <activity android:name=".LogoutActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".LoginActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDYUf6KtzQ8fZUk5GVTNjJ1zLmB1dLA8NQ"/>
+            android:value="AIzaSyDYUf6KtzQ8fZUk5GVTNjJ1zLmB1dLA8NQ" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -25,20 +31,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="android.cs.pusan.ac.myapplication"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <activity android:name=".Add_Information"/>
-        <activity android:name=".Add_Photo"/>
-        <activity android:name=".Interesting_Cat"/>
-        <activity android:name=".Take_Photo"/>
+
+        <activity android:name=".Add_Information" />
+        <activity android:name=".Add_Photo" />
+        <activity android:name=".Interesting_Cat" />
+        <activity android:name=".Take_Photo" />
     </application>
 
 </manifest>
