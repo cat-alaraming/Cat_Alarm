@@ -60,30 +60,32 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class ));
-//                createAccount(editTextEmail.getText().toString(),editTextPassword.getText().toString());
             }
         });
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null) {
-                    //User is signed in
-                    Intent intent = new Intent(LoginActivity.this,LogoutActivity.class);
-                    startActivity(intent);
-                    finish();
-
-                }else{
-                    //User is signed out
-                }
-            }
-        };
+//        mAuthListener = new FirebaseAuth.AuthStateListener() {   //이거 없어도 일단 작동은 함
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if(user != null) {
+//                    //User is signed in
+//                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                }else{
+//                    //User is signed out
+//                    Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
+//                    startActivity(intent);
+//
+//                }
+//            }
+//        };
 
     }
 
     private void loginUser(String email, String password) {
         // [START sign_in_with_email]
+        firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -92,29 +94,29 @@ public class LoginActivity extends AppCompatActivity {
                             if(firebaseAuth.getCurrentUser().isEmailVerified()){
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             }else{
-                                Toast.makeText(LoginActivity.this, "please verify your email id", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(LoginActivity.this, task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+//                            updateUI(null);
                         }
                     }
                 });
         // [END sign_in_with_email]
     }
 
-    private void updateUI(FirebaseUser user) {
-
-    }
+//    private void updateUI(FirebaseUser user) {
+//        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+//    }
 
     @Override
     public void onStart(){
         super.onStart();
 
-        // 활동을 초기화할 때 사용자가 현재 로그인되어 있는지 확인합니다.
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        // 활동을 초기화할 때 사용자가 현재 로그인되어 있는지 확인합니다. -> 제대로 작동안함
+//        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
     }
 
     @Override
