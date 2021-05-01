@@ -34,7 +34,7 @@ public class showAlbum extends AppCompatActivity {
     View noInfo;
     RecyclerView mRecyclerView;
     ArrayList<Uri> mArrayUri;
-    String[] catNames;
+    ArrayList<String> catNames;
     Object[] IndexArray;
     ArrayList<Uri> searchedUri;
     ArrayList<String> searchedUriName;
@@ -60,7 +60,7 @@ public class showAlbum extends AppCompatActivity {
         catNames = MainActivity.catNames;
 
         mArrayUri = new ArrayList<>();
-        IndexArray = new Object[catNames.length];
+        IndexArray = new Object[catNames.size()];
         cnt = 0;
 
         manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -127,8 +127,8 @@ public class showAlbum extends AppCompatActivity {
                             return;
                         }
                         Object ob;
-                        for(int i = 0; i < catNames.length; i++){
-                            String catName = catNames[i];
+                        for(int i = 0; i < catNames.size(); i++){
+                            String catName = catNames.get(i);
                             long num = 0;
                             if( (ob = getDB.get(catName)) != null ){
                                 num = (Long)ob;

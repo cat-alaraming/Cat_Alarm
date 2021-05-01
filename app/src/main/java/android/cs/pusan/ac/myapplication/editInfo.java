@@ -249,12 +249,13 @@ public class editInfo extends Activity {
 
     }
 
+
+
     //upload the file
     private void uploadFile(String catName) {
         if (mArrayUri != null) {
             FirebaseStorage storage = FirebaseStorage.getInstance();
-
-            String docPath = "catIMG/" + catName;
+            String docPath = "catNamesNums/nums";
             mDatabase.document(docPath)
                     .get()
                     .addOnCompleteListener(task -> {
@@ -265,14 +266,13 @@ public class editInfo extends Activity {
                                 return;
                             }
                             Object ob;
-                            if( (ob = getDB.get("num")) != null ){
+                            if( (ob = getDB.get(catName)) != null ){
                                 num = (Long)ob;
                             }
                             for(int i = 0; i < mArrayUri.size(); i++){
-                                if( mArrayUri.get(i) == null ) continue;
                                 Uri filePath = mArrayUri.get(i);
                                 String filename = (++num) + ".jpg";
-                                StorageReference storageRef = storage.getReferenceFromUrl("gs://catproj.appspot.com/").child( catName + "/" + filename);
+                                StorageReference storageRef = storage.getReferenceFromUrl("gs://db-7a416.appspot.com/").child( catName + "/" + filename);
                                 storageRef.putFile(filePath)
                                         .addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(), "업로드 완료!", Toast.LENGTH_SHORT).show())
                                         .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "업로드 실패!", Toast.LENGTH_SHORT).show())
@@ -281,8 +281,8 @@ public class editInfo extends Activity {
                                             double progress = (100f * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                                         });
                             }
-                            mDatabase.document(docPath).update("num", num);
-                            mDatabase.document("catImgNum/num").update(catName, num);
+                            mDatabase.document("catInfo/"+catName).update("num", num);
+                            mDatabase.document("catNamesNums/nums").update(catName, num);
                         }
                         else{
                             Log.d("SHOW", "Error show DB", task.getException());
