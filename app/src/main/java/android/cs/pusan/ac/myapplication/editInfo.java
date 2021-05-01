@@ -111,9 +111,9 @@ public class editInfo extends Activity {
                     }
                 }
                 Log.d("CHANGEDSTRING", namesString);
-                mDatabase.document("catIMG/" + names[0]).update("names", namesString);
-                mDatabase.document("catImgNum/names").set(data, SetOptions.merge());
-                mDatabase.document("catImgNum/names").update(deletes);
+                mDatabase.document("catInfo/" + names[0]).update("names", namesString);
+                mDatabase.document("catNamesNums/names").set(data, SetOptions.merge());
+                mDatabase.document("catNamesNums/names").update(deletes);
 
                 String featuresString = "";
                 count = featuresSpace.getChildCount();
@@ -129,7 +129,7 @@ public class editInfo extends Activity {
                 }
                 featuresString = featuresString.replace(", ", "").replace("#", "");
                 Log.d("CHANGEDSTRING", featuresString);
-                mDatabase.document("catIMG/" + names[0]).update("features", featuresString);
+                mDatabase.document("catInfo/" + names[0]).update("features", featuresString);
             }
             onBackPressed();
         });
@@ -246,9 +246,7 @@ public class editInfo extends Activity {
         else{
             Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
         }
-
     }
-
 
 
     //upload the file

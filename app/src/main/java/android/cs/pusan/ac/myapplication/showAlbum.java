@@ -54,11 +54,12 @@ public class showAlbum extends AppCompatActivity {
         mRecyclerView.setVisibility(View.VISIBLE);
 
         mDatabase = FirebaseFirestore.getInstance();
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://catproj.appspot.com/");
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
         storageRef = storage.getReference();
 
         catNames = MainActivity.catNames;
 
+        Log.d("SHOWALBUM", catNames.get(0) + ' ' + catNames.size());
         mArrayUri = new ArrayList<>();
         IndexArray = new Object[catNames.size()];
         cnt = 0;
@@ -116,7 +117,7 @@ public class showAlbum extends AppCompatActivity {
     DB에서 대표 이미지 들고 와서 리사이클러뷰 보여주기
      */
     public void showRecyclerView(){
-        String docPath = "catImgNum/num";
+        String docPath = "catNamesNums/nums";
         mDatabase.document(docPath)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -184,7 +185,7 @@ public class showAlbum extends AppCompatActivity {
             mCustomImageAdapter.setSearched(searched);
             return;
         }
-        String docPath = "catImgNum/names";
+        String docPath = "catNamesNums/names";
         mDatabase.document(docPath)
                 .get()
                 .addOnCompleteListener(task -> {

@@ -88,7 +88,7 @@ public class showCatInfo extends AppCompatActivity {
         setLayout2();
 
         mDatabase = FirebaseFirestore.getInstance();
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://catproj.appspot.com/");
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
         storageRef = storage.getReference();
 
         showInfoFromDB(catName);
@@ -268,7 +268,7 @@ public class showCatInfo extends AppCompatActivity {
     DB에서 정보 들고 와서 인포 보여주기
      */
     public void showInfoFromDB(String catName){
-        String docPath = "catIMG/" + catName;
+        String docPath = "catInfo/" + catName;
         mDatabase.document(docPath)
                 .get()
                 .addOnCompleteListener(task -> {
