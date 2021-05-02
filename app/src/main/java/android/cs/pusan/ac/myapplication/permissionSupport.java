@@ -62,16 +62,4 @@ public class permissionSupport {
         return true;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

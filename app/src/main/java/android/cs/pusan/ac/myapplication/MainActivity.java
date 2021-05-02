@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity
                     startActivity(information);
                     break;
                 case R.id.c:
-                    Intent intent = new Intent(getApplicationContext(), showAlbum.class);
-                    startActivity(intent);
+                    Intent album = new Intent(getApplicationContext(), showAlbum.class);
+                    startActivity(album);
                     break;
                 case R.id.d:
                     Intent interesting = new Intent(getApplicationContext(), Interesting_Cat.class);
