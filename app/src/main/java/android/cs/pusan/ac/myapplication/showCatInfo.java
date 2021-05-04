@@ -52,6 +52,8 @@ public class showCatInfo extends AppCompatActivity {
     private StorageReference storageRef;
     private CustomImageAdapter mCustomImageAdapter;
     private StaggeredGridLayoutManager manager;
+    private Button subscribeButton;
+    private Button unsubscribeButton;
 
     TextView textViewName;
     TextView textViewFeatures;
@@ -86,6 +88,9 @@ public class showCatInfo extends AppCompatActivity {
         nowPos = 0;
         setLayout1(catName);
         setLayout2();
+
+//        subscribeButton = (Button)findViewById(R.id.subscribeButton);
+//        unsubscribeButton = (Button)findViewById(R.id.unsubscribeButton);
 
         mDatabase = FirebaseFirestore.getInstance();
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
