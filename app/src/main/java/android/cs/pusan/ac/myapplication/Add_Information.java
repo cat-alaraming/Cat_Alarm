@@ -91,7 +91,6 @@ public class Add_Information extends AppCompatActivity {
             String getCatName = editText_name.getText().toString();
             String getFeature = editText_features.getText().toString();
 
-
             Map<String, Object> data = new HashMap<>();
             data.put("name", getCatName);
             data.put("type", selected2);
@@ -187,7 +186,7 @@ public class Add_Information extends AppCompatActivity {
                 Uri imageuri = data.getData();
                 mArrayUri.add(imageuri);
             }
-            uploadFile(selected);
+            uploadFile(selected2);
         }
         else{
             Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
