@@ -37,9 +37,8 @@ public class Add_Information extends AppCompatActivity {
 
     private FirebaseFirestore mDatabase;
     private ArrayList<Uri> mArrayUri;
-    private permissionSupport permission;
     long num = 0;
-    public static String[] catNames;
+    ArrayList<String> catNames;
     String allNames = "";
 
     @Override
@@ -47,35 +46,35 @@ public class Add_Information extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.information);
 
-        permissionCheck();
-
-
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("LOGIN", "signInAnonymously:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
-                    } else {
-                        Log.w("LOGIN", "signInAnonymously:failure", task.getException());
-                    }
-                });
         mDatabase = FirebaseFirestore.getInstance();
         Button btn_map = findViewById(R.id.btn_map);
         btn_map.setOnClickListener(v -> {
             onBackPressed();
         });
-        getAllNames();
+        catNames = MainActivity.catNames;
+
         spinner = findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, catNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selected = catNames.get(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selected = catNames.get(0);
+            }
+        });
+
         EditText editText_name = findViewById(R.id.editText_name);
         EditText editText_features = findViewById(R.id.editText_features);
         spinner2 = findViewById(R.id.spinner2);
         String[] types = {"black1", "black2", "cheese", "godeung", "chaos", "samsaek"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner2.setAdapter(adapter);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -91,7 +90,6 @@ public class Add_Information extends AppCompatActivity {
             String getCatName = editText_name.getText().toString();
             String getFeature = editText_features.getText().toString();
 
-
             Map<String, Object> data = new HashMap<>();
             data.put("name", getCatName);
             data.put("type", selected2);
@@ -100,7 +98,7 @@ public class Add_Information extends AppCompatActivity {
             if( Math.random() < 0.5 ) pm2 = -1;
             data.put("latitude", 35.233 + pm * Math.random()*0.005);
             data.put("longitude", 129.08 + pm2 * Math.random()*0.005);
-            mDatabase.collection("catinfo")
+            mDatabase.collection("catMarkers")
                     .add(data)
                     .addOnSuccessListener(documentReference -> Log.d("ADD","Document added ID: "+documentReference.getId()))
                     .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
@@ -109,18 +107,18 @@ public class Add_Information extends AppCompatActivity {
             data.put("names", getCatName);
             data.put("features", getFeature);
             data.put("num", 0);
-            mDatabase.collection("catIMG").document(getCatName)
+            mDatabase.collection("catInfo").document(getCatName)
                     .set(data);
             data = new HashMap<>();
             data.put(getCatName, getCatName);
-            mDatabase.collection("catImgNum").document("names")
+            mDatabase.collection("catNamesNums").document("names")
                     .set(data, SetOptions.merge());
             data = new HashMap<>();
             data.put(getCatName, 0);
-            mDatabase.collection("catImgNum").document("num")
+            mDatabase.collection("catNamesNums").document("nums")
                     .set(data, SetOptions.merge());
 
-            mDatabase.document("catImgNum/names")
+            mDatabase.document("catNamesNums/names")
                     .get()
                     .addOnCompleteListener(task -> {
                         if( task.isSuccessful() ){
@@ -133,8 +131,7 @@ public class Add_Information extends AppCompatActivity {
                             if( (ob = getDB.get("allNames")) != null ){
                                 allNames = ob.toString() + "," + getCatName;
                                 Log.d("AllNames", "allnames " + allNames);
-                                mDatabase.document("catImgNum/names").update("allNames", allNames);
-                                getAllNames();
+                                mDatabase.document("catNamesNums/names").update("allNames", allNames);
                             }
                             else{
                                 Log.d("AllNames", "Error");
@@ -144,6 +141,7 @@ public class Add_Information extends AppCompatActivity {
                             Log.d("SHOW", "Error show DB", task.getException());
                         }
                     });
+
             editText_name.setText(null);
             editText_features.setText(null);
 
@@ -199,8 +197,7 @@ public class Add_Information extends AppCompatActivity {
     private void uploadFile(String catName) {
         if (mArrayUri != null) {
             FirebaseStorage storage = FirebaseStorage.getInstance();
-
-            String docPath = "catIMG/" + catName;
+            String docPath = "catNamesNums/nums";
             mDatabase.document(docPath)
                     .get()
                     .addOnCompleteListener(task -> {
@@ -211,7 +208,7 @@ public class Add_Information extends AppCompatActivity {
                                 return;
                             }
                             Object ob;
-                            if( (ob = getDB.get("num")) != null ){
+                            if( (ob = getDB.get(catName)) != null ){
                                 num = (Long)ob;
                             }
                             for(int i = 0; i < mArrayUri.size(); i++){
@@ -226,8 +223,8 @@ public class Add_Information extends AppCompatActivity {
                                             double progress = (100f * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                                         });
                             }
-                            mDatabase.document(docPath).update("num", num);
-                            mDatabase.document("catImgNum/num").update(catName, num);
+                            mDatabase.document("catInfo/"+catName).update("num", num);
+                            mDatabase.document("catNamesNums/nums").update(catName, num);
                         }
                         else{
                             Log.d("SHOW", "Error show DB", task.getException());
@@ -240,53 +237,4 @@ public class Add_Information extends AppCompatActivity {
     } // End uploadFile()
 
 
-    public void getAllNames(){
-        mDatabase.document("catNamesNum/names")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if( task.isSuccessful() ){
-                        Map<String, Object> getDB = task.getResult().getData();
-                        if( getDB == null ){
-                            Log.d("DB Error", "Error get DB no data", task.getException());
-                            return;
-                        }
-                        Object ob;
-                        if( (ob = getDB.get("allNames")) != null ){
-                            catNames = ob.toString().split(",");
-                            return;
-                        }
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, catNames);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinner.setAdapter(adapter);
-                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                selected = catNames[position];
-                            }
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
-                                selected = catNames[0];
-                            }
-                        });
-                    }
-                    else{
-                        Log.d("SHOW", "Error show DB", task.getException());
-                    }
-                });
-    } // End getAllNames()
-    private void permissionCheck(){
-        if( Build.VERSION.SDK_INT >= 23 ){
-            permission = new permissionSupport(this, this);
-            if( !permission.checkPermission() ){
-                permission.requestPermission();
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        if( permission.permissionResult(requestCode, permissions, grantResults) ){
-            permission.requestPermission();
-        }
-    }
 }
