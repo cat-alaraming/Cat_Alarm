@@ -50,6 +50,7 @@ public class editInfo extends Activity {
     long num = 0;
     int changed = 0;
     int prevsize = 0;
+    boolean nowEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +163,8 @@ public class editInfo extends Activity {
     }
 
     public void createEditView(LinearLayout linearLayout, int hashTag){
+        if( nowEdit ) return;
+
         EditText editText = new EditText(getApplicationContext());
         editText.setHint("입력하세요");
         editText.setEms(10);
@@ -172,20 +175,26 @@ public class editInfo extends Activity {
 
         editText.setOnKeyListener((v, keyCode, event) -> {
             if( keyCode == KeyEvent.KEYCODE_ENTER ){
-                if( hashTag == 1 ){
-                    createTextView("#" + editText.getText().toString() + ", ", linearLayout);
+                String text =editText.getText().toString();
+                if( text.equals("") ){
+                    changed--;
+                }
+                else if( hashTag == 1 ){
+                    createTextView("#" + text + ", ", linearLayout);
                 }
                 else{
-                    createTextView(editText.getText().toString() + ", ", linearLayout);
+                    createTextView(text + ", ", linearLayout);
                 }
                 editText.setVisibility(View.GONE);
                 changed++;
+                nowEdit = false;
                 return true;
             }
             return false;
         });
 
         linearLayout.addView(editText);
+        nowEdit = true;
     }
 
     public void createImageView(){
@@ -275,7 +284,6 @@ public class editInfo extends Activity {
                                         .addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(), "업로드 완료!", Toast.LENGTH_SHORT).show())
                                         .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "업로드 실패!", Toast.LENGTH_SHORT).show())
                                         .addOnProgressListener(taskSnapshot -> {
-                                            @SuppressWarnings("VisibleForTests")
                                             double progress = (100f * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                                         });
                             }
