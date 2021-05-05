@@ -8,6 +8,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -28,6 +31,9 @@ public class showAlbum extends AppCompatActivity {
     private StorageReference storageRef;
     private CustomImageAdapter mCustomImageAdapter;
     private StaggeredGridLayoutManager manager;
+    private Button subscribeButton;
+    private Button unsubscribeButton;
+    private Spinner spinnerTopics;
 
     EditText editText;
     Button btn_search;
@@ -53,6 +59,10 @@ public class showAlbum extends AppCompatActivity {
         noInfo.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
 
+        subscribeButton = (Button)findViewById(R.id.subscribeButton);
+        unsubscribeButton = (Button)findViewById(R.id.unsubscribeButton);
+        spinnerTopics = (Spinner)findViewById(R.id.spinnerTopics);
+
         mDatabase = FirebaseFirestore.getInstance();
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
         storageRef = storage.getReference();
@@ -69,6 +79,40 @@ public class showAlbum extends AppCompatActivity {
         mCustomImageAdapter = new CustomImageAdapter(2, R.layout.row2, getApplicationContext(), mArrayUri);
         mCustomImageAdapter.setIndexArray(IndexArray);
         mRecyclerView.setAdapter(mCustomImageAdapter);
+
+        // [START subscribe_topics]
+        subscribeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String topic = spinnerTopics.getSelectedItem().toString();
+                FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                        .addOnCompleteListener(task ->{
+                            if(task.isSuccessful()){
+                                Toast.makeText(showAlbum.this, topic + " 구독 성공", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(showAlbum.this, topic + " 구독 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
+        // [END subscribe_topics]
+
+        // [START unsubscribe_topics]
+        unsubscribeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String topic = spinnerTopics.getSelectedItem().toString();
+                FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                        .addOnCompleteListener(task ->{
+                            if(task.isSuccessful()){
+                                Toast.makeText(showAlbum.this, topic + " 구독취소 성공", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(showAlbum.this, topic + " 구독취소 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
+        // [END unsubscribe_topics]
 
         showRecyclerView();
 

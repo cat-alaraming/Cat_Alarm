@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="default_notification_channel_id">default_notification_channel_id</string>
+
+    <array name="topics">
+        <item>hurricane</item>
+        <item>blackcat</item>
+        <item>cheese</item>
+        <item>cccat</item>
+        <item>chaos</item>
+    </array>
+
 </resources>
