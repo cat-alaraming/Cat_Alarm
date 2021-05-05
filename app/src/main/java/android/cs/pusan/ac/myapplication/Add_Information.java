@@ -185,7 +185,7 @@ public class Add_Information extends AppCompatActivity {
                 Uri imageuri = data.getData();
                 mArrayUri.add(imageuri);
             }
-            uploadFile(selected2);
+            uploadFile(selected);
         }
         else{
             Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
