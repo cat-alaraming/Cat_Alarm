@@ -40,19 +40,15 @@ import java.util.Map;
 public class Take_Photo extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    private String imageFilePath;
     private Uri photoUri;
 
     Spinner spinner;
     String selected;
-    Spinner spinner2;
-    String selected2;
 
     private FirebaseFirestore mDatabase;
     private ArrayList<Uri> mArrayUri;
     long num = 0;
     ArrayList<String> catNames;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +74,6 @@ public class Take_Photo extends AppCompatActivity {
             }
         });
 
-
         Button btn_uploadImages = findViewById(R.id.btn_uploadImages);
         btn_uploadImages.setOnClickListener((v-> {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -98,7 +93,6 @@ public class Take_Photo extends AppCompatActivity {
         }));
     }
 
-
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "TEST_" + timeStamp + "_";
@@ -111,33 +105,17 @@ public class Take_Photo extends AppCompatActivity {
         return image;
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mArrayUri = new ArrayList<>();
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
-
-//            // Get the Image from data
-//            if (data.getClipData() != null) {
-//                ClipData mClipData = data.getClipData();
-//                int cnt = mClipData.getItemCount();
-////                for (int i = 0; i < cnt; i++) {
-////                    Uri imageuri = mClipData.getItemAt(i).getUri();
             mArrayUri.add(photoUri);
-////                }
-//            }
-//            else {
-////                Uri imageuri = data.getData();
-//                mArrayUri.add(photoUri);
-//            }
             uploadFile(selected);
         }
         else{
-            Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "카메라 취소", Toast.LENGTH_LONG).show();
         }
 
     }
