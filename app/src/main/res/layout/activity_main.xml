@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -17,6 +18,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/tool_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"></include>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,6 +37,7 @@
                 android:id="@+id/main_Frag"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
 
                 <fragment
                     android:id="@+id/map"
