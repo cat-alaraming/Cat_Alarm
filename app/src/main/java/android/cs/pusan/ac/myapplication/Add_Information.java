@@ -71,7 +71,7 @@ public class Add_Information extends AppCompatActivity {
         EditText editText_name = findViewById(R.id.editText_name);
         EditText editText_features = findViewById(R.id.editText_features);
         spinner2 = findViewById(R.id.spinner2);
-        String[] types = {"black1", "black2", "cheese", "godeung", "chaos", "samsaek"};
+        String[] types = {"?", "black1", "black2", "cheese", "godeung", "chaos", "samsaek"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapter2);
@@ -79,10 +79,13 @@ public class Add_Information extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selected2 = types[position];
+                if( position == 0 ){
+                    selected2 = "white";
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                selected2 = types[0];
+                selected2 = "white";
             }
         });
         Button btn_uploadNewCat = findViewById(R.id.btn_uploadNewCat);
@@ -90,6 +93,10 @@ public class Add_Information extends AppCompatActivity {
             String getCatName = editText_name.getText().toString();
             String getFeature = editText_features.getText().toString();
 
+            if( getCatName.equals("") ){
+                Toast.makeText(this, "이름을 입력하세요", Toast.LENGTH_LONG).show();
+                return;
+            }
             Map<String, Object> data = new HashMap<>();
             data.put("name", getCatName);
             data.put("type", selected2);
