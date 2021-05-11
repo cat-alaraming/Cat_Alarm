@@ -64,7 +64,5 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-firestore:22.1.2'
     implementation 'com.google.firebase:firebase-core:18.0.3'
-//    implementation 'com.android.support:support-v4:26.1.0'
-//    implementation 'com.android.support:design:26.1.0'
 
 }
