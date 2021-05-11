@@ -81,13 +81,20 @@ public class MainActivity extends AppCompatActivity
         actionBar.setTitle(""); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
         actionBar.setHomeAsUpIndicator(R.drawable.view_menu_icon); //뒤로가기 버튼 이미지 지정
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                mDrawerLayout,
+                toolbar,
+                R.string.drawer_open,
+                R.string.drawer_close
+        );
+        mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         NavigationView navigationView = findViewById(R.id.navi_View);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
 
@@ -132,16 +139,16 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{ // 왼쪽 상단 버튼 눌렀을 때
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()){
+//            case android.R.id.home:{ // 왼쪽 상단 버튼 눌렀을 때
+//                mDrawerLayout.openDrawer(GravityCompat.START);
+//                return true;
+//            }
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     @SuppressLint("MissingPermission")
