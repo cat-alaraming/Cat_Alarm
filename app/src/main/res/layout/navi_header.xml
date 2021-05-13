@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        android:src="@drawable/cat2" />
 
     <TextView
         android:id="@+id/textView"
