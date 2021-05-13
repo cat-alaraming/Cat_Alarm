@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -34,6 +36,7 @@ public class showAlbum extends AppCompatActivity {
     private Button subscribeButton;
     private Button unsubscribeButton;
     private Spinner spinnerTopics;
+    private String topicSelected;
 
     EditText editText;
     Button btn_search;
@@ -79,6 +82,22 @@ public class showAlbum extends AppCompatActivity {
         mCustomImageAdapter = new CustomImageAdapter(2, R.layout.row2, getApplicationContext(), mArrayUri);
         mCustomImageAdapter.setIndexArray(IndexArray);
         mRecyclerView.setAdapter(mCustomImageAdapter);
+
+        // [START bring_topic_spinner]
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, catNames);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTopics.setAdapter(adapter);
+        spinnerTopics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                topicSelected = catNames.get(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                topicSelected = catNames.get(0);
+            }
+        });
+        // [END bring_topic_spinner]
 
         // [START subscribe_topics]
         subscribeButton.setOnClickListener(new View.OnClickListener() {
