@@ -73,18 +73,12 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-                    <Button
-                        android:id="@+id/login_button2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="로그인" />
 
                     <Button
                         android:id="@+id/addSmallMarker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="addSmall"
-                        app:layout_constraintStart_toStartOf="@+id/login_button2" />
+                        android:text="addSmall" />
                 </LinearLayout>
 
                 <com.google.android.material.navigation.NavigationView

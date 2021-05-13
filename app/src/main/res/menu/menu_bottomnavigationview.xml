@@ -5,20 +5,15 @@
     <item
         android:id="@+id/a"
         app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_camera"
-        android:title="고양이 사진 찍기" />
-    <item
-        android:id="@+id/b"
-        app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_upload"
         android:title="정보 추가" />
     <item
-        android:id="@+id/c"
+        android:id="@+id/b"
         app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_gallery"
         android:title="사진첩" />
     <item
-        android:id="@+id/d"
+        android:id="@+id/c"
         android:icon="@drawable/cat"
         android:title="관심 고양이"
         app:showAsAction="always" />

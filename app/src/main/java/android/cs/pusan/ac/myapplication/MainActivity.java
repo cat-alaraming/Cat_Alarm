@@ -147,20 +147,17 @@ public class MainActivity extends AppCompatActivity
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.a: //Item의 Id값에 해당하는 것을 누를 시
-                    Intent camera = new Intent(getApplicationContext(), Take_Photo.class);
-                    startActivity(camera);
-                    break;
-                case R.id.b: //Item의 Id값에 해당하는 것을 누를 시
                     Intent information = new Intent(getApplicationContext(), Add_Information.class);
                     startActivity(information);
                     break;
-                case R.id.c:
+                case R.id.b: //Item의 Id값에 해당하는 것을 누를 시
                     Intent album = new Intent(getApplicationContext(), showAlbum.class);
                     startActivity(album);
                     break;
-                case R.id.d:
+                case R.id.c:
                     Intent interesting = new Intent(getApplicationContext(), Interesting_Cat.class);
                     startActivity(interesting);
+                    break;
             }
             return true;
         }
