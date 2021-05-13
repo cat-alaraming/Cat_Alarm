@@ -167,16 +167,16 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
     }
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()){
-//            case android.R.id.home:{ // 왼쪽 상단 버튼 눌렀을 때
-//                mDrawerLayout.openDrawer(GravityCompat.START);
-//                return true;
-//            }
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ // 왼쪽 상단 버튼 눌렀을 때
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     @SuppressLint("MissingPermission")
