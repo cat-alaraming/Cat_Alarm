@@ -34,7 +34,7 @@
                     android:id="@+id/view_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_below="@+id/toolbar"/>
+                    android:layout_below="@id/toolbar"/>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -54,15 +54,6 @@
                 android:id="@+id/drawer_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <com.google.android.material.navigation.NavigationView
-                    android:id="@+id/navi_View"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="start"
-                    android:fitsSystemWindows="false"
-                    app:headerLayout="@layout/navi_header"
-                    app:menu="@menu/navi_menu" />
 
                 <fragment
                     android:id="@+id/map"
@@ -95,6 +86,15 @@
                         android:text="addSmall"
                         app:layout_constraintStart_toStartOf="@+id/login_button2" />
                 </LinearLayout>
+
+                <com.google.android.material.navigation.NavigationView
+                    android:id="@+id/navi_View"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:fitsSystemWindows="false"
+                    app:headerLayout="@layout/navi_header"
+                    app:menu="@menu/navi_menu" />
 
             </androidx.drawerlayout.widget.DrawerLayout>
 

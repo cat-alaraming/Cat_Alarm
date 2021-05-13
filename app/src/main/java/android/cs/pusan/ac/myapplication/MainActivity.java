@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity
 
         mDatabase = FirebaseFirestore.getInstance();
         catNames = new ArrayList<>();
-        LoginBtn = findViewById(R.id.login_button2);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
@@ -78,8 +77,6 @@ public class MainActivity extends AppCompatActivity
         if( mapFragment != null ){
             mapFragment.getMapAsync(this);
         }
-
-        LoginBtn.setOnClickListener(v -> startActivity(new Intent(MainActivity.this,LoginActivity.class )));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -109,6 +106,7 @@ public class MainActivity extends AppCompatActivity
 
                 if(id == R.id.account){
                     Toast.makeText(getApplicationContext(), title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this,LoginActivity.class ));
                 }
                 else if(id == R.id.setting){
                     Toast.makeText(getApplicationContext(), title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
