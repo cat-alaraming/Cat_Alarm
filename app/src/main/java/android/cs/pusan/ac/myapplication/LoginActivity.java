@@ -17,8 +17,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private FirebaseFirestore mDatabase;
 
     // [START declare_auth]
     private FirebaseAuth firebaseAuth;
@@ -29,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button emailLoginBtn;
     private Button emailSignupBtn;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    String[] uids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         emailSignupBtn = (Button)findViewById(R.id.register_button);
 
 
+        mDatabase = FirebaseFirestore.getInstance();
+
+
         emailLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loginUser(email,password);
+                registerPushTocken();
+
             }
         });
 
@@ -81,6 +96,35 @@ public class LoginActivity extends AppCompatActivity {
 //            }
 //        };
 
+    }
+
+    private void registerPushTocken(){
+        // Get token
+        // [START log_reg_token]
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "토근을 생성하지 못했습니다.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                        //DB에 토큰 저장
+                        Map<String, Object> pushToken = new HashMap<>();
+                        pushToken.put("pushToken", token);
+                        pushToken.put("uid", uid);
+                        mDatabase.document("pushTokens/userToken").update(pushToken);
+
+                        // Log and toast
+                        Toast.makeText(LoginActivity.this,  "토근을 생성했습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        // [END log_reg_token]
     }
 
     private void loginUser(String email, String password) {

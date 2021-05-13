@@ -289,6 +289,7 @@ public class editInfo extends Activity {
                             }
                             mDatabase.document("catInfo/"+catName).update("num", num);
                             mDatabase.document("catNamesNums/nums").update(catName, num);
+                            //알림 함수 넣기
                         }
                         else{
                             Log.d("SHOW", "Error show DB", task.getException());
