@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuPresenter;
 import androidx.core.content.FileProvider;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,6 +48,8 @@ public class Take_Photo extends AppCompatActivity {
     Spinner spinner2;
     String selected2;
     String allNames = "";
+
+    boolean check_camera;
 
     private FirebaseFirestore mDatabase;
     private ArrayList<Uri> mArrayUri;
@@ -77,24 +80,6 @@ public class Take_Photo extends AppCompatActivity {
                 selected = catNames.get(0);
             }
         });
-
-        Button btn_uploadImages = findViewById(R.id.btn_uploadImages);
-        btn_uploadImages.setOnClickListener((v -> {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                } catch (IOException ex) {
-                    onBackPressed();
-                }
-                if (photoFile != null) {
-                    photoUri = FileProvider.getUriForFile(getApplicationContext(), getPackageName(), photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
-            }
-        }));
 
         EditText editText_name = findViewById(R.id.editText_name);
         EditText editText_features = findViewById(R.id.editText_features);
@@ -176,9 +161,42 @@ public class Take_Photo extends AppCompatActivity {
         });
         Button btn_goToAlbum = findViewById(R.id.btn_goToAlbum);
         btn_goToAlbum.setOnClickListener(v -> {
+            check_camera = false;
             Intent intent = new Intent(getApplicationContext(), showAlbum.class);
             startActivity(intent);
         });
+
+        Button btn_uploadCameraImages = findViewById(R.id.btn_uploadCameraImages);
+        btn_uploadCameraImages.setOnClickListener((v -> {
+            check_camera = true;
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    onBackPressed();
+                }
+                if (photoFile != null) {
+                    photoUri = FileProvider.getUriForFile(getApplicationContext(), getPackageName(), photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }));
+
+        Button btn_uploadImages = findViewById(R.id.btn_uploadImages);
+        btn_uploadImages.setOnClickListener(v -> getImgFromAlbum());
+    }
+
+    public void getImgFromAlbum() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        }
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 0);
     }
 
 
@@ -198,15 +216,40 @@ public class Take_Photo extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         mArrayUri = new ArrayList<>();
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            mArrayUri.add(photoUri);
-            uploadFile(selected);
+        if(check_camera == true){
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                mArrayUri.add(photoUri);
+                uploadFile(selected);
+            }
+            else{
+                Toast.makeText(this, "카메라 취소", Toast.LENGTH_LONG).show();
+            }
         }
-        else{
-            Toast.makeText(this, "카메라 취소", Toast.LENGTH_LONG).show();
+        else if(check_camera == false){
+            if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+                // Get the Image from data
+                if (data.getClipData() != null) {
+                    ClipData mClipData = data.getClipData();
+                    int cnt = mClipData.getItemCount();
+                    for (int i = 0; i < cnt; i++) {
+                        Uri imageuri = mClipData.getItemAt(i).getUri();
+                        mArrayUri.add(imageuri);
+                    }
+                }
+                else {
+                    Uri imageuri = data.getData();
+                    mArrayUri.add(imageuri);
+                }
+                uploadFile(selected);
+            }
+            else{
+                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+            }
         }
+
 
     }
 
