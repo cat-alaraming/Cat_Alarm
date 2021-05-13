@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity
     private permissionSupport permission;
 
     private DrawerLayout mDrawerLayout;
-    ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

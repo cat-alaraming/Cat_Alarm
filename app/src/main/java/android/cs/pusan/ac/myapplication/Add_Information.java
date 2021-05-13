@@ -159,12 +159,7 @@ public class Add_Information extends AppCompatActivity {
             editText_features.setText(null);
 
         });
-        Button btn_goToAlbum = findViewById(R.id.btn_goToAlbum);
-        btn_goToAlbum.setOnClickListener(v -> {
-            check_camera = false;
-            Intent intent = new Intent(getApplicationContext(), showAlbum.class);
-            startActivity(intent);
-        });
+
 
         Button btn_uploadCameraImages = findViewById(R.id.btn_uploadCameraImages);
         btn_uploadCameraImages.setOnClickListener((v -> {
@@ -186,7 +181,10 @@ public class Add_Information extends AppCompatActivity {
         }));
 
         Button btn_uploadImages = findViewById(R.id.btn_uploadImages);
-        btn_uploadImages.setOnClickListener(v -> getImgFromAlbum());
+        btn_uploadImages.setOnClickListener(v -> {
+            check_camera = false;
+            getImgFromAlbum();
+        });
     }
 
     public void getImgFromAlbum() {
