@@ -51,7 +51,6 @@
 
         <Spinner
             android:id="@+id/spinnerTopics"
-            android:entries="@array/topics"
             android:layout_width="222dp"
             android:layout_height="51dp" />
 
