@@ -92,7 +92,9 @@
             </intent-filter>
         </service>
         <!-- [END firebase_service] -->
-
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/cat_logo_icon"/>
 
     </application>
 

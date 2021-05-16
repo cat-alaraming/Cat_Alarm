@@ -5,7 +5,7 @@ data class PushDTO(
         var notification : Notification = Notification()
 ){
     data class Notification(
-            var body : String? = null,
-            var title : String? = null
+            var body : String? = null,      //푸시메세지의 내용
+            var title : String? = null      //푸시메세지의 제목
     )
 }

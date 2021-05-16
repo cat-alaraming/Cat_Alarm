@@ -29,10 +29,10 @@ class FcmPush {
     fun sendMessage(destinationUid : String, title : String, message : String){
         //상대방의 uid를 이용해서 pushtoken을 받아옴
         //firestore에 있는 pushtoken 컬랙션에 접근해서 얻어옴
-        FirebaseFirestore.getInstance().collection("pushTokens").document(destinationUid).get().addOnCompleteListener {
+        FirebaseFirestore.getInstance().collection("pushTokens").document("userTocken").get().addOnCompleteListener {
             task ->
             if(task.isSuccessful){
-                var token = task?.result?.get("userToken").toString()
+                var token = task?.result?.get("pushToken").toString()
 
                 var pushDTO = PushDTO()
                 pushDTO.to = token
