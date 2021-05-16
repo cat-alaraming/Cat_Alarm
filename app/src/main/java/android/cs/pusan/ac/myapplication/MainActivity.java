@@ -120,24 +120,20 @@ public class MainActivity extends AppCompatActivity
 
 
 
+        Button btn_refresh = findViewById(R.id.btn_refresh);
+        btn_refresh.setOnClickListener(v -> {
+            if(mMap != null){ //prevent crashing if the map doesn't exist yet (eg. on starting activity)
+                mMap.clear();
+                setMarkersFromDB();
+                setSmallMarkersFromDB();
+            }
+
+        });
+
         Button btn_addSmall = findViewById(R.id.addSmallMarker);
         btn_addSmall.setOnClickListener(v -> {
-            Map<String, Object> data = new HashMap<>();
-            data.put("name", "test");
-            data.put("type", "white");
-            int pm = 1; int pm2 = 1;
-            if( Math.random() < 0.5 ) pm = -1;
-            if( Math.random() < 0.5 ) pm2 = -1;
-            data.put("latitude", 35.233 + pm * Math.random()*0.005);
-            data.put("longitude", 129.08 + pm2 * Math.random()*0.005);
-            Date currentTime = Calendar.getInstance().getTime();
-            String detectedTime = new SimpleDateFormat("yyyy:MM:dd:HH:mm", Locale.getDefault()).format(currentTime);
-            data.put("detectedTime", detectedTime);
-            mDatabase.collection("catSmallMarkers")
-                    .add(data)
-                    .addOnSuccessListener(documentReference -> Log.d("ADD","Document added ID: "+documentReference.getId()))
-                    .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
-
+            Intent intent1 = new Intent(getApplicationContext(), addSmallMarkers.class);
+            startActivity(intent1);
         });
     }
 
@@ -200,6 +196,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onMarkerClick(Marker marker) {
         Log.d("Marker", "marker clicked");
+        if( marker.getTitle().equals("??") ){
+            return false;
+        }
         if( clickedcnt == 0 ){
             clickedname = marker.getTitle();
             clickedcnt++;
@@ -235,7 +234,9 @@ public class MainActivity extends AppCompatActivity
                             Object ob;
                             if( (ob = getDB.get("name")) != null ){
                                 catName = ob.toString();
-                                catNames.add(catName);
+                                if( !(catNames.contains(catName)) ) {
+                                    catNames.add(catName);
+                                }
                             }
                             if( (ob = getDB.get("type")) != null ){
                                 type = ob.toString();
@@ -294,7 +295,6 @@ public class MainActivity extends AppCompatActivity
                             }
                             if( (ob = getDB.get("name")) != null ){
                                 catName = ob.toString();
-                                catNames.add(catName);
                             }
                             if( (ob = getDB.get("type")) != null ){
                                 type = ob.toString();

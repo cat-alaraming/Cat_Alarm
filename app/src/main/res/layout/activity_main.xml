@@ -75,6 +75,11 @@
                     android:layout_height="wrap_content">
 
                     <Button
+                        android:id="@+id/btn_refresh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="새로고침" />
+                    <Button
                         android:id="@+id/addSmallMarker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
