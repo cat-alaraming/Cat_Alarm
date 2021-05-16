@@ -46,6 +46,7 @@ public class addSmallMarkers extends Activity {
     Button btn_submit;
 
     ArrayList<String> catNames;
+    public static Map<String, String> namesAndTypes;
     String selected = "??";
 
     @Override
@@ -59,6 +60,7 @@ public class addSmallMarkers extends Activity {
         if( !(catNames.get(0).equals("??")) ) {
             catNames.add(0,"??");
         }
+        namesAndTypes = MainActivity.namesAndTypes;
 
         mDatabase = FirebaseFirestore.getInstance();
 
@@ -85,18 +87,45 @@ public class addSmallMarkers extends Activity {
         btn_submit.setOnClickListener(v -> {
             Map<String, Object> data = new HashMap<>();
             data.put("name", selected);
-            data.put("type", "white");
+            if( selected.equals("??") ){
+                data.put("type", "white");
+            }
+            else {
+                data.put("type", namesAndTypes.get(selected));
+            }
             int pm = 1; int pm2 = 1;
             if( Math.random() < 0.5 ) pm = -1;
             if( Math.random() < 0.5 ) pm2 = -1;
             data.put("latitude", 35.233 + pm * Math.random()*0.005);
             data.put("longitude", 129.08 + pm2 * Math.random()*0.005);
             Date currentTime = Calendar.getInstance().getTime();
-            String detectedTime = new SimpleDateFormat("yyyy:MM:dd:HH:mm", Locale.getDefault()).format(currentTime);
+            String yyyyMM = new SimpleDateFormat("yyyyMM", Locale.getDefault()).format(currentTime);
+            String dd = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
+            String detectedTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(currentTime);
             data.put("detectedTime", detectedTime);
-            mDatabase.collection("catSmallMarkers")
+
+            Map<String, Object> newDoc = new HashMap<>();
+            newDoc.put("date", yyyyMM);
+            mDatabase.document("catSmallMarkers/" + yyyyMM)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if( task.isSuccessful() ){
+                            Map<String, Object> getDB = task.getResult().getData();
+                            if( getDB == null ){
+                                Log.d("DB Error", "Error get DB no data", task.getException());
+                                mDatabase.document("catSmallMarkers/" + yyyyMM)
+                                        .set(newDoc)
+                                        .addOnSuccessListener(documentReference -> Log.d("ADD","new Doc"))
+                                        .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
+                            }
+                        }
+                        else{
+                            Log.d("SHOW", "Error show DB", task.getException());
+                        }
+                    });
+            mDatabase.collection("catSmallMarkers/" + yyyyMM + "/" + dd)
                     .add(data)
-                    .addOnSuccessListener(documentReference -> Log.d("ADD","Document added ID: "+documentReference.getId()))
+                    .addOnSuccessListener(documentReference -> Log.d("ADD","Document added ID: "+yyyyMM))
                     .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
             onBackPressed();
         });

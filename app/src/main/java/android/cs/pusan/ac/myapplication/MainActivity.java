@@ -4,12 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -25,7 +23,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -52,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     private int clickedcnt = 0;
     private String clickedname = "?";
     public static ArrayList<String> catNames;
+    public static Map<String, String> namesAndTypes;
 
     private FirebaseFirestore mDatabase;
     private permissionSupport permission;
@@ -67,6 +65,7 @@ public class MainActivity extends AppCompatActivity
 
         mDatabase = FirebaseFirestore.getInstance();
         catNames = new ArrayList<>();
+        namesAndTypes = new HashMap<>();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
@@ -127,13 +126,20 @@ public class MainActivity extends AppCompatActivity
                 setMarkersFromDB();
                 setSmallMarkersFromDB();
             }
-
         });
 
         Button btn_addSmall = findViewById(R.id.addSmallMarker);
         btn_addSmall.setOnClickListener(v -> {
             Intent intent1 = new Intent(getApplicationContext(), addSmallMarkers.class);
             startActivity(intent1);
+        });
+
+        Button btn_offSmall = findViewById(R.id.btn_offSmall);
+        btn_offSmall.setOnClickListener(v -> {
+            if(mMap != null){
+                mMap.clear();
+                setMarkersFromDB();
+            }
         });
     }
 
@@ -171,7 +177,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressLint("MissingPermission")
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
+    public void onMapReady(@NonNull final GoogleMap googleMap) {
         Log.d("Marker", "on map ready");
         mMap = googleMap;
         LatLng PNU = new LatLng(35.233903, 129.079871);
@@ -240,6 +246,7 @@ public class MainActivity extends AppCompatActivity
                             }
                             if( (ob = getDB.get("type")) != null ){
                                 type = ob.toString();
+                                namesAndTypes.put(catName, type);
                             }
                             if( (ob = getDB.get("latitude")) != null ){
                                 latitude = Double.parseDouble(ob.toString());
@@ -268,7 +275,11 @@ public class MainActivity extends AppCompatActivity
      */
     public void setSmallMarkersFromDB(){
         Log.d("SMarker", "set marker");
-        mDatabase.collection("catSmallMarkers")
+
+        Date currentTime = Calendar.getInstance().getTime();
+        String yyyyMM = new SimpleDateFormat("yyyyMM", Locale.getDefault()).format(currentTime);
+        String dd = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
+        mDatabase.collection("catSmallMarkers/" + yyyyMM + "/" + dd)
                 .get()
                 .addOnCompleteListener(task -> {
                     if( task.isSuccessful() ){
@@ -281,14 +292,9 @@ public class MainActivity extends AppCompatActivity
                             if( (ob = getDB.get("detectedTime")) != null ){
                                 detectedTime = ob.toString();
                                 String dt[] = detectedTime.split(":");
-                                Date currentTime = Calendar.getInstance().getTime();
-                                String cur = new SimpleDateFormat("yyyy:MM:dd:HH:mm", Locale.getDefault()).format(currentTime);
+                                String cur = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(currentTime);
                                 String ct[] = cur.split(":");
-                                if( !dt[0].equals(ct[0]) || !dt[1].equals(ct[1]) || !dt[2].equals(ct[2]) ){
-                                    // 연도, 월, 일이 다른 경우 마커 표시 X
-                                    return;
-                                }
-                                if( Integer.parseInt(ct[3]) - Integer.parseInt(dt[3]) > 2 ) {
+                                if( Integer.parseInt(ct[0]) - Integer.parseInt(dt[0]) > 2 ) {
                                     // 시간이 3시간 이상 차이날 경우 마커 표시 X
                                     return;
                                 }

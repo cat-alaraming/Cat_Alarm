@@ -84,6 +84,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="addSmall" />
+                    <Button
+                        android:id="@+id/btn_offSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="작은마커끄기" />
                 </LinearLayout>
 
                 <com.google.android.material.navigation.NavigationView

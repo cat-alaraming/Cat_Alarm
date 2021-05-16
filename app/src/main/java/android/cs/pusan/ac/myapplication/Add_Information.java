@@ -113,9 +113,9 @@ public class Add_Information extends AppCompatActivity {
             if (Math.random() < 0.5) pm2 = -1;
             data.put("latitude", 35.233 + pm * Math.random() * 0.005);
             data.put("longitude", 129.08 + pm2 * Math.random() * 0.005);
-            mDatabase.collection("catMarkers")
-                    .add(data)
-                    .addOnSuccessListener(documentReference -> Log.d("ADD", "Document added ID: " + documentReference.getId()))
+            mDatabase.collection("catMarkers").document(getCatName)
+                    .set(data)
+                    .addOnSuccessListener(documentReference -> Log.d("ADD", "Document added ID: " + getCatName))
                     .addOnFailureListener(e -> Log.d("ADD", "Error adding: ", e));
 
             data = new HashMap<>();
