@@ -145,11 +145,11 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    @Override
-    protected void onStop(){
-        super.onStop();
-        util.FcmPush.instance.sendMessage("XFzoaEbWRib2KsjtTNOrSJjM0ph2","hi","bye");
-    }
+//    @Override
+//    protected void onStop(){
+//        super.onStop();
+//        FcmPush.instance.sendMessage("XFzoaEbWRib2KsjtTNOrSJjM0ph2","hi","bye");
+//    }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
