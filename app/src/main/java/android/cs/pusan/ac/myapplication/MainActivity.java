@@ -4,13 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.cs.pusan.ac.myapplication.util.FcmPush;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -26,7 +23,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -145,11 +141,11 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-//    @Override
-//    protected void onStop(){
-//        super.onStop();
-//        FcmPush.instance.sendMessage("XFzoaEbWRib2KsjtTNOrSJjM0ph2","hi","bye");
-//    }
+    @Override
+    public void onStop(){
+        super.onStop();
+        FcmPush.instance.sendMessage("XFzoaEbWRib2KsjtTNOrSJjM0ph2","hi","bye");
+    }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
@@ -194,7 +190,7 @@ public class MainActivity extends AppCompatActivity
         LatLng PNU = new LatLng(35.233903, 129.079871);
 
         setMarkersFromDB();
-        setSmallMarkersFromDB();
+//        setSmallMarkersFromDB();
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PNU, 15.5f));
         mMap.getUiSettings().setCompassEnabled(true);
@@ -275,63 +271,63 @@ public class MainActivity extends AppCompatActivity
     } // End setMarkersFromDB();
 
 
-    /*
-    DB에서 정보 들고 와서 작은 마커 보여주기
-     */
-    public void setSmallMarkersFromDB(){
-        Log.d("SMarker", "set marker");
-        mDatabase.collection("catSmallMarkers")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if( task.isSuccessful() ){
-                        Log.d("SMarker", "Successful");
-                        String catName = "?"; String type = "?"; String detectedTime = "?";
-                        double latitude = 0.0; double longitude = 0.0;
-                        for(QueryDocumentSnapshot document : task.getResult()){
-                            Map<String, Object> getDB = document.getData();
-                            Object ob;
-                            if( (ob = getDB.get("detectedTime")) != null ){
-                                detectedTime = ob.toString();
-                                String dt[] = detectedTime.split(":");
-                                Date currentTime = Calendar.getInstance().getTime();
-                                String cur = new SimpleDateFormat("yyyy:MM:dd:HH:mm", Locale.getDefault()).format(currentTime);
-                                String ct[] = cur.split(":");
-                                if( !dt[0].equals(ct[0]) || !dt[1].equals(ct[1]) || !dt[2].equals(ct[2]) ){
-                                    // 연도, 월, 일이 다른 경우 마커 표시 X
-                                    return;
-                                }
-                                if( Integer.parseInt(ct[3]) - Integer.parseInt(dt[3]) > 2 ) {
-                                    // 시간이 3시간 이상 차이날 경우 마커 표시 X
-                                    return;
-                                }
-                            }
-                            if( (ob = getDB.get("name")) != null ){
-                                catName = ob.toString();
-                                catNames.add(catName);
-                            }
-                            if( (ob = getDB.get("type")) != null ){
-                                type = ob.toString();
-                            }
-                            if( (ob = getDB.get("latitude")) != null ){
-                                latitude = Double.parseDouble(ob.toString());
-                            }
-                            if( (ob = getDB.get("longitude")) != null ){
-                                longitude = Double.parseDouble(ob.toString());
-                            }
-                            Log.d("Marker Info", catName + " " + type);
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            markerOptions.position(new LatLng(latitude, longitude))
-                                    .title(catName)
-                                    .snippet(detectedTime)
-                                    .icon(BitmapDescriptorFactory.fromResource(getResources().getIdentifier("s"+type,"drawable",getPackageName())));
-                            mMap.addMarker(markerOptions);
-                        }
-                    }
-                    else{
-                        Log.d("Marker", "Error show DB", task.getException());
-                    }
-                });
-    } // End setMarkersFromDB();
+//    /*
+//    DB에서 정보 들고 와서 작은 마커 보여주기
+//     */
+//    public void setSmallMarkersFromDB(){
+//        Log.d("SMarker", "set marker");
+//        mDatabase.collection("catSmallMarkers")
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if( task.isSuccessful() ){
+//                        Log.d("SMarker", "Successful");
+//                        String catName = "?"; String type = "?"; String detectedTime = "?";
+//                        double latitude = 0.0; double longitude = 0.0;
+//                        for(QueryDocumentSnapshot document : task.getResult()){
+//                            Map<String, Object> getDB = document.getData();
+//                            Object ob;
+//                            if( (ob = getDB.get("detectedTime")) != null ){
+//                                detectedTime = ob.toString();
+//                                String dt[] = detectedTime.split(":");
+//                                Date currentTime = Calendar.getInstance().getTime();
+//                                String cur = new SimpleDateFormat("yyyy:MM:dd:HH:mm", Locale.getDefault()).format(currentTime);
+//                                String ct[] = cur.split(":");
+//                                if( !dt[0].equals(ct[0]) || !dt[1].equals(ct[1]) || !dt[2].equals(ct[2]) ){
+//                                    // 연도, 월, 일이 다른 경우 마커 표시 X
+//                                    return;
+//                                }
+//                                if( Integer.parseInt(ct[3]) - Integer.parseInt(dt[3]) > 2 ) {
+//                                    // 시간이 3시간 이상 차이날 경우 마커 표시 X
+//                                    return;
+//                                }
+//                            }
+//                            if( (ob = getDB.get("name")) != null ){
+//                                catName = ob.toString();
+//                                catNames.add(catName);
+//                            }
+//                            if( (ob = getDB.get("type")) != null ){
+//                                type = ob.toString();
+//                            }
+//                            if( (ob = getDB.get("latitude")) != null ){
+//                                latitude = Double.parseDouble(ob.toString());
+//                            }
+//                            if( (ob = getDB.get("longitude")) != null ){
+//                                longitude = Double.parseDouble(ob.toString());
+//                            }
+//                            Log.d("Marker Info", catName + " " + type);
+//                            MarkerOptions markerOptions = new MarkerOptions();
+//                            markerOptions.position(new LatLng(latitude, longitude))
+//                                    .title(catName)
+//                                    .snippet(detectedTime)
+//                                    .icon(BitmapDescriptorFactory.fromResource(getResources().getIdentifier("s"+type,"drawable",getPackageName())));
+//                            mMap.addMarker(markerOptions);
+//                        }
+//                    }
+//                    else{
+//                        Log.d("Marker", "Error show DB", task.getException());
+//                    }
+//                });
+//    } // End setMarkersFromDB();
 
 
 

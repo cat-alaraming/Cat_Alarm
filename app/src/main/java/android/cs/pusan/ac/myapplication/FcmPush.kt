@@ -1,6 +1,5 @@
-package android.cs.pusan.ac.myapplication.util
+package android.cs.pusan.ac.myapplication
 
-import android.cs.pusan.ac.myapplication.model.PushDTO
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import okhttp3.*
@@ -18,7 +17,7 @@ class FcmPush {
 
     //싱글톤 패턴?으로 어디서든지 사용하기 쉽게
     companion object{
-        var instance = FcmPush()
+        @JvmField var instance = FcmPush()
     }
 
     init {
@@ -30,10 +29,10 @@ class FcmPush {
     fun sendMessage(destinationUid : String, title : String, message : String){
         //상대방의 uid를 이용해서 pushtoken을 받아옴
         //firestore에 있는 pushtoken 컬랙션에 접근해서 얻어옴
-        FirebaseFirestore.getInstance().collection("pushtokens").document(destinationUid).get().addOnCompleteListener {
+        FirebaseFirestore.getInstance().collection("pushTokens").document(destinationUid).get().addOnCompleteListener {
             task ->
             if(task.isSuccessful){
-                var token = task?.result?.get("pushToken").toString()
+                var token = task?.result?.get("userToken").toString()
 
                 var pushDTO = PushDTO()
                 pushDTO.to = token

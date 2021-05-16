@@ -1,4 +1,4 @@
-package android.cs.pusan.ac.myapplication.model
+package android.cs.pusan.ac.myapplication
 
 data class PushDTO(
         var to : String? = null,    //push 받는 사람의 토큰 아이디
