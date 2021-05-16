@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.cs.pusan.ac.myapplication.util.FcmPush;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -142,6 +143,12 @@ public class MainActivity extends AppCompatActivity
                     .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
 
         });
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        util.FcmPush.instance.sendMessage("XFzoaEbWRib2KsjtTNOrSJjM0ph2","hi","bye");
     }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
