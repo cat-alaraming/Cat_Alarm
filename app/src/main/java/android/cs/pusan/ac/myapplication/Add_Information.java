@@ -69,13 +69,11 @@ public class Add_Information extends AppCompatActivity {
     long num = 0;
     ArrayList<String> catNames;
 
-    ImageView imageView;
     CascadeClassifier faceDetector;
     File cascFile;
     File photoFile = null;
     static Bitmap mImg = null;
     boolean ret;
-    static boolean check;
     int REQUEST_CHECK = 1;
 
     @Override
