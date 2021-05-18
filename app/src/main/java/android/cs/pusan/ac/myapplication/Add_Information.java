@@ -37,6 +37,7 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
@@ -73,6 +74,7 @@ public class Add_Information extends AppCompatActivity {
     File cascFile;
     File photoFile = null;
     static Bitmap mImg = null;
+    boolean ret;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -248,8 +250,13 @@ public class Add_Information extends AppCompatActivity {
         if(photoFile != null){
             try {
                 imageprocess();
-                Intent verify_cat_face = new Intent(this, verifyCat.class);
-                startActivity(verify_cat_face);
+                if(ret == true){
+                    Intent verify_cat_face = new Intent(this, verifyCat.class);
+                    startActivity(verify_cat_face);
+                } else{
+                    Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -344,6 +351,9 @@ public class Add_Information extends AppCompatActivity {
     } // End uploadFile()
 
     public void imageprocess() throws IOException {
+
+        ret = false;
+
         //사진에서 찍은 이미지(jpg,png 등등) 가져오기 (Uri는 아님)
         String filePath = photoFile.getPath();
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
@@ -366,6 +376,12 @@ public class Add_Information extends AppCompatActivity {
         //고양이 detect with 흑백이미지
         MatOfRect faceDetections = new MatOfRect();
         faceDetector.detectMultiScale(gray,faceDetections);
+
+        if(faceDetections.empty() == true){
+            ret = false;
+        } else{
+            ret = true;
+        }
 
         //고양이 얼굴에 사각형 생성 with color 이미지
         for(Rect rect: faceDetections.toArray()) {
