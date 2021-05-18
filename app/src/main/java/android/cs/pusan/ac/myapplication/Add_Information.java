@@ -74,7 +74,7 @@ public class Add_Information extends AppCompatActivity {
     File photoFile = null;
     static Bitmap mImg = null;
     boolean ret;
-    int REQUEST_CHECK = 1;
+    static final int REQUEST_CHECK = 100;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -249,40 +249,32 @@ public class Add_Information extends AppCompatActivity {
 
         mArrayUri = new ArrayList<>();
 
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            try {
-                imageprocess();
-                if(ret == true){
-                    Intent verify_cat_face = new Intent(this, verifyCat.class);
-                    startActivityForResult(verify_cat_face,REQUEST_CHECK);
-                    if (requestCode == REQUEST_CHECK && resultCode == RESULT_OK) {
-                        mArrayUri.add(photoUri);
-                        uploadFile(selected);
+        if(check_camera == true){
+            if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+                try {
+                    imageprocess();
+                    if(ret == true){
+                        Intent verify_cat_face = new Intent(this, verifyCat.class);
+                        startActivityForResult(verify_cat_face,REQUEST_CHECK);
+                    } else{
+                        Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
                     }
-                } else{
-                    Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else {
+                Toast.makeText(getApplicationContext(),  "카메라 취소", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(getApplicationContext(),  "카메라 취소", Toast.LENGTH_SHORT).show();
-        }
+            //액티비티가 끝나고 아래 if문이 실행되어야하는데 먼저 실행됨...
+            if (requestCode == REQUEST_CHECK && resultCode == RESULT_OK) {
+                mArrayUri.add(photoUri);
+                uploadFile(selected);
+            } else{
+                Toast.makeText(getApplicationContext(),  "설정 이상", Toast.LENGTH_SHORT).show();
+            }
 
-
-//        mArrayUri = new ArrayList<>();
-//
-//        if(check_camera == true){
-//            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//                mArrayUri.add(photoUri);
-//                uploadFile(selected);
-//            }
-//            else{
-//                Toast.makeText(this, "카메라 취소", Toast.LENGTH_LONG).show();
-//            }
-//        }
-//        else if(check_camera == false){
+        } else if(check_camera == false){
 //            if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
 //                // Get the Image from data
 //                if (data.getClipData() != null) {
@@ -302,7 +294,7 @@ public class Add_Information extends AppCompatActivity {
 //            else{
 //                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
 //            }
-//        }
+        }
 
 
     }
@@ -442,5 +434,11 @@ public class Add_Information extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void onPause(){
+        super.onPause();
+
+    }
 
 }
