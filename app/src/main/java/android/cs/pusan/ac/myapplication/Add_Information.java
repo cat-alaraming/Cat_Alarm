@@ -1,7 +1,11 @@
 package android.cs.pusan.ac.myapplication;
 
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,8 +34,22 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,10 +74,17 @@ public class Add_Information extends AppCompatActivity {
     long num = 0;
     ArrayList<String> catNames;
 
+    ImageView imageView;
+    CascadeClassifier faceDetector;
+    File cascFile;
+    File photoFile = null;
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.information);
+
+        imageView = (ImageView)findViewById(R.id.imageView);
 
         mDatabase = FirebaseFirestore.getInstance();
 
@@ -166,7 +191,6 @@ public class Add_Information extends AppCompatActivity {
             check_camera = true;
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                File photoFile = null;
                 try {
                     photoFile = createImageFile();
                 } catch (IOException ex) {
@@ -178,6 +202,7 @@ public class Add_Information extends AppCompatActivity {
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
             }
+
         }));
 
         Button btn_uploadImages = findViewById(R.id.btn_uploadImages);
@@ -185,6 +210,18 @@ public class Add_Information extends AppCompatActivity {
             check_camera = false;
             getImgFromAlbum();
         });
+
+        OpenCVLoader.initDebug();
+
+        if(!OpenCVLoader.initDebug()){
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this,baseCallback);
+        } else{
+            try {
+                baseCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void getImgFromAlbum() {
@@ -215,38 +252,47 @@ public class Add_Information extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mArrayUri = new ArrayList<>();
+        if(photoFile != null){
+            try {
+                imageprocess();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-        if(check_camera == true){
-            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                mArrayUri.add(photoUri);
-                uploadFile(selected);
-            }
-            else{
-                Toast.makeText(this, "카메라 취소", Toast.LENGTH_LONG).show();
-            }
-        }
-        else if(check_camera == false){
-            if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
-                // Get the Image from data
-                if (data.getClipData() != null) {
-                    ClipData mClipData = data.getClipData();
-                    int cnt = mClipData.getItemCount();
-                    for (int i = 0; i < cnt; i++) {
-                        Uri imageuri = mClipData.getItemAt(i).getUri();
-                        mArrayUri.add(imageuri);
-                    }
-                }
-                else {
-                    Uri imageuri = data.getData();
-                    mArrayUri.add(imageuri);
-                }
-                uploadFile(selected);
-            }
-            else{
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
-            }
-        }
+
+//        mArrayUri = new ArrayList<>();
+//
+//        if(check_camera == true){
+//            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//                mArrayUri.add(photoUri);
+//                uploadFile(selected);
+//            }
+//            else{
+//                Toast.makeText(this, "카메라 취소", Toast.LENGTH_LONG).show();
+//            }
+//        }
+//        else if(check_camera == false){
+//            if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+//                // Get the Image from data
+//                if (data.getClipData() != null) {
+//                    ClipData mClipData = data.getClipData();
+//                    int cnt = mClipData.getItemCount();
+//                    for (int i = 0; i < cnt; i++) {
+//                        Uri imageuri = mClipData.getItemAt(i).getUri();
+//                        mArrayUri.add(imageuri);
+//                    }
+//                }
+//                else {
+//                    Uri imageuri = data.getData();
+//                    mArrayUri.add(imageuri);
+//                }
+//                uploadFile(selected);
+//            }
+//            else{
+//                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+//            }
+//        }
 
 
     }
@@ -301,5 +347,76 @@ public class Add_Information extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
         }
     } // End uploadFile()
+
+    public void imageprocess() throws IOException {
+        String filePath = photoFile.getPath();
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+
+        Matrix rotateMatrix = new Matrix();
+        rotateMatrix.postRotate(90); //-360~360
+
+        Bitmap mImg = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.getWidth(), bitmap.getHeight(), rotateMatrix, false);
+
+        imageView.setImageBitmap(mImg);
+        Mat color = new Mat();
+        Utils.bitmapToMat(mImg, color);
+
+        Mat gray = new Mat();
+        Utils.bitmapToMat(mImg, gray);
+        Imgproc.cvtColor(gray, gray, Imgproc.COLOR_RGBA2GRAY);
+
+        MatOfRect faceDetections = new MatOfRect();
+        faceDetector.detectMultiScale(gray,faceDetections);
+
+        for(Rect rect: faceDetections.toArray()) {
+            Imgproc.rectangle(color, new Point(rect.x, rect.y),
+                    new Point(rect.x + rect.width, rect.y + rect.height),
+                    new Scalar(255,0,0),
+                    10);
+        }
+        Utils.matToBitmap(color, mImg);
+        imageView.setImageBitmap(mImg);
+    }
+
+    private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) throws IOException {
+            switch(status)
+            {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalcatface_extended);
+                    File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
+                    cascFile = new File(cascadeDir,"haarcascade_frontalcatface_extended.xml");
+
+                    FileOutputStream fos = new FileOutputStream(cascFile);
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    while((bytesRead = is.read(buffer)) != -1) {
+                        fos.write(buffer,0,bytesRead);
+                    }
+
+                    is.close();
+                    fos.close();
+
+                    faceDetector = new CascadeClassifier(cascFile.getAbsolutePath());
+                    if(faceDetector.empty()) {
+                        faceDetector = null;
+                    } else {
+                        cascadeDir.delete();
+                    }
+                }
+                break;
+
+                default: {
+                    super.onManagerConnected(status);
+                }
+                break;
+            }
+        }
+    };
 
 }

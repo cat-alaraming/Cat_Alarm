@@ -31,6 +31,7 @@
             android:value="AIzaSyDYUf6KtzQ8fZUk5GVTNjJ1zLmB1dLA8NQ" />
 
         <activity android:name=".MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
