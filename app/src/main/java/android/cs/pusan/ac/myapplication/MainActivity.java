@@ -144,8 +144,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onStop(){
+
         super.onStop();
-        FcmPush.instance.sendMessage("XFzoaEbWRib2KsjtTNOrSJjM0ph2","hi","bye");
+        FcmPush.instance.sendMessage("BVBRBjJ0ZkWR0qr4Kd5NZV6dgIl1","hi","bye");
     }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {

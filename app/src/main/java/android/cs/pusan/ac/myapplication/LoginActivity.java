@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.cs.pusan.ac.myapplication.navigation.util.FcmPush;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -121,6 +122,9 @@ public class LoginActivity extends AppCompatActivity {
 
                         // Log and toast
                         Toast.makeText(LoginActivity.this,  "토근을 생성했습니다.", Toast.LENGTH_SHORT).show();
+
+//                        // 알람보내기 test
+//                        FcmPush.instance.sendMessage("BVBRBjJ0ZkWR0qr4Kd5NZV6dgIl1","로그인 했군요","bye");
                     }
                 });
         // [END log_reg_token]

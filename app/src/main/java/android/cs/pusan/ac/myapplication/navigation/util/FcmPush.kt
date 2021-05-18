@@ -1,7 +1,9 @@
 package android.cs.pusan.ac.myapplication.navigation.util
 
 import android.cs.pusan.ac.myapplication.BuildConfig
+import android.cs.pusan.ac.myapplication.MainActivity
 import android.cs.pusan.ac.myapplication.navigation.model.PushDTO
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
@@ -19,7 +21,7 @@ class FcmPush {
     var gson : Gson? = null
     var okHttpClient : OkHttpClient? = null
 
-    //싱글톤 패턴?으로 어디서든지 사용하기 쉽게
+    //싱글톤 패턴으로 어디서든지 사용하기 쉽게
     companion object{
         @JvmField var instance = FcmPush()
     }
@@ -33,7 +35,7 @@ class FcmPush {
     fun sendMessage(destinationUid : String, title : String, message : String){
         //상대방의 uid를 이용해서 pushtoken을 받아옴
         //firestore에 있는 pushtoken 컬랙션에 접근해서 얻어옴
-        FirebaseFirestore.getInstance().collection("pushTokens").document("userTocken").get().addOnCompleteListener {
+        FirebaseFirestore.getInstance().collection("pushtokens").document(destinationUid).get().addOnCompleteListener {
             task ->
             if(task.isSuccessful){
                 var token = task?.result?.get("pushToken").toString()
@@ -53,11 +55,12 @@ class FcmPush {
 
                 okHttpClient?.newCall(request)?.enqueue(object : Callback {
                     override fun onFailure(call: Call?, e: IOException?) {
-
+                        println("Fail FcmPush.kt")
                     }
 
                     override fun onResponse(call: Call?, response: Response?) {
                         println(response?.body()?.string())
+                        println("Success FcmPush.kt")
                     }
 
                 })
