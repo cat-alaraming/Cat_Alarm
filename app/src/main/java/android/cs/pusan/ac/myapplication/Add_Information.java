@@ -75,7 +75,7 @@ public class Add_Information extends AppCompatActivity {
     static Bitmap albumImg = null;
     boolean ret;
     static final int REQUEST_CHECK = 101;
-    static final int REQUEST_CHECK2 = 102;
+//    static final int REQUEST_CHECK2 = 102;
     static final int REQUEST_CHECK3 = 103;
     private Uri imageuri;
 
