@@ -1,5 +1,6 @@
 package android.cs.pusan.ac.myapplication.navigation.util
 
+import android.cs.pusan.ac.myapplication.BuildConfig
 import android.cs.pusan.ac.myapplication.navigation.model.PushDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,7 +15,7 @@ class FcmPush {
 
     var JSON = MediaType.parse("application/json; charset=utf-8")
     var url = "https://fcm.googleapis.com/fcm/send"
-    var serverKey = "AIzaSyDexH0yCydYq1-BEOCMe7Y6u1fjZxnWodE"
+    var serverKey = BuildConfig.SERVER_KEY
     var gson : Gson? = null
     var okHttpClient : OkHttpClient? = null
 
