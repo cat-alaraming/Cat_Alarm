@@ -75,6 +75,8 @@ public class Add_Information extends AppCompatActivity {
     File photoFile = null;
     static Bitmap mImg = null;
     boolean ret;
+    static boolean check;
+    int REQUEST_CHECK = 1;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -247,12 +249,18 @@ public class Add_Information extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(photoFile != null){
+        mArrayUri = new ArrayList<>();
+
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
             try {
                 imageprocess();
                 if(ret == true){
                     Intent verify_cat_face = new Intent(this, verifyCat.class);
-                    startActivity(verify_cat_face);
+                    startActivityForResult(verify_cat_face,REQUEST_CHECK);
+                    if (requestCode == REQUEST_CHECK && resultCode == RESULT_OK) {
+                        mArrayUri.add(photoUri);
+                        uploadFile(selected);
+                    }
                 } else{
                     Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
                 }
@@ -260,6 +268,8 @@ public class Add_Information extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            Toast.makeText(getApplicationContext(),  "카메라 취소", Toast.LENGTH_SHORT).show();
         }
 
 
