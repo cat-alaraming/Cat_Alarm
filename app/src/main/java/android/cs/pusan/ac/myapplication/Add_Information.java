@@ -1,5 +1,6 @@
 package android.cs.pusan.ac.myapplication;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -37,7 +37,6 @@ import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
@@ -73,8 +72,12 @@ public class Add_Information extends AppCompatActivity {
     File cascFile;
     File photoFile = null;
     static Bitmap mImg = null;
+    static Bitmap albumImg = null;
     boolean ret;
-    static final int REQUEST_CHECK = 100;
+    static final int REQUEST_CHECK = 101;
+    static final int REQUEST_CHECK2 = 102;
+    static final int REQUEST_CHECK3 = 103;
+    private Uri imageuri;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -252,9 +255,9 @@ public class Add_Information extends AppCompatActivity {
         if(check_camera == true){
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
                 try {
-                    imageprocess();
+                    imageprocess_Camera(photoFile);
                     if(ret == true){
-                        Intent verify_cat_face = new Intent(this, verifyCat.class);
+                        Intent verify_cat_face = new Intent(this, verifyCatCamera.class);
                         startActivityForResult(verify_cat_face,REQUEST_CHECK);
                     } else{
                         Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
@@ -264,32 +267,59 @@ public class Add_Information extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            //액티비티가 끝나고 아래 if문이 실행되어야하는데 먼저 실행됨...
             if (requestCode == REQUEST_CHECK && resultCode == RESULT_OK) {
                 mArrayUri.add(photoUri);
                 uploadFile(selected);
             }
 
         } else if(check_camera == false){
-//            if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+            if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
 //                // Get the Image from data
 //                if (data.getClipData() != null) {
 //                    ClipData mClipData = data.getClipData();
 //                    int cnt = mClipData.getItemCount();
 //                    for (int i = 0; i < cnt; i++) {
-//                        Uri imageuri = mClipData.getItemAt(i).getUri();
+//                        imageuri = mClipData.getItemAt(i).getUri();
 //                        mArrayUri.add(imageuri);
+//                        try {
+//                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
+//                            imageprocess_Album(bitmap);
+//                            if(ret == true){
+//                                Intent verify_cat_face = new Intent(this, verifyCatAlbum.class);
+//                                startActivityForResult(verify_cat_face,REQUEST_CHECK2);
+//                            } else{
+//                                Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
+//                            }
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
 //                    }
 //                }
 //                else {
-//                    Uri imageuri = data.getData();
+                    imageuri = data.getData();
 //                    mArrayUri.add(imageuri);
-//                }
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
+                        imageprocess_Album(bitmap);
+                        if(ret == true){
+                            Intent verify_cat_face = new Intent(this, verifyCatAlbum.class);
+                            startActivityForResult(verify_cat_face,REQUEST_CHECK3);
+                        } else{
+                            Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+//                  }
+
+            }
+//            if (requestCode == REQUEST_CHECK2 && resultCode == RESULT_OK) {
 //                uploadFile(selected);
 //            }
-//            else{
-//                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
-//            }
+            if(requestCode == REQUEST_CHECK3 && resultCode == RESULT_OK) {
+                mArrayUri.add(imageuri);
+                uploadFile(selected);
+            }
         }
 
 
@@ -309,6 +339,7 @@ public class Add_Information extends AppCompatActivity {
                                 Log.d("DB Error", "Error get DB no data", task.getException());
                                 return;
                             }
+
                             Object ob;
                             if( (ob = getDB.get(catName)) != null ){
                                 num = (Long)ob;
@@ -346,12 +377,13 @@ public class Add_Information extends AppCompatActivity {
         }
     } // End uploadFile()
 
-    public void imageprocess() throws IOException {
+    public void imageprocess_Camera(File catfile) throws IOException {
 
         ret = false;
+        mImg = null;
 
         //사진에서 찍은 이미지(jpg,png 등등) 가져오기 (Uri는 아님)
-        String filePath = photoFile.getPath();
+        String filePath = catfile.getPath();
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
 
         //찍힌 사진이 정방향이 아니여서 90도로 회전시킴 //회전을 안시키니까 고양이 인식이 안됨
@@ -389,6 +421,51 @@ public class Add_Information extends AppCompatActivity {
 
         //imageView에 고양이 인식한 사진 올리기
         Utils.matToBitmap(color, mImg);
+    }
+
+    public void imageprocess_Album(Bitmap catBitmap) throws IOException {
+
+        ret = false;
+        albumImg = null;
+
+        //사진에서 찍은 이미지(jpg,png 등등) 가져오기 (Uri는 아님)
+        Bitmap bitmap = catBitmap;
+
+        //찍힌 사진이 정방향이 아니여서 90도로 회전시킴 //회전을 안시키니까 고양이 인식이 안됨
+        Matrix rotateMatrix = new Matrix();
+        rotateMatrix.postRotate(0);
+        albumImg = Bitmap.createBitmap(bitmap, 0, 0,
+                bitmap.getWidth(), bitmap.getHeight(), rotateMatrix, false);
+
+        //기존 이미지에 고양이가 확인되면 color위에 사각형을 그림
+        Mat color = new Mat();
+        Utils.bitmapToMat(albumImg, color);
+
+        //기존 이미지를 흑백으로 바꾸어서 catfacedetect가 좀더 수월하게 함
+        Mat gray = new Mat();
+        Utils.bitmapToMat(albumImg, gray);
+        Imgproc.cvtColor(gray, gray, Imgproc.COLOR_RGBA2GRAY);
+
+        //고양이 detect with 흑백이미지
+        MatOfRect faceDetections = new MatOfRect();
+        faceDetector.detectMultiScale(gray,faceDetections);
+
+        if(faceDetections.empty() == true){
+            ret = false;
+        } else{
+            ret = true;
+        }
+
+        //고양이 얼굴에 사각형 생성 with color 이미지
+        for(Rect rect: faceDetections.toArray()) {
+            Imgproc.rectangle(color, new Point(rect.x, rect.y),
+                    new Point(rect.x + rect.width, rect.y + rect.height),
+                    new Scalar(255,0,0),
+                    20);
+        }
+
+        //imageView에 고양이 인식한 사진 올리기
+        Utils.matToBitmap(color, albumImg);
     }
 
     private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
@@ -430,11 +507,5 @@ public class Add_Information extends AppCompatActivity {
             }
         }
     };
-
-    @Override
-    public void onPause(){
-        super.onPause();
-
-    }
 
 }

@@ -68,7 +68,8 @@
         <activity android:name=".CustomImageAdapter" />
         <activity android:name=".editInfo" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".addSmallMarkers" android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".verifyCat" />
+        <activity android:name=".verifyCatCamera" />
+        <activity android:name=".verifyCatAlbum" />
 
         <!-- [START fcm_default_channel] -->
         <meta-data

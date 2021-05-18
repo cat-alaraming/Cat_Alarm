@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class verifyCat extends Add_Information {
+public class verifyCatCamera extends Add_Information {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
