@@ -263,15 +263,11 @@ public class Add_Information extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                Toast.makeText(getApplicationContext(),  "카메라 취소", Toast.LENGTH_SHORT).show();
             }
             //액티비티가 끝나고 아래 if문이 실행되어야하는데 먼저 실행됨...
             if (requestCode == REQUEST_CHECK && resultCode == RESULT_OK) {
                 mArrayUri.add(photoUri);
                 uploadFile(selected);
-            } else{
-                Toast.makeText(getApplicationContext(),  "설정 이상", Toast.LENGTH_SHORT).show();
             }
 
         } else if(check_camera == false){
