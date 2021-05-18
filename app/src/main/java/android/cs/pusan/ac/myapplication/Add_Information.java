@@ -372,7 +372,7 @@ public class Add_Information extends AppCompatActivity {
             Imgproc.rectangle(color, new Point(rect.x, rect.y),
                     new Point(rect.x + rect.width, rect.y + rect.height),
                     new Scalar(255,0,0),
-                    10);
+                    20);
         }
 
         //imageView에 고양이 인식한 사진 올리기
