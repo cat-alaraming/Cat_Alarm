@@ -1,6 +1,5 @@
 package android.cs.pusan.ac.myapplication;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,14 +20,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuPresenter;
 import androidx.core.content.FileProvider;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -78,13 +72,12 @@ public class Add_Information extends AppCompatActivity {
     CascadeClassifier faceDetector;
     File cascFile;
     File photoFile = null;
+    static Bitmap mImg = null;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.information);
-
-        imageView = (ImageView)findViewById(R.id.imageView);
 
         mDatabase = FirebaseFirestore.getInstance();
 
@@ -255,6 +248,8 @@ public class Add_Information extends AppCompatActivity {
         if(photoFile != null){
             try {
                 imageprocess();
+                Intent verify_cat_face = new Intent(this, verifyCat.class);
+                startActivity(verify_cat_face);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -356,11 +351,9 @@ public class Add_Information extends AppCompatActivity {
         //찍힌 사진이 정방향이 아니여서 90도로 회전시킴 //회전을 안시키니까 고양이 인식이 안됨
         Matrix rotateMatrix = new Matrix();
         rotateMatrix.postRotate(90);
-        Bitmap mImg = Bitmap.createBitmap(bitmap, 0, 0,
+        mImg = Bitmap.createBitmap(bitmap, 0, 0,
                 bitmap.getWidth(), bitmap.getHeight(), rotateMatrix, false);
 
-        //불러온 비트맵을 imageView에 저장
-        imageView.setImageBitmap(mImg);
         //기존 이미지에 고양이가 확인되면 color위에 사각형을 그림
         Mat color = new Mat();
         Utils.bitmapToMat(mImg, color);
@@ -384,7 +377,6 @@ public class Add_Information extends AppCompatActivity {
 
         //imageView에 고양이 인식한 사진 올리기
         Utils.matToBitmap(color, mImg);
-        imageView.setImageBitmap(mImg);
     }
 
     private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
