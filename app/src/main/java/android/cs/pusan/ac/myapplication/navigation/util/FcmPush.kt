@@ -1,6 +1,9 @@
-package android.cs.pusan.ac.myapplication
+package android.cs.pusan.ac.myapplication.navigation.util
 
+import android.cs.pusan.ac.myapplication.navigation.model.PushDTO
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
@@ -60,4 +63,5 @@ class FcmPush {
             }
         }
     }
+
 }

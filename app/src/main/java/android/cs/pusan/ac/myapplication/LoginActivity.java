@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loginUser(email,password);
-                registerPushTocken();
+                registerPushToken();
 
             }
         });
@@ -98,7 +98,8 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void registerPushTocken(){
+
+    private void registerPushToken(){
         // Get token
         // [START log_reg_token]
         FirebaseMessaging.getInstance().getToken()
@@ -113,12 +114,10 @@ public class LoginActivity extends AppCompatActivity {
                         // Get new FCM registration token
                         String token = task.getResult();
                         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        Map<String, Object> map = new HashMap<>();
 
-                        //DB에 토큰 저장
-                        Map<String, Object> pushToken = new HashMap<>();
-                        pushToken.put("pushToken", token);
-                        pushToken.put("uid", uid);
-                        mDatabase.document("pushTokens/userToken").update(pushToken);
+                        map.put("pushToken", token);
+                        mDatabase.collection("pushtokens").document(uid).set(map);
 
                         // Log and toast
                         Toast.makeText(LoginActivity.this,  "토근을 생성했습니다.", Toast.LENGTH_SHORT).show();

@@ -70,14 +70,14 @@ public class RegisterActivity extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                     }else{
                                         // If sign in fails, display a message to the user.\
-                                        Toast.makeText(RegisterActivity.this, "Failed to register",
+                                        Toast.makeText(RegisterActivity.this, "Failed to register 2",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         } else {
                             // If sign in fails, display a message to the user.\
-                            Toast.makeText(RegisterActivity.this, "Failed to register",
+                            Toast.makeText(RegisterActivity.this, "Failed to register 1 ",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
