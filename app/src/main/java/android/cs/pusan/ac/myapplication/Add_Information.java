@@ -73,7 +73,7 @@ public class Add_Information extends AppCompatActivity {
     File photoFile = null;
     static Bitmap mImg = null;
     static Bitmap albumImg = null;
-    boolean ret;
+    static boolean ret;
     static final int REQUEST_CHECK = 101;
     static final int REQUEST_CHECK2 = 102;
     static final int REQUEST_CHECK3 = 103;
@@ -281,6 +281,7 @@ public class Add_Information extends AppCompatActivity {
                     for (int i = 0; i < cnt; i++) {
                         imageuri = mClipData.getItemAt(i).getUri();
                         try {
+                            //for문 때문인지 여러개 사진 선택시 albumImg는 제일 마지막 사진으로 지정됨
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
                             imageprocess_Album(bitmap);
                             if(ret == true){
