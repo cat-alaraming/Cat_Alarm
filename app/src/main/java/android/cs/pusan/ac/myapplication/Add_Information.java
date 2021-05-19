@@ -64,7 +64,7 @@ public class Add_Information extends AppCompatActivity {
     boolean check_camera;
 
     private FirebaseFirestore mDatabase;
-    private ArrayList<Uri> mArrayUri;
+    private static ArrayList<Uri> mArrayUri;
     long num = 0;
     ArrayList<String> catNames;
 
@@ -75,7 +75,7 @@ public class Add_Information extends AppCompatActivity {
     static Bitmap albumImg = null;
     boolean ret;
     static final int REQUEST_CHECK = 101;
-//    static final int REQUEST_CHECK2 = 102;
+    static final int REQUEST_CHECK2 = 102;
     static final int REQUEST_CHECK3 = 103;
     private Uri imageuri;
 
@@ -206,6 +206,8 @@ public class Add_Information extends AppCompatActivity {
         Button btn_uploadImages = findViewById(R.id.btn_uploadImages);
         btn_uploadImages.setOnClickListener(v -> {
             check_camera = false;
+            mArrayUri = null;
+            mArrayUri = new ArrayList<>();
             getImgFromAlbum();
         });
 
@@ -250,8 +252,6 @@ public class Add_Information extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mArrayUri = new ArrayList<>();
-
         if(check_camera == true){
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
                 try {
@@ -274,34 +274,34 @@ public class Add_Information extends AppCompatActivity {
 
         } else if(check_camera == false){
             if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
-//                // Get the Image from data
-//                if (data.getClipData() != null) {
-//                    ClipData mClipData = data.getClipData();
-//                    int cnt = mClipData.getItemCount();
-//                    for (int i = 0; i < cnt; i++) {
-//                        imageuri = mClipData.getItemAt(i).getUri();
-//                        mArrayUri.add(imageuri);
-//                        try {
-//                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
-//                            imageprocess_Album(bitmap);
-//                            if(ret == true){
-//                                Intent verify_cat_face = new Intent(this, verifyCatAlbum.class);
-//                                startActivityForResult(verify_cat_face,REQUEST_CHECK2);
-//                            } else{
-//                                Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
-//                            }
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }
-//                else {
+                // Get the Image from data
+                if (data.getClipData() != null) {
+                    ClipData mClipData = data.getClipData();
+                    int cnt = mClipData.getItemCount();
+                    for (int i = 0; i < cnt; i++) {
+                        imageuri = mClipData.getItemAt(i).getUri();
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
+                            imageprocess_Album(bitmap);
+                            if(ret == true){
+                                mArrayUri.add(imageuri);
+                                Intent verify_cat_face = new Intent(this, verifyCatAlbum.class);
+                                startActivityForResult(verify_cat_face,REQUEST_CHECK2);
+                            } else{
+                                Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else {
                     imageuri = data.getData();
-//                    mArrayUri.add(imageuri);
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
                         imageprocess_Album(bitmap);
                         if(ret == true){
+                            mArrayUri.add(imageuri);
                             Intent verify_cat_face = new Intent(this, verifyCatAlbum.class);
                             startActivityForResult(verify_cat_face,REQUEST_CHECK3);
                         } else{
@@ -310,14 +310,14 @@ public class Add_Information extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-//                  }
-
-            }
-//            if (requestCode == REQUEST_CHECK2 && resultCode == RESULT_OK) {
+                }
+                //이 if문을 벗어나면 data가 REQUEST2/3의 data가 넘어와서 uploadFile이안됨...
 //                uploadFile(selected);
-//            }
+            }
+            if (requestCode == REQUEST_CHECK2 && resultCode == RESULT_OK) {
+                uploadFile(selected);
+            }
             if(requestCode == REQUEST_CHECK3 && resultCode == RESULT_OK) {
-                mArrayUri.add(imageuri);
                 uploadFile(selected);
             }
         }
