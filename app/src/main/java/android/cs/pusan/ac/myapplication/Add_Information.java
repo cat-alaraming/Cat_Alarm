@@ -64,7 +64,7 @@ public class Add_Information extends AppCompatActivity {
     boolean check_camera;
 
     private FirebaseFirestore mDatabase;
-    private static ArrayList<Uri> mArrayUri;
+    protected static ArrayList<Uri> mArrayUri;
     long num = 0;
     ArrayList<String> catNames;
 
@@ -77,7 +77,12 @@ public class Add_Information extends AppCompatActivity {
     static final int REQUEST_CHECK = 101;
     static final int REQUEST_CHECK2 = 102;
     static final int REQUEST_CHECK3 = 103;
-    private Uri imageuri;
+    protected Uri imageuri;
+    static Bitmap[] sameBitmap;
+    static int imageproess_AlbumCount;
+    static int verifyCatAlbumCount;
+    static Uri[] multiUri;
+    static int MultiCount;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -186,6 +191,8 @@ public class Add_Information extends AppCompatActivity {
 
         Button btn_uploadCameraImages = findViewById(R.id.btn_uploadCameraImages);
         btn_uploadCameraImages.setOnClickListener((v -> {
+            mArrayUri = null;
+            mArrayUri = new ArrayList<>();
             check_camera = true;
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -208,6 +215,13 @@ public class Add_Information extends AppCompatActivity {
             check_camera = false;
             mArrayUri = null;
             mArrayUri = new ArrayList<>();
+            sameBitmap = null;
+            sameBitmap = new Bitmap[10];
+            imageproess_AlbumCount = 0;
+            verifyCatAlbumCount = 0;
+            MultiCount = 0;
+            multiUri = null;
+            multiUri = new Uri[10];
             getImgFromAlbum();
         });
 
@@ -285,8 +299,7 @@ public class Add_Information extends AppCompatActivity {
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
                             imageprocess_Album(bitmap);
                             if(ret == true){
-                                mArrayUri.add(imageuri);
-                                Intent verify_cat_face = new Intent(this, verifyCatAlbum.class);
+                                Intent verify_cat_face = new Intent(this, verifyCatAlbumMulti.class);
                                 startActivityForResult(verify_cat_face,REQUEST_CHECK2);
                             } else{
                                 Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
@@ -303,7 +316,7 @@ public class Add_Information extends AppCompatActivity {
                         imageprocess_Album(bitmap);
                         if(ret == true){
                             mArrayUri.add(imageuri);
-                            Intent verify_cat_face = new Intent(this, verifyCatAlbum.class);
+                            Intent verify_cat_face = new Intent(this, verifyCatAlbumOne.class);
                             startActivityForResult(verify_cat_face,REQUEST_CHECK3);
                         } else{
                             Toast.makeText(getApplicationContext(),  "고양이가 있는지 다시 확인 바랍니다.", Toast.LENGTH_SHORT).show();
@@ -312,8 +325,6 @@ public class Add_Information extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                //이 if문을 벗어나면 data가 REQUEST2/3의 data가 넘어와서 uploadFile이안됨...
-//                uploadFile(selected);
             }
             if (requestCode == REQUEST_CHECK2 && resultCode == RESULT_OK) {
                 uploadFile(selected);
@@ -455,18 +466,20 @@ public class Add_Information extends AppCompatActivity {
             ret = false;
         } else{
             ret = true;
-        }
+            //고양이 얼굴에 사각형 생성 with color 이미지
+            for(Rect rect: faceDetections.toArray()) {
+                Imgproc.rectangle(color, new Point(rect.x, rect.y),
+                        new Point(rect.x + rect.width, rect.y + rect.height),
+                        new Scalar(255,0,0),
+                        20);
+            }
 
-        //고양이 얼굴에 사각형 생성 with color 이미지
-        for(Rect rect: faceDetections.toArray()) {
-            Imgproc.rectangle(color, new Point(rect.x, rect.y),
-                    new Point(rect.x + rect.width, rect.y + rect.height),
-                    new Scalar(255,0,0),
-                    20);
+            //imageView에 고양이 인식한 사진 올리기
+            Utils.matToBitmap(color, albumImg);
+            sameBitmap[imageproess_AlbumCount] = albumImg;
+            multiUri[imageproess_AlbumCount] = imageuri;
+            imageproess_AlbumCount++;
         }
-
-        //imageView에 고양이 인식한 사진 올리기
-        Utils.matToBitmap(color, albumImg);
     }
 
     private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {

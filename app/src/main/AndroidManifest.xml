@@ -69,7 +69,8 @@
         <activity android:name=".editInfo" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".addSmallMarkers" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".verifyCatCamera" />
-        <activity android:name=".verifyCatAlbum" />
+        <activity android:name=".verifyCatAlbumMulti" />
+        <activity android:name=".verifyCatAlbumOne" />
 
         <!-- [START fcm_default_channel] -->
         <meta-data
