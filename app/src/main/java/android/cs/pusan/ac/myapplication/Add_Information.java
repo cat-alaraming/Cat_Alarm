@@ -279,8 +279,8 @@ public class Add_Information extends AppCompatActivity {
                     ClipData mClipData = data.getClipData();
                     int cnt = mClipData.getItemCount();
                     for (int i = 0; i < cnt; i++) {
-                        imageuri = mClipData.getItemAt(i).getUri();
                         try {
+                            imageuri = mClipData.getItemAt(i).getUri();
                             //for문 때문인지 여러개 사진 선택시 albumImg는 제일 마지막 사진으로 지정됨
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
                             imageprocess_Album(bitmap);
@@ -297,8 +297,8 @@ public class Add_Information extends AppCompatActivity {
                     }
                 }
                 else {
-                    imageuri = data.getData();
                     try {
+                        imageuri = data.getData();
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
                         imageprocess_Album(bitmap);
                         if(ret == true){
