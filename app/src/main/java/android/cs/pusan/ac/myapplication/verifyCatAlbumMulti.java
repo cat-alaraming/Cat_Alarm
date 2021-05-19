@@ -6,20 +6,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class verifyCatAlbum extends Add_Information{
+public class verifyCatAlbumMulti extends Add_Information{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.verify_cat);
 
         ImageView img = (ImageView)findViewById(R.id.verify);
-        img.setImageBitmap(albumImg);
+        img.setImageBitmap(sameBitmap[verifyCatAlbumCount]);
+        verifyCatAlbumCount++;
 
         Button btn_check = (Button)findViewById(R.id.check);
         btn_check.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
+                mArrayUri.add(multiUri[MultiCount]);
+                MultiCount++;
                 setResult(RESULT_OK);
                 finish();
             }
@@ -30,6 +33,7 @@ public class verifyCatAlbum extends Add_Information{
 
             @Override
             public void onClick(View v) {
+                MultiCount++;
                 Toast.makeText(getApplicationContext(),  "취소하였습니다.", Toast.LENGTH_SHORT).show();
                 finish();
             }
