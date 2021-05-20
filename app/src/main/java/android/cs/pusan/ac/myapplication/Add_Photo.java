@@ -1,36 +1,317 @@
 package android.cs.pusan.ac.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Map;
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfRect;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
+
 public class Add_Photo extends AppCompatActivity {
 
-    private final int GET_GALLERY_IMAGE = 200;
-    private ImageView imageview;
+    private FirebaseFirestore mDatabase;
+    ArrayList<Uri> mArrayUri;
+    ArrayList<Boolean> mArrayIsOpenCV;
+    long num = 0;
+    CascadeClassifier faceDetector;
+    boolean check_camera;
+
+    LinearLayout imageSpace;
+    int mArrayUriSize = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.take_gallery);
+        setContentView(R.layout.activity_add_photo);
 
-        imageview = (ImageView)findViewById(R.id.imageView);
+        Intent intent = getIntent();
+        String catName = intent.getStringExtra("catName");
+        check_camera = intent.getBooleanExtra("check_camera", false);
+        Log.d("NOWHERE", "Add_Photo");
+        mArrayUri = Add_Information.mArrayUri;
+        mArrayUriSize = mArrayUri.size();
+        mArrayIsOpenCV = new ArrayList<>();
+        for(int i = 0; i < mArrayUri.size(); i++){
+            mArrayIsOpenCV.add(false);
+        }
 
-        Intent gallery = new Intent(Intent.ACTION_PICK);
-        gallery.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(gallery, GET_GALLERY_IMAGE);
+        mDatabase = FirebaseFirestore.getInstance();
+        imageSpace = findViewById(R.id.images);
+
+
+        createImageView();
+
+        setResult();
+
+
+        OpenCVLoader.initDebug();
+
+        if(!OpenCVLoader.initDebug()){
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this,baseCallback);
+        } else{
+            try {
+                baseCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Button btn_opencv = findViewById(R.id.btn_opencv);
+        btn_opencv.setOnClickListener(v -> {
+            for(int i = 0; i < mArrayUri.size(); i++){
+                Uri imageuri = mArrayUri.get(i);
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
+                    if( imageprocess(bitmap, i) ){
+                        mArrayIsOpenCV.set(i, true);
+                    }
+                    else{
+                        mArrayIsOpenCV.set(i, false);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            setResult();
+        });
+
+        Button btn_cancel = findViewById(R.id.btn_cancel);
+        btn_cancel.setOnClickListener(v -> onBackPressed() );
+        Button btn_submit = findViewById(R.id.btn_submit);
+        btn_submit.setOnClickListener(v -> {
+            for(Boolean b : mArrayIsOpenCV){
+                if( !b ){
+                    Toast.makeText(getApplicationContext(), "고양이가 인식되지 않은 사진이 있습니다.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            uploadFile(catName);
+            onBackPressed();
+        });
+
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GET_GALLERY_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri selectedImageUri = data.getData();
-            imageview.setImageURI(selectedImageUri);
-        } else onBackPressed();
+
+    public void createImageView(){
+        Log.d("createImageView", "Add_Photo");
+        for(int i = 0; i < mArrayUri.size(); i++){
+            Log.d("createImageView", "Add_Photo");
+            ImageView imageView = new ImageView(getApplicationContext());
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(convertDPtoPX(300), convertDPtoPX(300));
+            imageView.setLayoutParams(param);
+            imageView.setTag( "iv" + i );
+            imageView.setOnLongClickListener(v -> {
+                int index = Integer.parseInt(imageView.getTag().toString().replaceAll("[^0-9]", ""));
+                mArrayUri.set(index, null);
+                mArrayIsOpenCV.set(index, true);
+                imageView.setVisibility(View.GONE);
+                setResult();
+                mArrayUriSize--;
+                if( mArrayUriSize == 0 ){
+                    onBackPressed();
+                }
+                return true;
+            });
+            Glide.with(getApplicationContext()).load(mArrayUri.get(i)).transform(new CenterCrop()).into(imageView);
+            imageSpace.addView(imageView);
+        }
     }
+
+    public int convertDPtoPX(int dp) {
+        float density = getApplicationContext().getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
+    }
+
+    public void setResult(){
+        TextView tv_result = findViewById(R.id.tv_result);
+        String results = "";
+        for(int i = 0; i < mArrayUriSize; i++){
+            if( mArrayUri.get(i) != null ){
+                if( mArrayIsOpenCV.get(i) ){
+                    results += " O";
+                }
+                else{
+                    results += " X";
+                }
+            }
+        }
+        tv_result.setText(results);
+    }
+
+
+    public boolean imageprocess(Bitmap catBitmap, int tagNum) throws IOException {
+
+        boolean ret;
+        Bitmap albumImg;
+
+        Matrix rotateMatrix = new Matrix();
+        //찍힌 사진이 정방향이 아니여서 90도로 회전시킴 //회전을 안시키니까 고양이 인식이 안됨
+        if( check_camera ){
+            rotateMatrix.postRotate(90);
+        }
+        else{
+            rotateMatrix.postRotate(0);
+        }
+        albumImg = Bitmap.createBitmap(catBitmap, 0, 0,
+                catBitmap.getWidth(), catBitmap.getHeight(), rotateMatrix, false);
+
+
+        //기존 이미지에 고양이가 확인되면 color위에 사각형을 그림
+        Mat color = new Mat();
+        Utils.bitmapToMat(albumImg, color);
+
+        //기존 이미지를 흑백으로 바꾸어서 catfacedetect가 좀더 수월하게 함
+        Mat gray = new Mat();
+        Utils.bitmapToMat(albumImg, gray);
+        Imgproc.cvtColor(gray, gray, Imgproc.COLOR_RGBA2GRAY);
+
+        //고양이 detect with 흑백이미지
+        MatOfRect faceDetections = new MatOfRect();
+        faceDetector.detectMultiScale(gray,faceDetections);
+
+        if( faceDetections.empty() ){
+            ret = false;
+        }
+        else{
+            ret = true;
+            //고양이 얼굴에 사각형 생성 with color 이미지
+            for(Rect rect: faceDetections.toArray()) {
+                Imgproc.rectangle(color, new Point(rect.x, rect.y),
+                        new Point(rect.x + rect.width, rect.y + rect.height),
+                        new Scalar(255,0,0),
+                        20);
+            }
+
+            //imageView에 고양이 인식한 사진 올리기
+            Utils.matToBitmap(color, albumImg);
+            ImageView iv = imageSpace.findViewWithTag( "iv" + tagNum );
+            iv.setImageBitmap(albumImg);
+        }
+
+        return ret;
+    }
+
+    private BaseLoaderCallback baseCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) throws IOException {
+            switch(status)
+            {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalcatface_extended);
+                    File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
+                    File cascFile = new File(cascadeDir,"haarcascade_frontalcatface_extended.xml");
+
+                    FileOutputStream fos = new FileOutputStream(cascFile);
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    while((bytesRead = is.read(buffer)) != -1) {
+                        fos.write(buffer,0,bytesRead);
+                    }
+
+                    is.close();
+                    fos.close();
+
+                    faceDetector = new CascadeClassifier(cascFile.getAbsolutePath());
+                    if(faceDetector.empty()) {
+                        faceDetector = null;
+                    } else {
+                        cascadeDir.delete();
+                    }
+                }
+                break;
+
+                default: {
+                    super.onManagerConnected(status);
+                }
+                break;
+            }
+        }
+    };
+
+
+    //upload the file
+    private void uploadFile(String catName) {
+        if (mArrayUri != null) {
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            String docPath = "catNamesNums/nums";
+            mDatabase.document(docPath)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if( task.isSuccessful() ){
+                            Map<String, Object> getDB = task.getResult().getData();
+                            if( getDB == null ){
+                                Log.d("DB Error", "Error get DB no data", task.getException());
+                                return;
+                            }
+                            Object ob;
+                            if( (ob = getDB.get(catName)) != null ){
+                                num = (Long)ob;
+                            }
+                            for(int i = 0; i < mArrayUri.size(); i++){
+                                Uri filePath = mArrayUri.get(i);
+                                if( filePath == null ) continue;
+                                String filename = (++num) + ".jpg";
+                                StorageReference storageRef = storage.getReferenceFromUrl("gs://db-7a416.appspot.com/").child( catName + "/" + filename);
+                                storageRef.putFile(filePath)
+                                        .addOnSuccessListener(taskSnapshot -> Toast.makeText(getApplicationContext(), "업로드 완료!", Toast.LENGTH_SHORT).show())
+                                        .addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "업로드 실패!", Toast.LENGTH_SHORT).show())
+                                        .addOnProgressListener(taskSnapshot -> {
+                                            @SuppressWarnings("VisibleForTests")
+                                            double progress = (100f * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                        });
+                            }
+
+                            mDatabase.document("catInfo/"+catName).update("num", num);
+                            mDatabase.document("catNamesNums/nums").update(catName, num);
+                            onBackPressed();
+
+                        }
+                        else{
+                            Log.d("SHOW", "Error show DB", task.getException());
+                        }
+                    });
+            num = 0;
+        } else {
+            Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
+        }
+    } // End uploadFile()
+
 }

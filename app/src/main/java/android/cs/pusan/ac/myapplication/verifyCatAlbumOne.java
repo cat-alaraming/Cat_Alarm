@@ -9,31 +9,31 @@ import android.widget.Toast;
 public class verifyCatAlbumOne extends Add_Information{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.verify_cat);
-
-        ImageView img = (ImageView)findViewById(R.id.verify);
-        img.setImageBitmap(albumImg);
-
-        Button btn_check = (Button)findViewById(R.id.check);
-        btn_check.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
-
-        Button btn_cancle = (Button)findViewById(R.id.cancle);
-        btn_cancle.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),  "취소하였습니다.", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.verify_cat);
+//
+//        ImageView img = (ImageView)findViewById(R.id.verify);
+//        img.setImageBitmap(albumImg);
+//
+//        Button btn_check = (Button)findViewById(R.id.check);
+//        btn_check.setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v) {
+//                setResult(RESULT_OK);
+//                finish();
+//            }
+//        });
+//
+//        Button btn_cancle = (Button)findViewById(R.id.cancle);
+//        btn_cancle.setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(),  "취소하였습니다.", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//        });
 
 
     }

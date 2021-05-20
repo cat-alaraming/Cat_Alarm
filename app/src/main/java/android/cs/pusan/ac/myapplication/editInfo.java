@@ -278,6 +278,7 @@ public class editInfo extends Activity {
                             }
                             for(int i = 0; i < mArrayUri.size(); i++){
                                 Uri filePath = mArrayUri.get(i);
+                                if( filePath == null ) continue;
                                 String filename = (++num) + ".jpg";
                                 StorageReference storageRef = storage.getReferenceFromUrl("gs://db-7a416.appspot.com/").child( catName + "/" + filename);
                                 storageRef.putFile(filePath)
