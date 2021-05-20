@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -203,6 +205,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onMarkerClick(Marker marker) {
         Log.d("Marker", "marker clicked");
         if( marker.getTitle().equals("??") ){
+            clickedcnt = 0;
             return false;
         }
         if( clickedcnt == 0 ){
@@ -287,16 +290,20 @@ public class MainActivity extends AppCompatActivity
                         String catName = "?"; String type = "?"; String detectedTime = "?";
                         double latitude = 0.0; double longitude = 0.0;
                         for(QueryDocumentSnapshot document : task.getResult()){
+                            Log.d("MarkerInfo", document.getId());
                             Map<String, Object> getDB = document.getData();
                             Object ob;
+                            int time = 0;
                             if( (ob = getDB.get("detectedTime")) != null ){
                                 detectedTime = ob.toString();
                                 String dt[] = detectedTime.split(":");
                                 String cur = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(currentTime);
                                 String ct[] = cur.split(":");
-                                if( Integer.parseInt(ct[0]) - Integer.parseInt(dt[0]) > 2 ) {
+                                time = (Integer.parseInt(ct[0]) - Integer.parseInt(dt[0])) * 60 + Integer.parseInt(ct[1]) - Integer.parseInt(dt[1]);
+                                Log.d("MarkerInfo", String.valueOf(time));
+                                if( time >= 180 ) {
                                     // 시간이 3시간 이상 차이날 경우 마커 표시 X
-                                    return;
+                                    continue;
                                 }
                             }
                             if( (ob = getDB.get("name")) != null ){
@@ -311,12 +318,14 @@ public class MainActivity extends AppCompatActivity
                             if( (ob = getDB.get("longitude")) != null ){
                                 longitude = Double.parseDouble(ob.toString());
                             }
-                            Log.d("Marker Info", catName + " " + type);
+                            Log.d("MarkerInfo", catName + " " + type);
                             MarkerOptions markerOptions = new MarkerOptions();
+                            Bitmap bm = BitmapFactory.decodeResource(getApplicationContext().getResources(), getApplicationContext().getResources().getIdentifier("s"+type,"drawable",getPackageName()));
+                            bm = Bitmap.createScaledBitmap(bm, convertDPtoPX((int)(10*(180-time)/180.0+30)), convertDPtoPX((int)(10*(180-time)/180.0+30)), false);
                             markerOptions.position(new LatLng(latitude, longitude))
                                     .title(catName)
                                     .snippet(detectedTime)
-                                    .icon(BitmapDescriptorFactory.fromResource(getResources().getIdentifier("s"+type,"drawable",getPackageName())));
+                                    .icon(BitmapDescriptorFactory.fromBitmap(bm));
                             mMap.addMarker(markerOptions);
                         }
                     }
@@ -326,6 +335,10 @@ public class MainActivity extends AppCompatActivity
                 });
     } // End setMarkersFromDB();
 
+    public int convertDPtoPX(int dp) {
+        float density = getApplicationContext().getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
+    }
 
 
     private void permissionCheck(){

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +51,7 @@ public class Add_Photo extends AppCompatActivity {
     long num = 0;
     CascadeClassifier faceDetector;
     boolean check_camera;
+    Long mLastClickTime = 0L;
 
     LinearLayout imageSpace;
     int mArrayUriSize = 0;
@@ -93,7 +95,20 @@ public class Add_Photo extends AppCompatActivity {
 
         Button btn_opencv = findViewById(R.id.btn_opencv);
         btn_opencv.setOnClickListener(v -> {
+
+            Log.d("ASDFASDF", String.valueOf(mLastClickTime));
+            if( SystemClock.elapsedRealtime() - mLastClickTime < 1000 ){
+                Log.d("ASDFASDF", "isDoing");
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
+
+            /*
+            !!!!!!!!!!!!!!!!!!!!!!!!쓰레드로 전환해 줘야 함
+            */
             for(int i = 0; i < mArrayUri.size(); i++){
+                Log.d("ASDFASDF", String.valueOf(i));
                 Uri imageuri = mArrayUri.get(i);
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
