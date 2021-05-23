@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.Source;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
@@ -119,14 +120,13 @@ public class showAlbum extends AppCompatActivity {
                 FirebaseMessaging.getInstance().subscribeToTopic(topic)
                         .addOnCompleteListener(task ->{
                             if(task.isSuccessful()){
+                                //firestoreDB favorites에 정보 추가
+                                add_favoritesDB(topic);
                                 Toast.makeText(showAlbum.this, topic + " 구독 성공", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(showAlbum.this, topic + " 구독 실패", Toast.LENGTH_SHORT).show();
                             }
                         });
-
-                //firestoreDB favorites에 정보 추가
-                favoritesDB(topic);
 
             }
         });
@@ -192,10 +192,8 @@ public class showAlbum extends AppCompatActivity {
         });
     } // End onCreate();
 
-    // [START favoritesDB]
-    private void favoritesDB(String topic){//topic은 고양이 이름
-
-
+    // [START add_favoritesDB]
+    private void add_favoritesDB(String topic){//topic은 고양이 이름
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -204,7 +202,6 @@ public class showAlbum extends AppCompatActivity {
                             Toast.makeText(showAlbum.this, "즐겨찾기에 추가 실패!.", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                     // [START get_document]
@@ -216,9 +213,6 @@ public class showAlbum extends AppCompatActivity {
                                     Map<String, Object> getDB = task.getResult().getData();
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
-//                                        catNum[0] = document.get(catName[0]).toString();
-//                                        Log.d("favoritesDB", "Document exists" + document.getData());
-
                                     //catnumcatNamesNums/nums에서 고양이 수 가져오기_start
                                         Object ob;
                                         if( (ob = getDB.get(topic)) != null ){
@@ -234,10 +228,7 @@ public class showAlbum extends AppCompatActivity {
 
                                         // Log and toast
                                         Toast.makeText(showAlbum.this,  "즐겨찾기에 추가 성공!", Toast.LENGTH_SHORT).show();
-
                                         Log.d("favoritesDB", "Document exists " + catNum );
-
-
 
                                     } else {
                                         Log.d("favoritesDB", "Document not exists");
@@ -251,7 +242,7 @@ public class showAlbum extends AppCompatActivity {
                     }
                 });
     }
-    // [END favoritesDB]
+    // [END add_favoritesDB]
 
 
     /*
