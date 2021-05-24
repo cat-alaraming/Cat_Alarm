@@ -34,12 +34,14 @@
                     android:id="@+id/view_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_below="@id/toolbar"/>
+                    android:layout_below="@id/toolbar"
+                    android:backgroundTint="#00000000"/>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorPrimary">
 
                     <TextView
                         android:id="@+id/toolbar_title"
@@ -65,10 +67,7 @@
                     app:layout_constraintTop_toTopOf="@+id/toolbar"
                     tools:context=".MapsActivity" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -78,25 +77,32 @@
                         android:id="@+id/btn_refresh"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="새로고침" />
+                        android:backgroundTint="#00000000"
+                        android:text="새로고침"
+                        android:textColor="@color/black"/>
+
                     <Button
                         android:id="@+id/addSmallMarker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="addSmall" />
+                        android:backgroundTint="#00000000"
+                        android:text="addSmall"
+                        android:textColor="@color/black"/>
+
                     <Button
                         android:id="@+id/btn_offSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="작은마커끄기" />
+                        android:backgroundTint="#00000000"
+                        android:text="작은마커끄기"
+                        android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <com.google.android.material.navigation.NavigationView
                     android:id="@+id/navi_View"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="500dp"
                     android:layout_gravity="start"
-                    android:fitsSystemWindows="false"
                     app:headerLayout="@layout/navi_header"
                     app:menu="@menu/navi_menu" />
 

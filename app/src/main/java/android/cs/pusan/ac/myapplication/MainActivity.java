@@ -2,10 +2,12 @@ package android.cs.pusan.ac.myapplication;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
+
 
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
