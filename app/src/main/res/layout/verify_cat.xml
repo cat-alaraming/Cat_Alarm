@@ -23,11 +23,11 @@
         android:id="@+id/detect_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
         android:layout_marginBottom="115dp"
         android:text="고양이가 탐지되었습니다.\n \t\t\t 등록하시겠습니까?"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/yes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/verify" />
 
     <Button
