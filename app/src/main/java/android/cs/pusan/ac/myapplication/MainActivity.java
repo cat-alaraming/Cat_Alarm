@@ -11,6 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -130,7 +132,6 @@ public class MainActivity extends AppCompatActivity
                     tvEmailId.setText("로그인 해주세요");
                     Toast.makeText(getApplicationContext(), title + ": 로그아웃 완료", Toast.LENGTH_SHORT).show();
                 }
-
                 return true;
             }
         });
@@ -146,15 +147,6 @@ public class MainActivity extends AppCompatActivity
             tvEmailId.setText("로그인 해주세요");
         }
 
-        Button btn_refresh = findViewById(R.id.btn_refresh);
-        btn_refresh.setOnClickListener(v -> {
-            if(mMap != null){ //prevent crashing if the map doesn't exist yet (eg. on starting activity)
-                mMap.clear();
-                setMarkersFromDB();
-                setSmallMarkersFromDB();
-            }
-        });
-
         Button btn_addSmall = findViewById(R.id.addSmallMarker);
         btn_addSmall.setOnClickListener(v -> {
             Intent intent1 = new Intent(getApplicationContext(), addSmallMarkers.class);
@@ -169,6 +161,13 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.navi_menu2, menu);
+
+        return true;
     }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -197,6 +196,14 @@ public class MainActivity extends AppCompatActivity
             case android.R.id.home:{ // 왼쪽 상단 버튼 눌렀을 때
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            }
+            case R.id.renew:{
+                if(mMap != null){ //prevent crashing if the map doesn't exist yet (eg. on starting activity)
+                    mMap.clear();
+                    setMarkersFromDB();
+                    setSmallMarkersFromDB();
+                }
+                Toast.makeText(getApplicationContext(),  " 지도 새로고침", Toast.LENGTH_SHORT).show();
             }
         }
         return super.onOptionsItemSelected(item);
