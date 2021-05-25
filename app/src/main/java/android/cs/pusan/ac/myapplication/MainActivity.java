@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
         bottomNavigationView.setItemIconTintList(null);
 
+        //네비드로어 헤더 현재 계정 보여주기
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if( mapFragment != null ){
             mapFragment.getMapAsync(this);
@@ -122,15 +126,25 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(), title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.logout){
-                    Toast.makeText(getApplicationContext(), title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this,LogoutActivity.class ));
+                    firebaseAuth.signOut();
+                    tvEmailId.setText("로그인 해주세요");
+                    Toast.makeText(getApplicationContext(), title + ": 로그아웃 완료", Toast.LENGTH_SHORT).show();
                 }
 
                 return true;
             }
         });
 
+        //네비드로어 헤더 현재 계정 보여주기
+        View header = navigationView.getHeaderView(0);
+        tvEmailId = (TextView)header.findViewById(R.id.tv_email_id);
+        FirebaseUser user = firebaseAuth.getCurrentUser();
 
+        if (user != null){
+            tvEmailId.setText(firebaseUser.getEmail());
+        } else{
+            tvEmailId.setText("로그인 해주세요");
+        }
 
         Button btn_refresh = findViewById(R.id.btn_refresh);
         btn_refresh.setOnClickListener(v -> {
@@ -155,13 +169,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        View header = navigationView.getHeaderView(0);
-
-        tvEmailId = (TextView)header.findViewById(R.id.tv_email_id);
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        tvEmailId.setText(firebaseUser.getEmail());
     }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
