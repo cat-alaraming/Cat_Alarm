@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toStartOf="@+id/btn_uploadImages"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"></Spinner>
+        app:layout_constraintTop_toBottomOf="@+id/tv_catName"></Spinner>
 
     <EditText
         android:id="@+id/editText_features"
@@ -48,7 +48,7 @@
         app:layout_constraintStart_toEndOf="@+id/editText_features" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_catName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="108dp"
@@ -86,7 +86,7 @@
         android:text="카메라 찍기"
         app:layout_constraintBottom_toTopOf="@+id/btn_uploadImages"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView" />
+        app:layout_constraintStart_toEndOf="@+id/tv_catName" />
 
     <TextView
         android:id="@+id/textView2"

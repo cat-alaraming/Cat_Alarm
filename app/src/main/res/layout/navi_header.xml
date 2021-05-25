@@ -18,13 +18,13 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/tv_catName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/cat2" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_catName"
         android:layout_width="73dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -49,5 +49,5 @@
         android:textColor="#fff"
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_catName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/iv_main"
+        android:id="@+id/cat_imgView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="36dp"
@@ -18,12 +18,12 @@
         android:layout_marginBottom="44dp"
         android:src="@drawable/cat"
         app:layout_constraintBottom_toTopOf="@+id/iv2_main"
-        app:layout_constraintEnd_toStartOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/tv_catName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_catName"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="75dp"
@@ -34,7 +34,7 @@
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/text2View"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_main"
+        app:layout_constraintStart_toEndOf="@+id/cat_imgView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -50,7 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/text2View"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_main" />
+        app:layout_constraintTop_toBottomOf="@+id/cat_imgView" />
 
     <TextView
         android:id="@+id/text2View"
@@ -64,5 +64,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv2_main"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_catName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
