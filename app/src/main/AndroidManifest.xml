@@ -22,7 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="n">
-        <activity android:name=".LogoutActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
 
