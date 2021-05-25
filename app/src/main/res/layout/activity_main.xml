@@ -5,6 +5,9 @@
     android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00FFFFFF"
+    android:backgroundTint="#00FFFFFF"
+    android:visibility="visible"
     tools:context=".MainActivity">
 
 
@@ -35,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_below="@id/toolbar"
-                    android:backgroundTint="#00000000"/>
+                    android:backgroundTint="#00000000" />
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -69,7 +72,6 @@
                     tools:context=".MapsActivity" />
 
 
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -80,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="#00000000"
                         android:text="새로고침"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <Button
                         android:id="@+id/addSmallMarker"
@@ -88,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="#00000000"
                         android:text="addSmall"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
 
                     <Button
                         android:id="@+id/btn_offSmall"
@@ -96,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="#00000000"
                         android:text="작은마커끄기"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <com.google.android.material.navigation.NavigationView

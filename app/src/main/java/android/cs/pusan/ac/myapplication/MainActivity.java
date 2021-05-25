@@ -12,7 +12,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,6 +27,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -36,6 +40,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     private permissionSupport permission;
 
     private DrawerLayout mDrawerLayout;
+    private TextView tvEmailId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +123,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if(id == R.id.logout){
                     Toast.makeText(getApplicationContext(), title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this,LogoutActivity.class ));
                 }
 
                 return true;
@@ -146,6 +154,14 @@ public class MainActivity extends AppCompatActivity
                 setMarkersFromDB();
             }
         });
+
+        View header = navigationView.getHeaderView(0);
+
+        tvEmailId = (TextView)header.findViewById(R.id.tv_email_id);
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        tvEmailId.setText(firebaseUser.getEmail());
     }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {

@@ -18,11 +18,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -55,6 +58,7 @@ public class Add_Information extends AppCompatActivity {
     private FirebaseFirestore mDatabase;
     protected static ArrayList<Uri> mArrayUri;
     ArrayList<String> catNames;
+
 
 
     @Override
