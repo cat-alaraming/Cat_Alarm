@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity
                     startActivity(new Intent(MainActivity.this,LoginActivity.class ));
                 }
                 else if(id == R.id.setting){
+                    Intent setting = new Intent(getApplicationContext(), setting.class);
+                    startActivity(setting);
                     Toast.makeText(getApplicationContext(), title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.logout){
