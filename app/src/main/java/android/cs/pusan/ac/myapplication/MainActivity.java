@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+        smallMarkerChecking();
 
         //네비드로어 헤더 현재 계정 보여주기
         View header = navigationView.getHeaderView(0);
@@ -146,13 +147,11 @@ public class MainActivity extends AppCompatActivity
         } else{
             tvEmailId.setText("로그인 해주세요");
         }
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.navi_menu2, menu);
-
         return true;
     }
 
@@ -396,14 +395,5 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // Activity 가 종료되기 전에 저장한다
-        // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
-        SharedPreferences sf = getSharedPreferences("setting", 0);
-        SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
-        editor.putBoolean("checking", checking); // 입력
-        editor.commit(); // 파일에 최종 반영함 //꼭!!!!!!
-    }
+
 }

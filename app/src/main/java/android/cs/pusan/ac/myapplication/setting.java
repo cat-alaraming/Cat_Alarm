@@ -33,5 +33,4 @@ public class setting extends PreferenceActivity {
             }
         });
     }
-
 }
