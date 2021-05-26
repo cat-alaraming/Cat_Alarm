@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="환경설정">
+        <CheckBoxPreference
+            android:title="Small Maker"
+            android:summary="지도에 작은 마커를 생성합니다"
+            android:key="small_marker"
+            android:defaultValue="true"/>
+        <RingtonePreference
+            android:title="아무거나 추가하세요"
+            />
+        <SwitchPreference
+            android:title="아무거나 추가하세요"
+            />
 
-    <CheckBoxPreference
-        android:title="Small Maker"
-        android:summary="지도에 작은 마커를 생성합니다"
-        android:key="small_marker"
-        android:defaultValue="true"/>
-    <RingtonePreference
-        android:title="아무거나 추가하세요"
-        />
-    <SwitchPreference
-        android:title="아무거나 추가하세요"
-        />
+    </PreferenceCategory>
 </PreferenceScreen>

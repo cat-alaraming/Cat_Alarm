@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
     private TextView tvEmailId;
+    static boolean small_marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,10 +201,18 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
             case R.id.renew:{
-                if(mMap != null){ //prevent crashing if the map doesn't exist yet (eg. on starting activity)
-                    mMap.clear();
-                    setMarkersFromDB();
-                    setSmallMarkersFromDB();
+                boolean getBoolean = getIntent().getBooleanExtra("s_marker",false);
+                if(getBoolean == true){
+                    if(mMap != null){
+                        mMap.clear();
+                        setMarkersFromDB();
+                        setSmallMarkersFromDB();
+                    }
+                } else{
+                    if(mMap != null){
+                        mMap.clear();
+                        setMarkersFromDB();
+                    }
                 }
                 Toast.makeText(getApplicationContext(),  " 지도 새로고침", Toast.LENGTH_SHORT).show();
             }
