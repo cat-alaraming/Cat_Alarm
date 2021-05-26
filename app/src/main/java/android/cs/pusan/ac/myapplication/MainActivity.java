@@ -119,17 +119,6 @@ public class MainActivity extends AppCompatActivity
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-//                MenuItem logoutItem = menuItem.setTitle("로그아웃");
-//                if (user != null){
-//                    logoutItem.setVisible(true);
-//                    if(id == R.id.logout){
-//                        firebaseAuth.signOut();
-//                        Toast.makeText(getApplicationContext(), title + ": 로그아웃 완료", Toast.LENGTH_SHORT).show();
-//                    }
-//                } else{
-//                    logoutItem.setVisible(false);
-//                }
-
                 if(id == R.id.account){
                     if (user != null){
                         Toast.makeText(getApplicationContext(), "이미 로그인이 되어있습니다.", Toast.LENGTH_SHORT).show();
