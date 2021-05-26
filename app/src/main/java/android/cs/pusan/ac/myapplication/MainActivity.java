@@ -155,6 +155,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        smallMarkerChecking();
+    }
+
     public void smallMarkerChecking(){
         SharedPreferences pref = getSharedPreferences("Setting",0);
         checking = pref.getBoolean("checking",true);
@@ -177,6 +183,7 @@ public class MainActivity extends AppCompatActivity
                 mMap.clear();
                 setMarkersFromDB();
             }
+
         }
     }
 

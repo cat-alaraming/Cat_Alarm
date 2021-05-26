@@ -54,6 +54,7 @@ public class Add_Photo extends AppCompatActivity {
     Long mLastClickTime = 0L;
 
     LinearLayout imageSpace;
+    TextView tv_result;
     int mArrayUriSize = 0;
 
     @Override
@@ -74,6 +75,7 @@ public class Add_Photo extends AppCompatActivity {
 
         mDatabase = FirebaseFirestore.getInstance();
         imageSpace = findViewById(R.id.images);
+        tv_result = findViewById(R.id.tv_result);
 
 
         createImageView();
@@ -102,27 +104,22 @@ public class Add_Photo extends AppCompatActivity {
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
+            tv_result.setText("running....");
 
-
-            /*
-            !!!!!!!!!!!!!!!!!!!!!!!!쓰레드로 전환해 줘야 함
-            */
-            for(int i = 0; i < mArrayUri.size(); i++){
-                Log.d("ASDFASDF", String.valueOf(i));
-                Uri imageuri = mArrayUri.get(i);
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageuri);
-                    if( imageprocess(bitmap, i) ){
-                        mArrayIsOpenCV.set(i, true);
+            new Thread(() -> runOnUiThread(() -> {
+                for(int i = 0; i < mArrayUri.size(); i++){
+                    Log.d("ASDFASDF", String.valueOf(i));
+                    Uri imageuri = mArrayUri.get(i);
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageuri);
+                        mArrayIsOpenCV.set(i, imageprocess(bitmap, i));
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    else{
-                        mArrayIsOpenCV.set(i, false);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
-            }
-            setResult();
+                setResult();
+            })).start();
+
         });
 
         Button btn_cancel = findViewById(R.id.btn_cancel);
@@ -173,7 +170,6 @@ public class Add_Photo extends AppCompatActivity {
     }
 
     public void setResult(){
-        TextView tv_result = findViewById(R.id.tv_result);
         String results = "";
         for(int i = 0; i < mArrayUriSize; i++){
             if( mArrayUri.get(i) != null ){
