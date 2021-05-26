@@ -114,12 +114,23 @@ public class MainActivity extends AppCompatActivity
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
 
-
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+//                MenuItem logoutItem = menuItem.setTitle("로그아웃");
+//                if (user != null){
+//                    logoutItem.setVisible(true);
+//                    if(id == R.id.logout){
+//                        firebaseAuth.signOut();
+//                        Toast.makeText(getApplicationContext(), title + ": 로그아웃 완료", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else{
+//                    logoutItem.setVisible(false);
+//                }
+
                 if(id == R.id.account){
-                    FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (user != null){
                         Toast.makeText(getApplicationContext(), "이미 로그인이 되어있습니다.", Toast.LENGTH_SHORT).show();
                     } else{
@@ -133,9 +144,13 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(), title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.logout){
-                    firebaseAuth.signOut();
-                    tvEmailId.setText("로그인 해주세요");
-                    Toast.makeText(getApplicationContext(), title + ": 로그아웃 완료", Toast.LENGTH_SHORT).show();
+                    if (user != null){
+                        firebaseAuth.signOut();
+                        tvEmailId.setText("로그인 해주세요");
+                        Toast.makeText(getApplicationContext(), title + ": 로그아웃 완료", Toast.LENGTH_SHORT).show();
+                    } else{
+                        Toast.makeText(getApplicationContext(), "로그인 안되어 있습니다.", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return true;
             }
@@ -152,11 +167,13 @@ public class MainActivity extends AppCompatActivity
         } else{
             tvEmailId.setText("로그인 해주세요");
         }
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.navi_menu2, menu);
+
         return true;
     }
 

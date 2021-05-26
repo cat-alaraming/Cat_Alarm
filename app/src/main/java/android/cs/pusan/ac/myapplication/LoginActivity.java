@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             if(firebaseAuth.getCurrentUser().isEmailVerified()){
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                Toast.makeText(LoginActivity.this, "로그인 완료", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
                             }
@@ -100,5 +101,5 @@ public class LoginActivity extends AppCompatActivity {
             firebaseAuth.removeAuthStateListener(mAuthListener);
         }
     }
-    
+
 }
