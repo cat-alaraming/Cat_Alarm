@@ -85,14 +85,6 @@
                         android:backgroundTint="#00000000"
                         android:text="addSmall"
                         android:textColor="@color/black" />
-
-                    <Button
-                        android:id="@+id/btn_offSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#00000000"
-                        android:text="작은마커끄기"
-                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <com.google.android.material.navigation.NavigationView

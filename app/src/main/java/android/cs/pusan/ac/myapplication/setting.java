@@ -1,17 +1,17 @@
 package android.cs.pusan.ac.myapplication;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
 
 public class setting extends PreferenceActivity {
-
-    static boolean small_marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,18 +19,23 @@ public class setting extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.setting_map);
 
-        SharedPreferences prefs;
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
-            public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-                if(key.equals("small_marker")){
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    intent.putExtra("s_marker",true);
-                } else{
-                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                    intent.putExtra("s_marker",false);
+        CheckBoxPreference checkbox = (CheckBoxPreference) findPreference("small_marker");
+        checkbox.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                if (checkbox.isChecked()) {
+                    SharedPreferences pref = getSharedPreferences("Setting", 0);
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putBoolean("checking", true);
+                    edit.commit();
+                } else {
+                    SharedPreferences pref = getSharedPreferences("Setting", 0);
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putBoolean("checking", false);
+                    edit.commit();
                 }
+                return true;
             }
         });
     }
+
 }

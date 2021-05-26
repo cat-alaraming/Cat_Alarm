@@ -3,6 +3,7 @@
     <PreferenceCategory
         android:title="환경설정">
         <CheckBoxPreference
+            android:id="@+id/small_marker"
             android:title="Small Maker"
             android:summary="지도에 작은 마커를 생성합니다"
             android:key="small_marker"

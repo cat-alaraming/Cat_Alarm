@@ -2,20 +2,25 @@ package android.cs.pusan.ac.myapplication;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,7 +73,8 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
     private TextView tvEmailId;
-    static boolean small_marker;
+    private Boolean checking;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,20 +156,6 @@ public class MainActivity extends AppCompatActivity
             tvEmailId.setText("로그인 해주세요");
         }
 
-        Button btn_addSmall = findViewById(R.id.addSmallMarker);
-        btn_addSmall.setOnClickListener(v -> {
-            Intent intent1 = new Intent(getApplicationContext(), addSmallMarkers.class);
-            startActivity(intent1);
-        });
-
-        Button btn_offSmall = findViewById(R.id.btn_offSmall);
-        btn_offSmall.setOnClickListener(v -> {
-            if(mMap != null){
-                mMap.clear();
-                setMarkersFromDB();
-            }
-        });
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,6 +163,31 @@ public class MainActivity extends AppCompatActivity
         menuInflater.inflate(R.menu.navi_menu2, menu);
 
         return true;
+    }
+
+    public void smallMarkerChecking(){
+        SharedPreferences pref = getSharedPreferences("Setting",0);
+        checking = pref.getBoolean("checking",true);
+        if(checking == true){
+            Button btn_addSmall = findViewById(R.id.addSmallMarker);
+            btn_addSmall.setVisibility(View.VISIBLE);
+            btn_addSmall.setOnClickListener(v -> {
+                Intent intent1 = new Intent(getApplicationContext(), addSmallMarkers.class);
+                startActivity(intent1);
+            });
+            if(mMap != null){
+                mMap.clear();
+                setMarkersFromDB();
+                setSmallMarkersFromDB();
+            }
+        } else{
+            Button btn_addSmall = findViewById(R.id.addSmallMarker);
+            btn_addSmall.setVisibility(View.GONE);
+            if(mMap != null){
+                mMap.clear();
+                setMarkersFromDB();
+            }
+        }
     }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -201,19 +218,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
             case R.id.renew:{
-                boolean getBoolean = getIntent().getBooleanExtra("s_marker",false);
-                if(getBoolean == true){
-                    if(mMap != null){
-                        mMap.clear();
-                        setMarkersFromDB();
-                        setSmallMarkersFromDB();
-                    }
-                } else{
-                    if(mMap != null){
-                        mMap.clear();
-                        setMarkersFromDB();
-                    }
-                }
+                smallMarkerChecking();
                 Toast.makeText(getApplicationContext(),  " 지도 새로고침", Toast.LENGTH_SHORT).show();
             }
         }
@@ -228,8 +233,7 @@ public class MainActivity extends AppCompatActivity
         mMap = googleMap;
         LatLng PNU = new LatLng(35.233903, 129.079871);
 
-        setMarkersFromDB();
-        setSmallMarkersFromDB();
+        smallMarkerChecking();
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PNU, 15.5f));
         mMap.getUiSettings().setCompassEnabled(true);
@@ -399,5 +403,16 @@ public class MainActivity extends AppCompatActivity
         if( permission.permissionResult(requestCode, permissions, grantResults) ){
             permission.requestPermission();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Activity 가 종료되기 전에 저장한다
+        // SharedPreferences 에 설정값(특별히 기억해야할 사용자 값)을 저장하기
+        SharedPreferences sf = getSharedPreferences("setting", 0);
+        SharedPreferences.Editor editor = sf.edit();//저장하려면 editor가 필요
+        editor.putBoolean("checking", checking); // 입력
+        editor.commit(); // 파일에 최종 반영함 //꼭!!!!!!
     }
 }
