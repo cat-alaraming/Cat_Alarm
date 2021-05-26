@@ -6,7 +6,7 @@
     android:layout_height="230dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/lavender">
+    android:background="@color/orange">
 
 
     <ImageView

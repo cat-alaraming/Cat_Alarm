@@ -119,8 +119,13 @@ public class MainActivity extends AppCompatActivity
                 String title = menuItem.getTitle().toString();
 
                 if(id == R.id.account){
-                    Toast.makeText(getApplicationContext(), title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this,LoginActivity.class ));
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user != null){
+                        Toast.makeText(getApplicationContext(), "이미 로그인이 되어있습니다.", Toast.LENGTH_SHORT).show();
+                    } else{
+                        Toast.makeText(getApplicationContext(), title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this,LoginActivity.class ));
+                    }
                 }
                 else if(id == R.id.setting){
                     Intent setting = new Intent(getApplicationContext(), setting.class);
