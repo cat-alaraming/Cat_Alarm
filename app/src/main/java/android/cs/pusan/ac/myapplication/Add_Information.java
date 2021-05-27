@@ -1,11 +1,7 @@
 package android.cs.pusan.ac.myapplication;
 
 import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,24 +14,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -250,6 +239,7 @@ public class Add_Information extends AppCompatActivity {
                     mArrayUri.add(imageuri);
                 }
                 Intent intent1 = new Intent(getApplicationContext(), Add_Photo.class);
+                intent1.putExtra("class", 1);
                 intent1.putExtra("catName", selected);
                 intent1.putExtra("check_camera", check_camera);
                 startActivity(intent1);

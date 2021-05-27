@@ -34,6 +34,7 @@ public class editInfo extends Activity {
 
     private FirebaseFirestore mDatabase;
     private ArrayList<Uri> mArrayUri;
+    protected static ArrayList<Uri> sendMArrayUri;
 
     LinearLayout namesSpace;
     LinearLayout featuresSpace;
@@ -64,6 +65,7 @@ public class editInfo extends Activity {
         features = intent.getStringExtra("features").split("\\(endline\\)");
 
         mArrayUri = new ArrayList<>();
+        sendMArrayUri = new ArrayList<>();
         namesSpace = findViewById(R.id.namesSpace);
         featuresSpace = findViewById(R.id.featuresSpace);
         imageSpace = findViewById(R.id.imageSpace);
@@ -74,8 +76,10 @@ public class editInfo extends Activity {
             createTextView(name + ", ", namesSpace);
         }
 
-        for (String feature : features) {
-            createTextView("#" + feature + ", ", featuresSpace);
+        if( !(features[0].equals("")) ){
+            for (String feature : features) {
+                createTextView("#" + feature + ", ", featuresSpace);
+            }
         }
 
         mDatabase = FirebaseFirestore.getInstance();
@@ -91,9 +95,6 @@ public class editInfo extends Activity {
         btn_cancel.setOnClickListener(v -> onBackPressed() );
         btn_submit.setOnClickListener(v -> {
             if( mArrayUri.size() <= 0 && changed <= 0 ) return;
-            if( mArrayUri.size() > 0 ){
-                uploadFile(names[0]);
-            }
             if( changed != 0 ){
                 TextView tv;
                 String namesString = names[0];
@@ -118,7 +119,7 @@ public class editInfo extends Activity {
 
                 String featuresString = "";
                 count = featuresSpace.getChildCount();
-                if( count >= 1 ){
+                if( count >= 1 && !(features[0].equals("")) ){
                     tv = (TextView)featuresSpace.getChildAt(0);
                     featuresString = tv.getText().toString();
                 }
@@ -129,8 +130,22 @@ public class editInfo extends Activity {
                     }
                 }
                 featuresString = featuresString.replace(", ", "").replace("#", "");
-                Log.d("CHANGEDSTRING", featuresString);
+                if( features[0].equals("") ){
+                    featuresString = featuresString.replaceFirst("\\(endline\\)", "");
+                }
+                Log.d("CHANGEDSTRING2", featuresString);
                 mDatabase.document("catInfo/" + names[0]).update("features", featuresString);
+            }
+            if( mArrayUri.size() > 0 ){
+                for(int i = 0; i < mArrayUri.size(); i++){
+                    if( mArrayUri.get(i) != null ){
+                        sendMArrayUri.add(mArrayUri.get(i));
+                    }
+                }
+                Intent intent1 = new Intent(getApplicationContext(), Add_Photo.class);
+                intent1.putExtra("class", 2);
+                intent1.putExtra("catName", names[0]);
+                startActivity(intent1);
             }
             onBackPressed();
         });

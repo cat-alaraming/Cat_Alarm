@@ -50,23 +50,32 @@ public class Add_Photo extends AppCompatActivity {
     ArrayList<Boolean> mArrayIsOpenCV;
     long num = 0;
     CascadeClassifier faceDetector;
-    boolean check_camera;
+    boolean check_camera = false;
     Long mLastClickTime = 0L;
 
     LinearLayout imageSpace;
     TextView tv_result;
     int mArrayUriSize = 0;
+    String catName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photo);
 
+        mArrayUri = new ArrayList<>();
         Intent intent = getIntent();
-        String catName = intent.getStringExtra("catName");
-        check_camera = intent.getBooleanExtra("check_camera", false);
+        int classNum = intent.getIntExtra("class", 0);
+        catName = intent.getStringExtra("catName");
+        if( classNum == 1 ){
+            check_camera = intent.getBooleanExtra("check_camera", false);
+            mArrayUri.addAll(Add_Information.mArrayUri);
+        }
+        else{
+            mArrayUri.addAll(editInfo.sendMArrayUri);
+        }
+
         Log.d("NOWHERE", "Add_Photo");
-        mArrayUri = Add_Information.mArrayUri;
         mArrayUriSize = mArrayUri.size();
         mArrayIsOpenCV = new ArrayList<>();
         for(int i = 0; i < mArrayUri.size(); i++){
@@ -110,11 +119,13 @@ public class Add_Photo extends AppCompatActivity {
                 for(int i = 0; i < mArrayUri.size(); i++){
                     Log.d("ASDFASDF", String.valueOf(i));
                     Uri imageuri = mArrayUri.get(i);
-                    try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageuri);
-                        mArrayIsOpenCV.set(i, imageprocess(bitmap, i));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if( imageuri != null ){
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageuri);
+                            mArrayIsOpenCV.set(i, imageprocess(bitmap, i));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 setResult();
@@ -171,7 +182,7 @@ public class Add_Photo extends AppCompatActivity {
 
     public void setResult(){
         String results = "";
-        for(int i = 0; i < mArrayUriSize; i++){
+        for(int i = 0; i < mArrayUri.size(); i++){
             if( mArrayUri.get(i) != null ){
                 if( mArrayIsOpenCV.get(i) ){
                     results += " O";
