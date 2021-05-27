@@ -40,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.text.SimpleDateFormat;
@@ -108,6 +109,13 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         NavigationView navigationView = findViewById(R.id.navi_View);
+        Menu menu = navigationView.getMenu();
+        MenuItem logoutItem = menu.findItem(R.id.logout);
+        if (firebaseUser != null){
+            logoutItem.setVisible(true);
+        } else{
+            logoutItem.setVisible(false);
+        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -118,6 +126,8 @@ public class MainActivity extends AppCompatActivity
                 String title = menuItem.getTitle().toString();
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+                Menu menu = navigationView.getMenu();
+                MenuItem logoutItem = menu.findItem(R.id.logout);
 
                 if(id == R.id.account){
                     if (user != null){
@@ -137,6 +147,7 @@ public class MainActivity extends AppCompatActivity
                         firebaseAuth.signOut();
                         tvEmailId.setText("로그인 해주세요");
                         Toast.makeText(getApplicationContext(), title + ": 로그아웃 완료", Toast.LENGTH_SHORT).show();
+                        logoutItem.setVisible(false);
                     } else{
                         Toast.makeText(getApplicationContext(), "로그인 안되어 있습니다.", Toast.LENGTH_SHORT).show();
                     }
