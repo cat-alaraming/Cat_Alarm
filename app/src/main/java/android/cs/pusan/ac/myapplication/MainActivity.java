@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences pref = getSharedPreferences("Setting",0);
         checking = pref.getBoolean("checking",true);
         if(checking == true){
-            Button btn_addSmall = findViewById(R.id.addSmallMarker);
+            ImageButton btn_addSmall = findViewById(R.id.addSmallMarker);
             btn_addSmall.setVisibility(View.VISIBLE);
             btn_addSmall.setOnClickListener(v -> {
                 Intent intent1 = new Intent(getApplicationContext(), addSmallMarkers.class);
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity
                 setSmallMarkersFromDB();
             }
         } else{
-            Button btn_addSmall = findViewById(R.id.addSmallMarker);
+            ImageButton btn_addSmall = findViewById(R.id.addSmallMarker);
             btn_addSmall.setVisibility(View.GONE);
             if(mMap != null){
                 mMap.clear();

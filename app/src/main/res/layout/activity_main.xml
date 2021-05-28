@@ -48,6 +48,17 @@
                     app:menu="@menu/navi_menu2">
 
                 </androidx.appcompat.widget.Toolbar>
+
+                <ImageButton
+                    android:id="@+id/addSmallMarker"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="260dp"
+                    android:layout_marginTop="3dp"
+                    android:backgroundTint="#00000000"
+                    android:src="@android:drawable/ic_menu_add"
+                    android:text="addSmall"
+                    android:textColor="@color/black" />
             </RelativeLayout>
 
             <androidx.drawerlayout.widget.DrawerLayout
@@ -72,13 +83,6 @@
                     android:layout_height="wrap_content">
 
 
-                    <Button
-                        android:id="@+id/addSmallMarker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#00000000"
-                        android:text="addSmall"
-                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <com.google.android.material.navigation.NavigationView
