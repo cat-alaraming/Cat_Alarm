@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,6 +76,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_MyApplication);
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+            }
+        }, 1000000);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
