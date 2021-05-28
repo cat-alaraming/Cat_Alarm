@@ -10,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +44,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.text.SimpleDateFormat;
@@ -73,15 +71,17 @@ public class MainActivity extends AppCompatActivity
     private TextView tvEmailId;
     private Boolean checking;
 
+    // 마지막으로 뒤로가기 버튼을 눌렀던 시간 저장
+    private long backKeyPressedTime = 0;
+    // 첫 번째 뒤로가기 버튼을 누를때 표시
+    private Toast toast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         setTheme(R.style.Theme_MyApplication);
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-            }
-        }, 1000000);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -178,8 +178,10 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(getApplicationContext(), "로그인 안되어 있습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
+
                 return true;
             }
+
         });
         smallMarkerChecking();
 
@@ -450,5 +452,24 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+            mDrawerLayout.closeDrawers();
+        } else{
+            if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+                backKeyPressedTime = System.currentTimeMillis();
+                toast = Toast.makeText(this, "종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+            if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+                finish();
+                toast.cancel();
+            }
+        }
+
+    }
 
 }
