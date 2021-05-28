@@ -215,6 +215,7 @@ public class Add_Information extends AppCompatActivity {
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 mArrayUri.add(photoUri);
                 Intent intent1 = new Intent(getApplicationContext(), Add_Photo.class);
+                intent1.putExtra("class", 1);
                 intent1.putExtra("catName", selected);
                 intent1.putExtra("check_camera", check_camera);
                 startActivity(intent1);
