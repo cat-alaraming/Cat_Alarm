@@ -39,7 +39,7 @@
         android:id="@+id/btn_uploadCameraImages"
         android:layout_width="120dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="4dp"
         android:text="카메라 찍기"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
