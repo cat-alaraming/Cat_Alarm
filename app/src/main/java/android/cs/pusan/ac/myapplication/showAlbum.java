@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -223,17 +225,27 @@ public class showAlbum extends AppCompatActivity {
                                         //catnumcatNamesNums/nums에서 고양이 수 가져오기_end
 
                                         //DB에 저장
-                                        Map<String, Object> favorite = new HashMap<>();
-                                        favorite.put("catNum", catNum);
-                                        favorite.put("catName", topic);
-                                        mDatabase.document("favorites/"+uid).set(favorite);
+                                        Map<String, Object> favorites_list = new HashMap<>();
+                                        favorites_list.put("catNum", catNum);
+                                        favorites_list.put("catName", topic);
 
+                                        mDatabase.collection("favorites/"+uid+"/favorites_list")
+                                                .add(favorites_list)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Log.d("favorites_list", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("favorites_list", "Error adding document", e);
+                                                    }
+                                                });
                                         // Log and toast
-                                        Toast.makeText(showAlbum.this,  "즐겨찾기에 추가 성공!", Toast.LENGTH_SHORT).show();
-
-                                        Log.d("favoritesDB", "Document exists " + catNum );
-
-
+//                                        Toast.makeText(showAlbum.this,  "즐겨찾기에 추가 성공!", Toast.LENGTH_SHORT).show();
+//                                        Log.d("favoritesDB", "Document exists " + catNum );
 
                                     } else {
                                         Log.d("favoritesDB", "Document not exists");
