@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,9 +14,12 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +34,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -42,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -63,6 +74,7 @@ public class showCatInfo extends AppCompatActivity {
     View noInfo;
     View layout1;
     View layout2;
+    LinearLayout LL_comments;
     View btns;
     PhotoView photoView;
     Button btn_left;
@@ -73,6 +85,7 @@ public class showCatInfo extends AppCompatActivity {
     long num;
     String names;
     String features;
+    String catName;
     int nowPos;
 
     @Override
@@ -82,7 +95,9 @@ public class showCatInfo extends AppCompatActivity {
 
         Log.d("CatInfo", "get intent");
         Intent intent = getIntent();
-        String catName = intent.getStringExtra("catName");
+        catName = intent.getStringExtra("catName");
+
+        mDatabase = FirebaseFirestore.getInstance();
 
         num = 0;
         nowPos = 0;
@@ -92,7 +107,6 @@ public class showCatInfo extends AppCompatActivity {
 //        subscribeButton = (Button)findViewById(R.id.subscribeButton);
 //        unsubscribeButton = (Button)findViewById(R.id.unsubscribeButton);
 
-        mDatabase = FirebaseFirestore.getInstance();
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
         storageRef = storage.getReference();
 
@@ -109,6 +123,7 @@ public class showCatInfo extends AppCompatActivity {
         btn_edit = findViewById(R.id.btn_edit);
         photoView = findViewById(R.id.photoView);
         layout1 = findViewById(R.id.layout1);
+        LL_comments = findViewById(R.id.LL_comments);
 
         textViewName.setText(catName);
         textViewName.setMovementMethod(new ScrollingMovementMethod());
@@ -155,6 +170,109 @@ public class showCatInfo extends AppCompatActivity {
             }
         });
 
+
+        String docPath = "catInfo/" + catName + "/comments";
+        mDatabase.collection(docPath).orderBy("when", Query.Direction.ASCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if( task.isSuccessful() ){
+                        Log.d("SetComments", "Successful");
+                        String who = "?"; String what = "?"; String when = "?";
+                        for(QueryDocumentSnapshot document : task.getResult()){
+                            Log.d("SetComments", document.getId());
+                            Map<String, Object> getDB = document.getData();
+                            Object ob;
+                            if( (ob = getDB.get("who")) != null ){
+                                who = ob.toString();
+                            }
+                            if( (ob = getDB.get("what")) != null ){
+                                what = ob.toString();
+                            }
+                            if( (ob = getDB.get("when")) != null ){
+                                when = ob.toString();
+                            }
+                            createComment(who, what, when);
+                        }
+                        createEditView(LL_comments);
+                    }
+                    else{
+                        Log.d("Marker", "Error show DB", task.getException());
+                    }
+                });
+
+    }
+
+    public void createComment(String who, String what, String when){
+        createTextView(who, 1, LL_comments);
+        createTextView(what, 2,  LL_comments);
+        createTextView(when, 3, LL_comments);
+    }
+
+    public int convertDPtoPX(int dp) {
+        float density = getApplicationContext().getResources().getDisplayMetrics().density;
+        return Math.round((float) dp * density);
+    }
+
+    public void createTextView(String value, int num, LinearLayout linearLayout){
+        TextView textView = new TextView(getApplicationContext());
+        textView.setText(value);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        if( num == 1 ){
+            textView.setTextColor(Color.parseColor("#000000"));
+            textView.setTextSize(13);
+            param.topMargin = convertDPtoPX(5);
+        }
+        else if( num == 2 ){
+            textView.setTextColor(Color.parseColor("#000000"));
+            textView.setTextSize(15);
+            param.leftMargin = convertDPtoPX(2);
+        }
+        else{
+            textView.setTextColor(Color.parseColor("#9F9F9F"));
+            textView.setTextSize(10);
+            param.bottomMargin = convertDPtoPX(5);
+        }
+        textView.setLayoutParams(param);
+        textView.setOnClickListener(v -> {
+            ;
+        });
+        linearLayout.addView(textView);
+    }
+
+    public void createEditView(LinearLayout linearLayout){
+        EditText editText = new EditText(getApplicationContext());
+        editText.setHint("댓글을 입력하세요");
+        editText.setEms(20);
+
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        editText.setLayoutParams(param);
+
+        editText.setOnKeyListener((v, keyCode, event) -> {
+            if( keyCode == KeyEvent.KEYCODE_ENTER ){
+                String who = "익명";
+                String what = editText.getText().toString();
+                if( what.equals("") ) return true;
+                Date currentTime = Calendar.getInstance().getTime();
+                String when = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault()).format(currentTime);
+                createComment(who, what, when);
+                editText.setVisibility(View.GONE);
+                createEditView(linearLayout);
+
+                Map<String, Object> data = new HashMap<>();
+                data.put("who", who);
+                data.put("what", what);
+                data.put("when", when);
+
+                mDatabase.collection("catInfo/" + catName + "/comments")
+                        .add(data)
+                        .addOnSuccessListener(documentReference -> Log.d("ADD","Document added"))
+                        .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
+                return true;
+            }
+            return false;
+        });
+
+        linearLayout.addView(editText);
     }
 
     public void setLayout2(){
