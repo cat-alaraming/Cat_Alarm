@@ -3,6 +3,7 @@ package android.cs.pusan.ac.myapplication;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -37,6 +39,9 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -55,12 +60,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class showCatInfo extends AppCompatActivity {
 
     private FirebaseFirestore mDatabase;
     private StorageReference storageRef;
+    String uid;
     private CustomImageAdapter mCustomImageAdapter;
     private StaggeredGridLayoutManager manager;
     private Button subscribeButton;
@@ -87,6 +94,7 @@ public class showCatInfo extends AppCompatActivity {
     String features;
     String catName;
     int nowPos;
+    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +104,9 @@ public class showCatInfo extends AppCompatActivity {
         Log.d("CatInfo", "get intent");
         Intent intent = getIntent();
         catName = intent.getStringExtra("catName");
+        builder = new AlertDialog.Builder(this);
 
+        uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         mDatabase = FirebaseFirestore.getInstance();
 
         num = 0;
@@ -177,9 +187,10 @@ public class showCatInfo extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if( task.isSuccessful() ){
                         Log.d("SetComments", "Successful");
-                        String who = "?"; String what = "?"; String when = "?";
+                        String who = "?"; String what = "?"; String when = "?"; String commentUID = "?";
                         for(QueryDocumentSnapshot document : task.getResult()){
-                            Log.d("SetComments", document.getId());
+                            String docID = document.getId();
+                            Log.d("SetComments", docID);
                             Map<String, Object> getDB = document.getData();
                             Object ob;
                             if( (ob = getDB.get("who")) != null ){
@@ -191,7 +202,15 @@ public class showCatInfo extends AppCompatActivity {
                             if( (ob = getDB.get("when")) != null ){
                                 when = ob.toString();
                             }
-                            createComment(who, what, when);
+                            if( (ob = getDB.get("uid")) != null ){
+                                commentUID = ob.toString();
+                            }
+                            if( commentUID.equals(uid) ){
+                                createComment(who, what, when, 1, docID);
+                            }
+                            else{
+                                createComment(who, what, when, 0, "");
+                            }
                         }
                         createEditView(LL_comments);
                     }
@@ -202,10 +221,58 @@ public class showCatInfo extends AppCompatActivity {
 
     }
 
-    public void createComment(String who, String what, String when){
-        createTextView(who, 1, LL_comments);
-        createTextView(what, 2,  LL_comments);
-        createTextView(when, 3, LL_comments);
+    public void createComment(String who, String what, String when, int isMyComment, String docID){
+        LinearLayout commentBox = new LinearLayout(this);
+        commentBox.setOrientation(LinearLayout.VERTICAL);
+
+        commentBox.setTag(docID);
+        if( isMyComment == 1 ){
+            commentBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v){
+                    Log.d("ClickedMyComment", docID);
+
+                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("ClickedMyComment", "확인");
+                            mDatabase.collection("catInfo/" + catName + "/comments").document(docID)
+                                    .delete()
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d("ClickedMyComment", "DocumentSnapshot successfully deleted!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("ClickedMyComment", "Error deleting document", e);
+                                        }
+                                    });
+                            commentBox.setVisibility(View.GONE);
+                        }
+                    });
+                    builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("ClickedMyComment", "취소");
+                        }
+                    });
+                    //builder.setIcon(R.drawable.ic_launcher);
+
+                    builder.setTitle("댓글을 지우시겠습니까?");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                }
+            });
+        }
+
+        commentBox.addView(createTextView(who, 1, isMyComment));
+        commentBox.addView(createTextView(what, 2, isMyComment));
+        commentBox.addView(createTextView(when, 3, isMyComment));
+        LL_comments.addView(commentBox);
     }
 
     public int convertDPtoPX(int dp) {
@@ -213,12 +280,17 @@ public class showCatInfo extends AppCompatActivity {
         return Math.round((float) dp * density);
     }
 
-    public void createTextView(String value, int num, LinearLayout linearLayout){
+    public TextView createTextView(String value, int num, int isMyComment){
         TextView textView = new TextView(getApplicationContext());
         textView.setText(value);
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         if( num == 1 ){
-            textView.setTextColor(Color.parseColor("#000000"));
+            if( isMyComment == 1 ){
+                textView.setTextColor(Color.parseColor("#FF9800"));
+            }
+            else{
+                textView.setTextColor(Color.parseColor("#000000"));
+            }
             textView.setTextSize(13);
             param.topMargin = convertDPtoPX(5);
         }
@@ -236,7 +308,7 @@ public class showCatInfo extends AppCompatActivity {
         textView.setOnClickListener(v -> {
             ;
         });
-        linearLayout.addView(textView);
+        return textView;
     }
 
     public void createEditView(LinearLayout linearLayout){
@@ -254,18 +326,20 @@ public class showCatInfo extends AppCompatActivity {
                 if( what.equals("") ) return true;
                 Date currentTime = Calendar.getInstance().getTime();
                 String when = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault()).format(currentTime);
-                createComment(who, what, when);
                 editText.setVisibility(View.GONE);
-                createEditView(linearLayout);
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("who", who);
                 data.put("what", what);
                 data.put("when", when);
+                data.put("uid", uid);
 
                 mDatabase.collection("catInfo/" + catName + "/comments")
                         .add(data)
-                        .addOnSuccessListener(documentReference -> Log.d("ADD","Document added"))
+                        .addOnSuccessListener(documentReference -> {
+                            createComment(who, what, when, 1, documentReference.getId());
+                            createEditView(linearLayout);
+                        })
                         .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
                 return true;
             }
