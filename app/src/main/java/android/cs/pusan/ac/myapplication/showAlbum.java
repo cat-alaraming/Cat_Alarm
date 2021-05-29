@@ -235,12 +235,12 @@ public class showAlbum extends AppCompatActivity {
                                         favorites_list.put("catNum", catNum);
                                         favorites_list.put("catName", topic);
 
-                                        mDatabase.collection("favorites/"+uid+"/favorites_list")
-                                                .add(favorites_list)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        mDatabase.collection("favorites/"+uid+"/favorites_list").document(topic)
+                                                .set(favorites_list)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        Log.d("favorites_list", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d("favorites_list", "DocumentSnapshot written with ID: " + aVoid);
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
