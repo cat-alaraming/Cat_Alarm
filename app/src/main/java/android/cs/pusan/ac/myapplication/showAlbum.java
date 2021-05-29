@@ -138,6 +138,7 @@ public class showAlbum extends AppCompatActivity {
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
                         .addOnCompleteListener(task ->{
                             if(task.isSuccessful()){
+                                delete_favoritesDB(topic);
                                 Toast.makeText(showAlbum.this, topic + " 구독취소 성공", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(showAlbum.this, topic + " 구독취소 실패", Toast.LENGTH_SHORT).show();
@@ -190,10 +191,15 @@ public class showAlbum extends AppCompatActivity {
         });
     } // End onCreate();
 
+    // [START delete_favoritesDB]
+    private void delete_favoritesDB(String topic) {//topic은 고양이 이름
+
+    }
+    // [END delete_favoritesDB]
+
+
     // [START add_favoritesDB]
     private void add_favoritesDB(String topic){//topic은 고양이 이름
-
-
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
