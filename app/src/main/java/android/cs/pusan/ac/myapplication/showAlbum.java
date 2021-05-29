@@ -192,8 +192,24 @@ public class showAlbum extends AppCompatActivity {
     } // End onCreate();
 
     // [START delete_favoritesDB]
-    private void delete_favoritesDB(String topic) {//topic은 고양이 이름
-
+    private void delete_favoritesDB(String topic) {//topic은 고양이 이름// [START delete_document]
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase.collection("favorites/"+uid+"/favorites_list").document(topic)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(showAlbum.this,  "즐겨찾기에 삭제 성공!", Toast.LENGTH_SHORT).show();
+                        Log.d("delete_favoritesDB", "subDocument successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("delete_favoritesDB", "Error deleting subdocument", e);
+                    }
+                });
+        // [END delete_document]
     }
     // [END delete_favoritesDB]
 
