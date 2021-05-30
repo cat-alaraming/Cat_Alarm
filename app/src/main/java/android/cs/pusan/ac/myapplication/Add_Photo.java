@@ -55,6 +55,7 @@ public class Add_Photo extends AppCompatActivity {
 
     LinearLayout imageSpace;
     TextView tv_result;
+    TextView check_text;
     int mArrayUriSize = 0;
     String catName;
 
@@ -85,6 +86,7 @@ public class Add_Photo extends AppCompatActivity {
         mDatabase = FirebaseFirestore.getInstance();
         imageSpace = findViewById(R.id.images);
         tv_result = findViewById(R.id.tv_result);
+        check_text = findViewById(R.id.checktext);
 
 
         createImageView();
@@ -104,6 +106,7 @@ public class Add_Photo extends AppCompatActivity {
             }
         }
 
+        tv_result.setText("");
         Button btn_opencv = findViewById(R.id.btn_opencv);
         btn_opencv.setOnClickListener(v -> {
 
@@ -123,6 +126,7 @@ public class Add_Photo extends AppCompatActivity {
                         try {
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageuri);
                             mArrayIsOpenCV.set(i, imageprocess(bitmap, i));
+                            check_text.setText("검사 결과");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
