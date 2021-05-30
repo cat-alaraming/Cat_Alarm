@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 
@@ -61,7 +60,7 @@ public class CustomImageAdapter extends RecyclerView.Adapter<CustomImageAdapter.
         ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.imageView);
-            if( contents == 2 ) textView = itemView.findViewById(R.id.textView);
+            if( contents == 2 ) textView = itemView.findViewById(R.id.tv_catName);
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition() ;
                 if( pos != RecyclerView.NO_POSITION ){
