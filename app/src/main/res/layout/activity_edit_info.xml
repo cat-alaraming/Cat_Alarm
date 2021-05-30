@@ -14,23 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이름"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            android:layout_marginStart="10dp" />
+
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_addName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_btn_2"
-            android:layout_margin="10dp"
+            android:layout_width="240dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
-            android:textColor="#FFFFFF"
+            android:layout_margin="10dp"
+            android:background="#00000000"
+            android:text="이름"
+            android:textColor="#C0C0C0"
             android:textStyle="bold" />
     </LinearLayout>
     <HorizontalScrollView
@@ -50,23 +44,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="특징"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            android:layout_marginStart="10dp" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_addFeature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_btn_2"
+            android:layout_width="240dp"
+            android:layout_height="30dp"
+            android:background="#00000000"
             android:layout_margin="10dp"
             android:layout_gravity="center"
-            android:textColor="#FFFFFF"
+            android:text="특징"
+            android:textColor="#C0C0C0"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -83,36 +70,40 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:padding="10dp">
+<!--    <HorizontalScrollView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:scrollbars="none"-->
+<!--        android:padding="10dp">-->
         <LinearLayout
             android:id="@+id/imageSpace"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_addImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_btn_2"
-                android:layout_margin="10dp"
+                android:layout_width="158dp"
+                android:layout_height="39dp"
                 android:layout_gravity="center"
-                android:textColor="#FFFFFF"
+                android:layout_margin="10dp"
+                android:background="#00000000"
+                android:text="갤러리에서 사진 추가"
+                android:textColor="#C0C0C0"
                 android:textStyle="bold" />
             <TextView
                 android:id="@+id/addImgInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="39dp"
                 android:layout_margin="10dp"
-                android:padding="10dp"
                 android:layout_weight="1"
-                android:text="갤러리에서 사진 추가"
-                android:gravity="center" />
+                android:gravity="center"
+                android:padding="10dp"
+                android:textColor="#C0C0C0">
+            </TextView>
 
         </LinearLayout>
-    </HorizontalScrollView>
+<!--    </HorizontalScrollView>-->
 
 
     <View
