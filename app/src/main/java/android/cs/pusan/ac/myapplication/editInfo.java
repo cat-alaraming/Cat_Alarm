@@ -87,7 +87,6 @@ public class editInfo extends Activity {
         btn_addName = findViewById(R.id.btn_addName);
         btn_addFeature = findViewById(R.id.btn_addFeature);
         btn_addImg = findViewById(R.id.btn_addImg);
-        addImgInfo = findViewById(R.id.addImgInfo);
 
         btn_addName.setOnClickListener(v -> createEditView(namesSpace, 0));
         btn_addFeature.setOnClickListener(v -> createEditView(featuresSpace, 1));

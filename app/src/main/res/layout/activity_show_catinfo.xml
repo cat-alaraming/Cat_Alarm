@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
-                    android:text="여기를 클릭 해주세요"
+                    android:text="정보 수정을 통해 사진을 올려주세요."
                     android:gravity="center_horizontal" />
             </LinearLayout>
 

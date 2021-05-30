@@ -527,7 +527,4 @@ public class showCatInfo extends AppCompatActivity {
     }
 
 
-
-
-
 }

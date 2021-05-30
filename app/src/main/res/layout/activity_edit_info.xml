@@ -14,23 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="이름"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            android:layout_marginStart="10dp" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_addName"
-            android:layout_width="wrap_content"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_btn_2"
             android:layout_margin="10dp"
             android:layout_gravity="center"
-            android:textColor="#FFFFFF"
+            android:background="@android:color/transparent"
+            android:text="이름"
+            android:textColor="#C0C0C0"
             android:textStyle="bold" />
     </LinearLayout>
     <HorizontalScrollView
@@ -50,23 +43,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="특징"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            android:layout_marginStart="10dp" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_addFeature"
-            android:layout_width="wrap_content"
+            android:layout_width="236dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_btn_2"
-            android:layout_margin="10dp"
             android:layout_gravity="center"
-            android:textColor="#FFFFFF"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
+            android:text="특징"
+            android:textColor="#C0C0C0"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -92,25 +78,19 @@
             android:id="@+id/imageSpace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_addImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_btn_2"
-                android:layout_margin="10dp"
+                android:layout_width="216dp"
+                android:layout_height="41dp"
                 android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/round_btn_2"
+                android:gravity="center"
+                android:text="갤러리에서 사진 추가"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold" />
-            <TextView
-                android:id="@+id/addImgInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:layout_weight="1"
-                android:text="갤러리에서 사진 추가"
-                android:gravity="center" />
-
+            
         </LinearLayout>
     </HorizontalScrollView>
 
