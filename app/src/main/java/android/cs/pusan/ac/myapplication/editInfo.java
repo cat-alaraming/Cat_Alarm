@@ -244,6 +244,7 @@ public class editInfo extends Activity {
         }
         intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         startActivityForResult(intent, 0);
+        btn_addImg.setVisibility(View.GONE);
     }
 
     @Override
