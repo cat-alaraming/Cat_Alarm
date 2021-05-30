@@ -1,0 +1,641 @@
+Index: src/main/res/layout/activity_show_catinfo.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n\r\n<FrameLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    tools:context=\".showCatInfo\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:id=\"@+id/layout1\"\r\n        android:visibility=\"visible\" >\r\n\r\n        <FrameLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:id=\"@+id/F1\"\r\n            app:layout_constraintStart_toStartOf=\"parent\"\r\n            android:layout_marginBottom=\"400dp\" >\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:orientation=\"vertical\"\r\n                android:padding=\"20dp\"\r\n                android:gravity=\"center\"\r\n                android:id=\"@+id/noInfo\">\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textAlignment=\"center\"\r\n                    android:textStyle=\"bold\"\r\n                    android:textSize=\"17sp\"\r\n                    android:text=\"사진이 없어요\"\r\n                    android:gravity=\"center_horizontal\" />\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:textAlignment=\"center\"\r\n                    android:text=\"여기를 클릭 해주세요\"\r\n                    android:gravity=\"center_horizontal\" />\r\n            </LinearLayout>\r\n\r\n            <androidx.recyclerview.widget.RecyclerView\r\n                android:id=\"@+id/recyclerView\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                app:layoutManager=\"StaggeredGridLayoutManager\"\r\n                app:spanCount=\"2\" />\r\n        </FrameLayout>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\"\r\n            android:layout_marginLeft=\"20dp\"\r\n            android:layout_marginRight=\"20dp\"\r\n            app:layout_constraintTop_toBottomOf=\"@id/F1\"\r\n            app:layout_constraintBottom_toTopOf=\"@id/L2\"\r\n            android:id=\"@+id/L1\" >\r\n\r\n            <TextView\r\n                android:id=\"@+id/name\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:textSize=\"20sp\"\r\n                android:textStyle=\"bold\"\r\n                android:text=\"이름\" />\r\n            <TextView\r\n                android:id=\"@+id/show_name\"\r\n                android:background=\"@drawable/round_info\"\r\n                android:scrollbars=\"vertical\"\r\n                android:layout_marginTop=\"10dp\"\r\n                android:padding=\"20dp\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"65dp\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/name\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/features\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_marginTop=\"20dp\"\r\n                android:textSize=\"20sp\"\r\n                android:textStyle=\"bold\"\r\n                android:text=\"특징\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/show_name\" />\r\n            <TextView\r\n                android:id=\"@+id/show_features\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"120dp\"\r\n                android:padding=\"20dp\"\r\n                android:background=\"@drawable/round_info\"\r\n                android:scrollbars=\"vertical\"\r\n                android:layout_marginTop=\"10dp\"\r\n                app:layout_constraintTop_toBottomOf=\"@id/features\" />\r\n\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"horizontal\"\r\n            android:padding=\"20dp\"\r\n            app:layout_constraintBottom_toBottomOf=\"parent\"\r\n            android:id=\"@+id/L2\" >\r\n\r\n            <androidx.appcompat.widget.AppCompatButton\r\n                android:id=\"@+id/btn_goMain\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:background=\"@drawable/round_btn\"\r\n                android:textColor=\"#FFFFFF\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"17sp\"\r\n                app:layout_constraintLeft_toLeftOf=\"parent\"\r\n                android:text=\"뒤로 가기\" />\r\n            <View\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"0dp\"\r\n                android:layout_weight=\"1\" />\r\n\r\n            <androidx.appcompat.widget.AppCompatButton\r\n                android:id=\"@+id/btn_edit\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:background=\"@drawable/round_btn\"\r\n                android:textColor=\"#FFFFFF\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"17sp\"\r\n                app:layout_constraintRight_toRightOf=\"parent\"\r\n                android:text=\"정보 수정\" />\r\n\r\n        </LinearLayout>\r\n\r\n\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n\r\n    <FrameLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:id=\"@+id/layout2\"\r\n        android:visibility=\"invisible\" >\r\n\r\n        <com.github.chrisbanes.photoview.PhotoView\r\n            android:id=\"@+id/photoView\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\" />\r\n\r\n        <LinearLayout\r\n            android:id=\"@+id/btns\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:orientation=\"vertical\"\r\n            android:layout_gravity=\"center\">\r\n            <View\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"0dp\"\r\n                android:layout_weight=\"1\" />\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:orientation=\"horizontal\"\r\n                android:layout_gravity=\"center\" >\r\n                <Button\r\n                    android:id=\"@+id/btn_left\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_gravity=\"start\"\r\n                    android:background=\"#00ff0000\"\r\n                    android:textStyle=\"bold\"\r\n                    android:textSize=\"17sp\"\r\n                    android:text=\"&lt;\" />\r\n                <View\r\n                    android:layout_width=\"0dp\"\r\n                    android:layout_height=\"0dp\"\r\n                    android:layout_weight=\"1\" />\r\n                <Button\r\n                    android:id=\"@+id/btn_right\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_gravity=\"end\"\r\n                    android:background=\"#00ff0000\"\r\n                    android:textStyle=\"bold\"\r\n                    android:textSize=\"17sp\"\r\n                    android:text=\"&gt;\" />\r\n            </LinearLayout>\r\n\r\n            <View\r\n                android:layout_width=\"0dp\"\r\n                android:layout_height=\"0dp\"\r\n                android:layout_weight=\"1\" />\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/btn_download\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"end\"\r\n                android:layout_marginRight=\"20dp\"\r\n                android:layout_marginBottom=\"20dp\"\r\n                android:padding=\"0dp\"\r\n                android:src=\"@drawable/download\"\r\n                android:layout_marginEnd=\"20dp\" />\r\n        </LinearLayout>\r\n\r\n\r\n    </FrameLayout>\r\n\r\n\r\n</FrameLayout>\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/res/layout/activity_show_catinfo.xml	(revision feb9d38db7cf0b973bb5acdeceb50bf5f74b2e49)
++++ src/main/res/layout/activity_show_catinfo.xml	(date 1622362968281)
+@@ -97,6 +97,22 @@
+                 android:scrollbars="vertical"
+                 android:layout_marginTop="10dp"
+                 app:layout_constraintTop_toBottomOf="@id/features" />
++        <TextView
++            android:id="@+id/comments"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginTop="20dp"
++            android:textSize="20sp"
++            android:textStyle="bold"
++            android:text="댓글"
++            app:layout_constraintTop_toBottomOf="@id/show_features" />
++        <LinearLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:orientation="vertical"
++            app:layout_constraintBottom_toBottomOf="parent"
++            android:padding="10dp"
++            android:id="@+id/LL_comments" >
+ 
+         </LinearLayout>
+ 
+Index: src/main/res/layout/activity_edit_info.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:background=\"#FFFFFF\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_width=\"300dp\"\r\n    android:layout_gravity=\"center\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:padding=\"20dp\"\r\n    tools:context=\".editInfo\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\">\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"이름\"\r\n            android:layout_marginLeft=\"10dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:textStyle=\"bold\"\r\n            android:textSize=\"17sp\"\r\n            android:layout_marginStart=\"10dp\" />\r\n        <androidx.appcompat.widget.AppCompatButton\r\n            android:id=\"@+id/btn_addName\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"@drawable/round_btn_2\"\r\n            android:layout_margin=\"10dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:textColor=\"#FFFFFF\"\r\n            android:textStyle=\"bold\" />\r\n    </LinearLayout>\r\n    <HorizontalScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"60dp\"\r\n        android:scrollbars=\"none\"\r\n        android:padding=\"10dp\">\r\n        <LinearLayout\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/namesSpace\"\r\n            android:orientation=\"horizontal\">\r\n        </LinearLayout>\r\n    </HorizontalScrollView>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\">\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"특징\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_marginLeft=\"10dp\"\r\n            android:textStyle=\"bold\"\r\n            android:textSize=\"17sp\"\r\n            android:layout_marginStart=\"10dp\" />\r\n        <androidx.appcompat.widget.AppCompatButton\r\n            android:id=\"@+id/btn_addFeature\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"@drawable/round_btn_2\"\r\n            android:layout_margin=\"10dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:textColor=\"#FFFFFF\"\r\n            android:textStyle=\"bold\" />\r\n    </LinearLayout>\r\n\r\n    <HorizontalScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"60dp\"\r\n        android:scrollbars=\"none\"\r\n        android:padding=\"10dp\">\r\n        <LinearLayout\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/featuresSpace\"\r\n            android:orientation=\"horizontal\">\r\n        </LinearLayout>\r\n    </HorizontalScrollView>\r\n\r\n    <HorizontalScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:scrollbars=\"none\"\r\n        android:padding=\"10dp\">\r\n        <LinearLayout\r\n            android:id=\"@+id/imageSpace\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\">\r\n            <androidx.appcompat.widget.AppCompatButton\r\n                android:id=\"@+id/btn_addImg\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:background=\"@drawable/round_btn_2\"\r\n                android:layout_margin=\"10dp\"\r\n                android:layout_gravity=\"center\"\r\n                android:textColor=\"#FFFFFF\"\r\n                android:textStyle=\"bold\" />\r\n            <TextView\r\n                android:id=\"@+id/addImgInfo\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_margin=\"10dp\"\r\n                android:padding=\"10dp\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"갤러리에서 사진 추가\"\r\n                android:gravity=\"center\" />\r\n\r\n        </LinearLayout>\r\n    </HorizontalScrollView>\r\n\r\n\r\n    <View\r\n        android:layout_width=\"match_parent\"\r\n        android:background=\"#eeeeee\"\r\n        android:layout_height=\"1dp\"/>\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n        <Button\r\n            android:id=\"@+id/btn_cancel\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"#00FF0000\"\r\n            android:textColor=\"#9F9F9F\"\r\n            android:text=\"CANCEL\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:layout_weight=\"1\"/>\r\n        <Button\r\n            android:id=\"@+id/btn_submit\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"#00FF0000\"\r\n            android:textColor=\"#FFC01F\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:text=\"SUBMIT\"\r\n            android:layout_weight=\"1\"/>\r\n    </LinearLayout>\r\n\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/res/layout/activity_edit_info.xml	(revision feb9d38db7cf0b973bb5acdeceb50bf5f74b2e49)
++++ src/main/res/layout/activity_edit_info.xml	(date 1622362398530)
+@@ -14,23 +14,16 @@
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal">
+-        <TextView
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:text="이름"
+-            android:layout_marginLeft="10dp"
+-            android:layout_gravity="center"
+-            android:textStyle="bold"
+-            android:textSize="17sp"
+-            android:layout_marginStart="10dp" />
++
+         <androidx.appcompat.widget.AppCompatButton
+             android:id="@+id/btn_addName"
+-            android:layout_width="wrap_content"
++            android:layout_width="236dp"
+             android:layout_height="wrap_content"
+-            android:background="@drawable/round_btn_2"
+             android:layout_margin="10dp"
+             android:layout_gravity="center"
+-            android:textColor="#FFFFFF"
++            android:background="@android:color/transparent"
++            android:text="이름"
++            android:textColor="#C0C0C0"
+             android:textStyle="bold" />
+     </LinearLayout>
+     <HorizontalScrollView
+@@ -50,23 +43,16 @@
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal">
+-        <TextView
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:text="특징"
+-            android:layout_gravity="center"
+-            android:layout_marginLeft="10dp"
+-            android:textStyle="bold"
+-            android:textSize="17sp"
+-            android:layout_marginStart="10dp" />
++
+         <androidx.appcompat.widget.AppCompatButton
+             android:id="@+id/btn_addFeature"
+-            android:layout_width="wrap_content"
++            android:layout_width="236dp"
+             android:layout_height="wrap_content"
+-            android:background="@drawable/round_btn_2"
+-            android:layout_margin="10dp"
+             android:layout_gravity="center"
+-            android:textColor="#FFFFFF"
++            android:layout_margin="10dp"
++            android:background="@android:color/transparent"
++            android:text="특징"
++            android:textColor="#C0C0C0"
+             android:textStyle="bold" />
+     </LinearLayout>
+ 
+@@ -92,13 +78,16 @@
+             android:id="@+id/imageSpace"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content">
++
+             <androidx.appcompat.widget.AppCompatButton
+                 android:id="@+id/btn_addImg"
+-                android:layout_width="wrap_content"
+-                android:layout_height="wrap_content"
++                android:layout_width="216dp"
++                android:layout_height="41dp"
++                android:layout_gravity="center"
++                android:layout_margin="10dp"
+                 android:background="@drawable/round_btn_2"
+-                android:layout_margin="10dp"
+-                android:layout_gravity="center"
++                android:gravity="center"
++                android:text="갤러리에서 사진 추가"
+                 android:textColor="#FFFFFF"
+                 android:textStyle="bold" />
+             <TextView
+@@ -110,7 +99,7 @@
+                 android:layout_weight="1"
+                 android:text="갤러리에서 사진 추가"
+                 android:gravity="center" />
+-
++            
+         </LinearLayout>
+     </HorizontalScrollView>
+ 
+Index: src/main/java/android/cs/pusan/ac/myapplication/showCatInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package android.cs.pusan.ac.myapplication;\r\n\r\nimport android.content.ContentResolver;\r\nimport android.content.ContentValues;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.graphics.Bitmap;\r\nimport android.net.Uri;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.os.Environment;\r\nimport android.provider.MediaStore;\r\nimport android.text.method.ScrollingMovementMethod;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.ImageButton;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.RequiresApi;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\nimport androidx.recyclerview.widget.StaggeredGridLayoutManager;\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.bumptech.glide.load.engine.DiskCacheStrategy;\r\nimport com.bumptech.glide.request.target.SimpleTarget;\r\nimport com.bumptech.glide.request.transition.Transition;\r\nimport com.github.chrisbanes.photoview.PhotoView;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageReference;\r\n\r\nimport java.io.File;\r\nimport java.io.FileNotFoundException;\r\nimport java.io.FileOutputStream;\r\nimport java.io.IOException;\r\nimport java.io.OutputStream;\r\nimport java.text.SimpleDateFormat;\r\nimport java.util.ArrayList;\r\nimport java.util.Calendar;\r\nimport java.util.Date;\r\nimport java.util.Locale;\r\nimport java.util.Map;\r\n\r\n\r\npublic class showCatInfo extends AppCompatActivity {\r\n\r\n    private FirebaseFirestore mDatabase;\r\n    private StorageReference storageRef;\r\n    private CustomImageAdapter mCustomImageAdapter;\r\n    private StaggeredGridLayoutManager manager;\r\n    private Button subscribeButton;\r\n    private Button unsubscribeButton;\r\n\r\n    TextView textViewName;\r\n    TextView textViewFeatures;\r\n    Button btn_goMain;\r\n    Button btn_edit;\r\n    RecyclerView mRecyclerView;\r\n    View noInfo;\r\n    View layout1;\r\n    View layout2;\r\n    View btns;\r\n    PhotoView photoView;\r\n    Button btn_left;\r\n    Button btn_right;\r\n    ImageButton btn_download;\r\n\r\n    ArrayList<Uri> mArrayUri;\r\n    long num;\r\n    String names;\r\n    String features;\r\n    int nowPos;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_show_catinfo);\r\n\r\n        Log.d(\"CatInfo\", \"get intent\");\r\n        Intent intent = getIntent();\r\n        String catName = intent.getStringExtra(\"catName\");\r\n\r\n        num = 0;\r\n        nowPos = 0;\r\n        setLayout1(catName);\r\n        setLayout2();\r\n\r\n//        subscribeButton = (Button)findViewById(R.id.subscribeButton);\r\n//        unsubscribeButton = (Button)findViewById(R.id.unsubscribeButton);\r\n\r\n        mDatabase = FirebaseFirestore.getInstance();\r\n        FirebaseStorage storage = FirebaseStorage.getInstance(\"gs://db-7a416.appspot.com/\");\r\n        storageRef = storage.getReference();\r\n\r\n        showInfoFromDB(catName);\r\n\r\n    } // End onCreate();\r\n\r\n    public void setLayout1(String catName){\r\n        mRecyclerView = findViewById(R.id.recyclerView);\r\n        noInfo = findViewById(R.id.noInfo);\r\n        textViewName = findViewById(R.id.show_name);\r\n        textViewFeatures = findViewById(R.id.show_features);\r\n        btn_goMain = findViewById(R.id.btn_goMain);\r\n        btn_edit = findViewById(R.id.btn_edit);\r\n        photoView = findViewById(R.id.photoView);\r\n        layout1 = findViewById(R.id.layout1);\r\n\r\n        textViewName.setText(catName);\r\n        textViewName.setMovementMethod(new ScrollingMovementMethod());\r\n        textViewFeatures.setMovementMethod(new ScrollingMovementMethod());\r\n        noInfo.setVisibility(View.VISIBLE);\r\n        mRecyclerView.setVisibility(View.INVISIBLE);\r\n\r\n        mArrayUri = new ArrayList<>();\r\n        manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);\r\n        mRecyclerView.setLayoutManager(manager);\r\n        mCustomImageAdapter = new CustomImageAdapter(1, R.layout.row, getApplicationContext(), mArrayUri);\r\n        mRecyclerView.setAdapter(mCustomImageAdapter);\r\n\r\n        btn_goMain.setOnClickListener(v -> onBackPressed());\r\n        btn_edit.setOnClickListener(v -> {\r\n            Intent intent1 = new Intent(getApplicationContext(), editInfo.class);\r\n            intent1.putExtra(\"names\", names);\r\n            intent1.putExtra(\"features\", features);\r\n            startActivity(intent1);\r\n        });\r\n\r\n        mCustomImageAdapter.setOnItemClickListener((view, position) -> {\r\n            Log.d(\"CLICKED\", \"clicked\");\r\n            nowPos = position;\r\n            Glide.with(getApplicationContext()).load(mArrayUri.get(nowPos)).diskCacheStrategy(DiskCacheStrategy.ALL).into(photoView);\r\n            layout1.setVisibility(View.INVISIBLE);\r\n            layout2.setVisibility(View.VISIBLE);\r\n            setBtnVisibility();\r\n        });\r\n\r\n        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {\r\n            @Override\r\n            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {\r\n                super.onScrolled(recyclerView, dx, dy);\r\n\r\n                int[] lastItems = new int[2];\r\n                int totalItemCount = manager.getItemCount();\r\n                manager.findLastCompletelyVisibleItemPositions(lastItems);\r\n                int lastVisible = Math.max(lastItems[0], lastItems[1]);\r\n                if( lastVisible >= totalItemCount - 1 ){\r\n                    Log.d(\"Recycler\", \"lastVisibled \" + lastVisible);\r\n                    manager.invalidateSpanAssignments();\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    public void setLayout2(){\r\n        layout2 = findViewById(R.id.layout2);\r\n        btns = findViewById(R.id.btns);\r\n        btn_left = findViewById(R.id.btn_left);\r\n        btn_right = findViewById(R.id.btn_right);\r\n        btn_download = findViewById(R.id.btn_download);\r\n\r\n        btn_left.setOnClickListener(v -> {\r\n            if( layout2.getVisibility() == View.VISIBLE && nowPos > 0 ){\r\n                nowPos--;\r\n                Glide.with(getApplicationContext()).load(mArrayUri.get(nowPos)).diskCacheStrategy(DiskCacheStrategy.ALL).into(photoView);\r\n                setBtnVisibility();\r\n            }\r\n        });\r\n        btn_right.setOnClickListener(v -> {\r\n            if( layout2.getVisibility() == View.VISIBLE && nowPos < mArrayUri.size() - 1 ){\r\n                nowPos++;\r\n                Glide.with(getApplicationContext()).load(mArrayUri.get(nowPos)).diskCacheStrategy(DiskCacheStrategy.ALL).into(photoView);\r\n                setBtnVisibility();\r\n            }\r\n        });\r\n        btn_download.setOnClickListener(v -> {\r\n            Glide.with(getApplicationContext()).asBitmap().load(mArrayUri.get(nowPos))\r\n                    .into(new SimpleTarget<Bitmap>() {\r\n                        @Override\r\n                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {\r\n                            try {\r\n                                Date currentTime = Calendar.getInstance().getTime();\r\n                                String date_text = new SimpleDateFormat(\"yyyy-MM-dd-HHmmss\", Locale.getDefault()).format(currentTime);\r\n                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {\r\n                                    saveBitmap(getApplicationContext(), resource, Bitmap.CompressFormat.JPEG, \"image/jpeg\", \"Cat-\"+date_text+\".jpg\");\r\n                                }\r\n                                else{\r\n                                    saveBitmapToJpeg(resource, date_text);\r\n                                }\r\n                            } catch (IOException e) {\r\n                                e.printStackTrace();\r\n                            }\r\n                        }\r\n                    });\r\n        });\r\n        photoView.setOnClickListener(v -> {\r\n            if( btns.getVisibility() == View.VISIBLE ){\r\n                btns.setVisibility(View.INVISIBLE);\r\n            }\r\n            else{\r\n                btns.setVisibility(View.VISIBLE);\r\n            }\r\n        });\r\n    }\r\n\r\n    @RequiresApi(api = Build.VERSION_CODES.Q)\r\n    public void saveBitmap(@NonNull final Context context, @NonNull final Bitmap bitmap,\r\n                           @NonNull final Bitmap.CompressFormat format,\r\n                           @NonNull final String mimeType,\r\n                           @NonNull final String displayName) throws IOException {\r\n        final ContentValues values = new ContentValues();\r\n        values.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);\r\n        values.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);\r\n        values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM);\r\n        final ContentResolver resolver = context.getContentResolver();\r\n        Uri uri = null;\r\n        try{\r\n            final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;\r\n            uri = resolver.insert(contentUri, values);\r\n            if( uri == null )\r\n                throw new IOException(\"Failed to create new MediaStore record.\");\r\n            try( final OutputStream stream = resolver.openOutputStream(uri) ){\r\n                if (stream == null)\r\n                    throw new IOException(\"Failed to open output stream.\");\r\n                if (!bitmap.compress(format, 100, stream))\r\n                    throw new IOException(\"Failed to save bitmap.\");\r\n            }\r\n            Toast.makeText(getApplicationContext(), \"파일을 저장했습니다\", Toast.LENGTH_SHORT).show();\r\n        } catch (IOException e) {\r\n            if( uri != null ){\r\n                resolver.delete(uri, null, null);\r\n            }\r\n            throw e;\r\n        }\r\n    }\r\n\r\n    public void saveBitmapToJpeg(Bitmap bitmap, String fileName) {\r\n        File tempFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName);\r\n        try {\r\n            tempFile.createNewFile();\r\n            FileOutputStream out = new FileOutputStream(tempFile);\r\n            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);\r\n            out.close();\r\n            Toast.makeText(getApplicationContext(), \"파일을 저장했습니다\", Toast.LENGTH_SHORT).show();\r\n        } catch(FileNotFoundException exception){\r\n            Log.e(\"FileNotFoundException\", exception.getMessage());\r\n        }catch(IOException exception){\r\n            Log.e(\"IOException\", exception.getMessage());\r\n        }\r\n    }\r\n\r\n    public void setBtnVisibility(){\r\n        if( nowPos == mArrayUri.size() - 1 ){\r\n            btn_right.setVisibility(View.INVISIBLE);\r\n        }\r\n        else{\r\n            btn_right.setVisibility(View.VISIBLE);\r\n        }\r\n        if( nowPos == 0 ){\r\n            btn_left.setVisibility(View.INVISIBLE);\r\n        }\r\n        else{\r\n            btn_left.setVisibility(View.VISIBLE);\r\n        }\r\n    }\r\n\r\n    /*\r\n    DB에서 정보 들고 와서 인포 보여주기\r\n     */\r\n    public void showInfoFromDB(String catName){\r\n        String docPath = \"catInfo/\" + catName;\r\n        mDatabase.document(docPath)\r\n                .get()\r\n                .addOnCompleteListener(task -> {\r\n                    if( task.isSuccessful() ){\r\n                        Map<String, Object> getDB = task.getResult().getData();\r\n                        if( getDB == null ){\r\n                            Log.d(\"DB Error\", \"Error get DB no data\", task.getException());\r\n                            return;\r\n                        }\r\n                        Object ob;\r\n                        if( (ob = getDB.get(\"names\")) != null ){\r\n                            names = ob.toString();\r\n                            textViewName.setText(names.replace(\"(endline)\", \", \"));\r\n                        }\r\n                        if( (ob = getDB.get(\"features\")) != null ){\r\n                            features = ob.toString();\r\n                            textViewFeatures.setText(features.replace(\"(endline)\", \"\\n\"));\r\n                        }\r\n                        if( (ob = getDB.get(\"num\")) != null ){\r\n                            num = (Long)ob;\r\n                        }\r\n                        Log.d(\"SHOW\", catName + \" => \" + features + \" \" + num);\r\n\r\n                        if( num > 0 ){\r\n                            noInfo.setVisibility(View.INVISIBLE);\r\n                            mRecyclerView.setVisibility(View.VISIBLE);\r\n                        }\r\n                        for(int i = 1; i < num + 1; i++){\r\n                            String filename = i + \".jpg\";\r\n                            storageRef.child(catName + \"/\" + filename).getDownloadUrl().addOnCompleteListener(task1 -> {\r\n                                if( task1.isSuccessful() ){\r\n                                    Log.d(\"GETURI\", catName + \"/\" + filename + \" Success \");\r\n                                    mArrayUri.add(task1.getResult());\r\n                                    manager.invalidateSpanAssignments();\r\n                                }\r\n                                else{\r\n                                    Log.d(\"GETURI\", catName + \"/\" + filename + \" Fail\");\r\n                                }\r\n                            });\r\n                        } // End for\r\n                    }\r\n                    else{\r\n                        Log.d(\"SHOW\", \"Error show DB\", task.getException());\r\n                    }\r\n                });\r\n\r\n\r\n    } // End showInfoFromDB();\r\n\r\n    @Override\r\n    public void onBackPressed(){\r\n        if( layout2.getVisibility() == View.VISIBLE ){\r\n            layout1.setVisibility(View.VISIBLE);\r\n            layout2.setVisibility(View.INVISIBLE);\r\n        }\r\n        else{\r\n            super.onBackPressed();\r\n        }\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/android/cs/pusan/ac/myapplication/showCatInfo.java	(revision feb9d38db7cf0b973bb5acdeceb50bf5f74b2e49)
++++ src/main/java/android/cs/pusan/ac/myapplication/showCatInfo.java	(date 1622362621262)
+@@ -3,8 +3,11 @@
+ import android.content.ContentResolver;
+ import android.content.ContentValues;
+ import android.content.Context;
++import android.content.DialogInterface;
+ import android.content.Intent;
+ import android.graphics.Bitmap;
++import android.graphics.BitmapFactory;
++import android.graphics.Color;
+ import android.net.Uri;
+ import android.os.Build;
+ import android.os.Bundle;
+@@ -12,14 +15,18 @@
+ import android.provider.MediaStore;
+ import android.text.method.ScrollingMovementMethod;
+ import android.util.Log;
++import android.view.KeyEvent;
+ import android.view.View;
+ import android.widget.Button;
++import android.widget.EditText;
+ import android.widget.ImageButton;
++import android.widget.LinearLayout;
+ import android.widget.TextView;
+ import android.widget.Toast;
+ 
+ import androidx.annotation.NonNull;
+ import androidx.annotation.RequiresApi;
++import androidx.appcompat.app.AlertDialog;
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.recyclerview.widget.RecyclerView;
+ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+@@ -29,7 +36,15 @@
+ import com.bumptech.glide.request.target.SimpleTarget;
+ import com.bumptech.glide.request.transition.Transition;
+ import com.github.chrisbanes.photoview.PhotoView;
++import com.google.android.gms.maps.model.BitmapDescriptorFactory;
++import com.google.android.gms.maps.model.LatLng;
++import com.google.android.gms.maps.model.MarkerOptions;
++import com.google.android.gms.tasks.OnFailureListener;
++import com.google.android.gms.tasks.OnSuccessListener;
++import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.firestore.Query;
++import com.google.firebase.firestore.QueryDocumentSnapshot;
+ import com.google.firebase.storage.FirebaseStorage;
+ import com.google.firebase.storage.StorageReference;
+ 
+@@ -42,14 +57,17 @@
+ import java.util.ArrayList;
+ import java.util.Calendar;
+ import java.util.Date;
++import java.util.HashMap;
+ import java.util.Locale;
+ import java.util.Map;
++import java.util.Objects;
+ 
+ 
+ public class showCatInfo extends AppCompatActivity {
+ 
+     private FirebaseFirestore mDatabase;
+     private StorageReference storageRef;
++    String uid;
+     private CustomImageAdapter mCustomImageAdapter;
+     private StaggeredGridLayoutManager manager;
+     private Button subscribeButton;
+@@ -63,6 +81,7 @@
+     View noInfo;
+     View layout1;
+     View layout2;
++    LinearLayout LL_comments;
+     View btns;
+     PhotoView photoView;
+     Button btn_left;
+@@ -73,7 +92,9 @@
+     long num;
+     String names;
+     String features;
++    String catName;
+     int nowPos;
++    AlertDialog.Builder builder;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -82,7 +103,11 @@
+ 
+         Log.d("CatInfo", "get intent");
+         Intent intent = getIntent();
+-        String catName = intent.getStringExtra("catName");
++        catName = intent.getStringExtra("catName");
++        builder = new AlertDialog.Builder(this);
++
++        uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
++        mDatabase = FirebaseFirestore.getInstance();
+ 
+         num = 0;
+         nowPos = 0;
+@@ -92,7 +117,6 @@
+ //        subscribeButton = (Button)findViewById(R.id.subscribeButton);
+ //        unsubscribeButton = (Button)findViewById(R.id.unsubscribeButton);
+ 
+-        mDatabase = FirebaseFirestore.getInstance();
+         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
+         storageRef = storage.getReference();
+ 
+@@ -109,6 +133,7 @@
+         btn_edit = findViewById(R.id.btn_edit);
+         photoView = findViewById(R.id.photoView);
+         layout1 = findViewById(R.id.layout1);
++        LL_comments = findViewById(R.id.LL_comments);
+ 
+         textViewName.setText(catName);
+         textViewName.setMovementMethod(new ScrollingMovementMethod());
+@@ -155,6 +180,173 @@
+             }
+         });
+ 
++
++        String docPath = "catInfo/" + catName + "/comments";
++        mDatabase.collection(docPath).orderBy("when", Query.Direction.ASCENDING)
++                .get()
++                .addOnCompleteListener(task -> {
++                    if( task.isSuccessful() ){
++                        Log.d("SetComments", "Successful");
++                        String who = "?"; String what = "?"; String when = "?"; String commentUID = "?";
++                        for(QueryDocumentSnapshot document : task.getResult()){
++                            String docID = document.getId();
++                            Log.d("SetComments", docID);
++                            Map<String, Object> getDB = document.getData();
++                            Object ob;
++                            if( (ob = getDB.get("who")) != null ){
++                                who = ob.toString();
++                            }
++                            if( (ob = getDB.get("what")) != null ){
++                                what = ob.toString();
++                            }
++                            if( (ob = getDB.get("when")) != null ){
++                                when = ob.toString();
++                            }
++                            if( (ob = getDB.get("uid")) != null ){
++                                commentUID = ob.toString();
++                            }
++                            if( commentUID.equals(uid) ){
++                                createComment(who, what, when, 1, docID);
++                            }
++                            else{
++                                createComment(who, what, when, 0, "");
++                            }
++                        }
++                        createEditView(LL_comments);
++                    }
++                    else{
++                        Log.d("Marker", "Error show DB", task.getException());
++                    }
++                });
++
++    }
++
++    public void createComment(String who, String what, String when, int isMyComment, String docID){
++        LinearLayout commentBox = new LinearLayout(this);
++        commentBox.setOrientation(LinearLayout.VERTICAL);
++
++        commentBox.setTag(docID);
++        if( isMyComment == 1 ){
++            commentBox.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v){
++                    Log.d("ClickedMyComment", docID);
++
++                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener(){
++                        @Override
++                        public void onClick(DialogInterface dialog, int which) {
++                            Log.d("ClickedMyComment", "확인");
++                            mDatabase.collection("catInfo/" + catName + "/comments").document(docID)
++                                    .delete()
++                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
++                                        @Override
++                                        public void onSuccess(Void aVoid) {
++                                            Log.d("ClickedMyComment", "DocumentSnapshot successfully deleted!");
++                                        }
++                                    })
++                                    .addOnFailureListener(new OnFailureListener() {
++                                        @Override
++                                        public void onFailure(@NonNull Exception e) {
++                                            Log.w("ClickedMyComment", "Error deleting document", e);
++                                        }
++                                    });
++                            commentBox.setVisibility(View.GONE);
++                        }
++                    });
++                    builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
++                        @Override
++                        public void onClick(DialogInterface dialog, int which) {
++                            Log.d("ClickedMyComment", "취소");
++                        }
++                    });
++                    //builder.setIcon(R.drawable.ic_launcher);
++
++                    builder.setTitle("댓글을 지우시겠습니까?");
++                    AlertDialog alertDialog = builder.create();
++                    alertDialog.show();
++
++                }
++            });
++        }
++
++        commentBox.addView(createTextView(who, 1, isMyComment));
++        commentBox.addView(createTextView(what, 2, isMyComment));
++        commentBox.addView(createTextView(when, 3, isMyComment));
++        LL_comments.addView(commentBox);
++    }
++
++    public int convertDPtoPX(int dp) {
++        float density = getApplicationContext().getResources().getDisplayMetrics().density;
++        return Math.round((float) dp * density);
++    }
++
++    public TextView createTextView(String value, int num, int isMyComment){
++        TextView textView = new TextView(getApplicationContext());
++        textView.setText(value);
++        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
++        if( num == 1 ){
++            if( isMyComment == 1 ){
++                textView.setTextColor(Color.parseColor("#FF9800"));
++            }
++            else{
++                textView.setTextColor(Color.parseColor("#000000"));
++            }
++            textView.setTextSize(13);
++            param.topMargin = convertDPtoPX(5);
++        }
++        else if( num == 2 ){
++            textView.setTextColor(Color.parseColor("#000000"));
++            textView.setTextSize(15);
++            param.leftMargin = convertDPtoPX(2);
++        }
++        else{
++            textView.setTextColor(Color.parseColor("#9F9F9F"));
++            textView.setTextSize(10);
++            param.bottomMargin = convertDPtoPX(5);
++        }
++        textView.setLayoutParams(param);
++        textView.setOnClickListener(v -> {
++            ;
++        });
++        return textView;
++    }
++
++    public void createEditView(LinearLayout linearLayout){
++        EditText editText = new EditText(getApplicationContext());
++        editText.setHint("댓글을 입력하세요");
++        editText.setEms(20);
++
++        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
++        editText.setLayoutParams(param);
++
++        editText.setOnKeyListener((v, keyCode, event) -> {
++            if( keyCode == KeyEvent.KEYCODE_ENTER ){
++                String who = "익명";
++                String what = editText.getText().toString();
++                if( what.equals("") ) return true;
++                Date currentTime = Calendar.getInstance().getTime();
++                String when = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.getDefault()).format(currentTime);
++                editText.setVisibility(View.GONE);
++
++                Map<String, Object> data = new HashMap<>();
++                data.put("who", who);
++                data.put("what", what);
++                data.put("when", when);
++                data.put("uid", uid);
++
++                mDatabase.collection("catInfo/" + catName + "/comments")
++                        .add(data)
++                        .addOnSuccessListener(documentReference -> {
++                            createComment(who, what, when, 1, documentReference.getId());
++                            createEditView(linearLayout);
++                        })
++                        .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
++                return true;
++            }
++            return false;
++        });
++
++        linearLayout.addView(editText);
+     }
+ 
+     public void setLayout2(){
+Index: ../sdk/build/intermediates/incremental/packageDebugResources/compile-file-map.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Thu May 27 16:24:12 KST 2021\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>x-windows-949
+===================================================================
+--- ../sdk/build/intermediates/incremental/packageDebugResources/compile-file-map.properties	(revision feb9d38db7cf0b973bb5acdeceb50bf5f74b2e49)
++++ ../sdk/build/intermediates/incremental/packageDebugResources/compile-file-map.properties	(date 1622362346273)
+@@ -1,1 +1,1 @@
+-#Thu May 27 16:24:12 KST 2021
++#Sun May 30 17:12:26 KST 2021
+Index: src/main/java/android/cs/pusan/ac/myapplication/showAlbum.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package android.cs.pusan.ac.myapplication;\r\n\r\nimport android.content.Intent;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.KeyEvent;\r\nimport android.view.View;\r\nimport android.widget.AdapterView;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.Spinner;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\nimport androidx.recyclerview.widget.StaggeredGridLayoutManager;\r\n\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.messaging.FirebaseMessaging;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageReference;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Map;\r\n\r\n\r\npublic class showAlbum extends AppCompatActivity {\r\n\r\n    private FirebaseFirestore mDatabase;\r\n    private StorageReference storageRef;\r\n    private CustomImageAdapter mCustomImageAdapter;\r\n    private StaggeredGridLayoutManager manager;\r\n    private Button subscribeButton;\r\n    private Button unsubscribeButton;\r\n    private Spinner spinnerTopics;\r\n    private String topicSelected;\r\n\r\n    EditText editText;\r\n    Button btn_search;\r\n    View noInfo;\r\n    RecyclerView mRecyclerView;\r\n    ArrayList<Uri> mArrayUri;\r\n    ArrayList<String> catNames;\r\n    Object[] IndexArray;\r\n    ArrayList<Uri> searchedUri;\r\n    ArrayList<String> searchedUriName;\r\n    boolean searched = false;\r\n    int cnt = 0;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_show_album);\r\n\r\n        mRecyclerView = findViewById(R.id.recyclerView);\r\n        editText = findViewById(R.id.editText);\r\n        btn_search = findViewById(R.id.btn_search);\r\n        noInfo = findViewById(R.id.noInfo);\r\n        noInfo.setVisibility(View.INVISIBLE);\r\n        mRecyclerView.setVisibility(View.VISIBLE);\r\n\r\n        subscribeButton = (Button)findViewById(R.id.subscribeButton);\r\n        unsubscribeButton = (Button)findViewById(R.id.unsubscribeButton);\r\n        spinnerTopics = (Spinner)findViewById(R.id.spinnerTopics);\r\n\r\n        mDatabase = FirebaseFirestore.getInstance();\r\n        FirebaseStorage storage = FirebaseStorage.getInstance(\"gs://db-7a416.appspot.com/\");\r\n        storageRef = storage.getReference();\r\n\r\n        catNames = MainActivity.catNames;\r\n\r\n        Log.d(\"SHOWALBUM\", catNames.get(0) + ' ' + catNames.size());\r\n        mArrayUri = new ArrayList<>();\r\n        IndexArray = new Object[catNames.size()];\r\n        cnt = 0;\r\n\r\n        manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);\r\n        mRecyclerView.setLayoutManager(manager);\r\n        mCustomImageAdapter = new CustomImageAdapter(2, R.layout.row2, getApplicationContext(), mArrayUri);\r\n        mCustomImageAdapter.setIndexArray(IndexArray);\r\n        mRecyclerView.setAdapter(mCustomImageAdapter);\r\n\r\n        // [START bring_topic_spinner]\r\n        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, catNames);\r\n        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);\r\n        spinnerTopics.setAdapter(adapter);\r\n        spinnerTopics.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {\r\n            @Override\r\n            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {\r\n                topicSelected = catNames.get(position);\r\n            }\r\n            @Override\r\n            public void onNothingSelected(AdapterView<?> parent) {\r\n                topicSelected = catNames.get(0);\r\n            }\r\n        });\r\n        // [END bring_topic_spinner]\r\n\r\n        // [START subscribe_topics]\r\n        subscribeButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                String topic = spinnerTopics.getSelectedItem().toString();\r\n                FirebaseMessaging.getInstance().subscribeToTopic(topic)\r\n                        .addOnCompleteListener(task ->{\r\n                            if(task.isSuccessful()){\r\n                                Toast.makeText(showAlbum.this, topic + \" 구독 성공\", Toast.LENGTH_SHORT).show();\r\n                            }else{\r\n                                Toast.makeText(showAlbum.this, topic + \" 구독 실패\", Toast.LENGTH_SHORT).show();\r\n                            }\r\n                        });\r\n            }\r\n        });\r\n        // [END subscribe_topics]\r\n\r\n        // [START unsubscribe_topics]\r\n        unsubscribeButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                String topic = spinnerTopics.getSelectedItem().toString();\r\n                FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)\r\n                        .addOnCompleteListener(task ->{\r\n                            if(task.isSuccessful()){\r\n                                Toast.makeText(showAlbum.this, topic + \" 구독취소 성공\", Toast.LENGTH_SHORT).show();\r\n                            }else{\r\n                                Toast.makeText(showAlbum.this, topic + \" 구독취소 실패\", Toast.LENGTH_SHORT).show();\r\n                            }\r\n                        });\r\n            }\r\n        });\r\n        // [END unsubscribe_topics]\r\n\r\n        showRecyclerView();\r\n\r\n        editText.setOnKeyListener((v, keyCode, event) -> {\r\n            if( keyCode == KeyEvent.KEYCODE_ENTER ){\r\n                Log.d(\"IndexArray\", \"key clicked\");\r\n                searchName();\r\n                return true;\r\n            }\r\n            return false;\r\n        });\r\n\r\n        btn_search.setOnClickListener(v -> {\r\n            Log.d(\"IndexArray\", \"btn clicked\"); searchName();});\r\n\r\n        mCustomImageAdapter.setOnItemClickListener((view, position) -> {\r\n            Log.d(\"CLICKED\", \"clicked \" + IndexArray[position]);\r\n            Intent intent1 = new Intent(getApplicationContext(), showCatInfo.class);\r\n            if( searched ){\r\n                intent1.putExtra(\"catName\", searchedUriName.get(position));\r\n            }\r\n            else{\r\n                intent1.putExtra(\"catName\", IndexArray[position].toString());\r\n            }\r\n            startActivity(intent1);\r\n        });\r\n\r\n        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {\r\n            @Override\r\n            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {\r\n                super.onScrolled(recyclerView, dx, dy);\r\n\r\n                int[] lastItems = new int[2];\r\n                int totalItemCount = manager.getItemCount();\r\n                manager.findLastCompletelyVisibleItemPositions(lastItems);\r\n                int lastVisible = Math.max(lastItems[0], lastItems[1]);\r\n                if (lastVisible >= totalItemCount - 1) {\r\n                    Log.d(\"Recycler\", \"lastVisibled\");\r\n                    manager.invalidateSpanAssignments();\r\n                }\r\n            }\r\n        });\r\n    } // End onCreate();\r\n\r\n    /*\r\n    DB에서 대표 이미지 들고 와서 리사이클러뷰 보여주기\r\n     */\r\n    public void showRecyclerView(){\r\n        String docPath = \"catNamesNums/nums\";\r\n        mDatabase.document(docPath)\r\n                .get()\r\n                .addOnCompleteListener(task -> {\r\n                    if( task.isSuccessful() ){\r\n                        Map<String, Object> getDB = task.getResult().getData();\r\n                        if( getDB == null ){\r\n                            Log.d(\"DB Error\", \"Error get DB no data\", task.getException());\r\n                            return;\r\n                        }\r\n                        Object ob;\r\n                        for(int i = 0; i < catNames.size(); i++){\r\n                            String catName = catNames.get(i);\r\n                            long num = 0;\r\n                            if( (ob = getDB.get(catName)) != null ){\r\n                                num = (Long)ob;\r\n                                Log.d(\"GETURI\", catName + \"/\" + num);\r\n                            }\r\n                            if( num == 0 ){\r\n                                storageRef.child(\"0.jpg\").getDownloadUrl().addOnCompleteListener(task1 -> {\r\n                                    if( task1.isSuccessful() ){\r\n                                        IndexArray[cnt] = catName;\r\n                                        cnt++;\r\n                                        mArrayUri.add(task1.getResult());\r\n                                        Log.d(\"GETURI!!\", \"Success \"+cnt);\r\n                                        manager.invalidateSpanAssignments();\r\n                                    }\r\n                                    else{\r\n                                        Log.d(\"GETURI!!\", \"Fail\");\r\n                                    }\r\n                                });\r\n                            }\r\n                            else{\r\n                                storageRef.child(catName + \"/\" + num + \".jpg\").getDownloadUrl().addOnCompleteListener(task1 -> {\r\n                                    if( task1.isSuccessful() ){\r\n                                        IndexArray[cnt] = catName;\r\n                                        cnt++;\r\n                                        mArrayUri.add(task1.getResult());\r\n                                        Log.d(\"GETURI!!\", \"Success \"+cnt);\r\n                                        manager.invalidateSpanAssignments();\r\n                                    }\r\n                                    else{\r\n                                        Log.d(\"GETURI!!\", \"Fail\");\r\n                                    }\r\n                                });\r\n                            }\r\n                        }\r\n                    }\r\n                    else{\r\n                        Log.d(\"SHOW\", \"Error show DB\", task.getException());\r\n                    }\r\n                });\r\n    } // End showRecyclerView();\r\n\r\n    /*\r\n    DB에 별명이 있는지 검색해서 결과 보여줌\r\n     */\r\n    public void searchName(){\r\n        noInfo.setVisibility(View.INVISIBLE);\r\n        String searchName = editText.getText().toString();\r\n        if( searchName.equals(\"\") ){\r\n            mCustomImageAdapter.setArrayUri(mArrayUri);\r\n            mCustomImageAdapter.notifyDataSetChanged();\r\n            mRecyclerView.setVisibility(View.VISIBLE);\r\n            searched = false;\r\n            mCustomImageAdapter.setSearched(searched);\r\n            return;\r\n        }\r\n        String docPath = \"catNamesNums/names\";\r\n        mDatabase.document(docPath)\r\n                .get()\r\n                .addOnCompleteListener(task -> {\r\n                    if( task.isSuccessful() && task.getResult().getData() != null ){\r\n                        Map<String, Object> getDB = task.getResult().getData();\r\n                        Object ob;\r\n                        if( (ob = getDB.get(searchName)) != null ){\r\n                            String catName = ob.toString();\r\n                            searchedUri = new ArrayList<>();\r\n                            searchedUriName = new ArrayList<>();\r\n                            for(int i = 0; i < IndexArray.length; i++){\r\n                                if( IndexArray[i].toString().equals(catName) ){\r\n                                    searchedUri.add(mArrayUri.get(i));\r\n                                    searchedUriName.add(catName);\r\n                                    searched = true;\r\n                                }\r\n                            }\r\n                            if( searched ){\r\n                                mCustomImageAdapter.setSearched(searched);\r\n                                mCustomImageAdapter.setSearchedArrayUriName(searchedUriName);\r\n                                mCustomImageAdapter.setArrayUri(searchedUri);\r\n                                mCustomImageAdapter.notifyDataSetChanged();\r\n                                mRecyclerView.setVisibility(View.VISIBLE);\r\n                            }\r\n                        }\r\n                        else{\r\n                            noInfo.setVisibility(View.VISIBLE);\r\n                            mRecyclerView.setVisibility(View.INVISIBLE);\r\n                        }\r\n                    }\r\n                    else{\r\n                        Log.d(\"SHOW\", \"Error show DB\", task.getException());\r\n                    }\r\n                });\r\n    } // End searchName();\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/android/cs/pusan/ac/myapplication/showAlbum.java	(revision feb9d38db7cf0b973bb5acdeceb50bf5f74b2e49)
++++ src/main/java/android/cs/pusan/ac/myapplication/showAlbum.java	(date 1622362345898)
+@@ -18,12 +18,18 @@
+ import androidx.recyclerview.widget.RecyclerView;
+ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+ 
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.Task;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.firestore.DocumentReference;
++import com.google.firebase.firestore.DocumentSnapshot;
+ import com.google.firebase.firestore.FirebaseFirestore;
+ import com.google.firebase.messaging.FirebaseMessaging;
+ import com.google.firebase.storage.FirebaseStorage;
+ import com.google.firebase.storage.StorageReference;
+ 
+ import java.util.ArrayList;
++import java.util.HashMap;
+ import java.util.Map;
+ 
+ 
+@@ -50,6 +56,10 @@
+     boolean searched = false;
+     int cnt = 0;
+ 
++    //구독하는 uid저장 -> 즐겨찾기 구현
++    String[] uids;
++    long catNum= 0; //favoritesDB 함수에서 사용
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+@@ -107,6 +117,8 @@
+                 FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                         .addOnCompleteListener(task ->{
+                             if(task.isSuccessful()){
++                                //firestoreDB favorites에 정보 추가
++                                add_favoritesDB(topic);
+                                 Toast.makeText(showAlbum.this, topic + " 구독 성공", Toast.LENGTH_SHORT).show();
+                             }else{
+                                 Toast.makeText(showAlbum.this, topic + " 구독 실패", Toast.LENGTH_SHORT).show();
+@@ -176,6 +188,67 @@
+         });
+     } // End onCreate();
+ 
++    // [START add_favoritesDB]
++    private void add_favoritesDB(String topic){//topic은 고양이 이름
++
++
++        FirebaseMessaging.getInstance().getToken()
++                .addOnCompleteListener(new OnCompleteListener<String>() {
++                    @Override
++                    public void onComplete(@NonNull Task<String> task) {
++                        if (!task.isSuccessful()) {
++                            Toast.makeText(showAlbum.this, "즐겨찾기에 추가 실패!.", Toast.LENGTH_SHORT).show();
++                            return;
++                        }
++
++                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
++
++                        // [START get_document]
++                        DocumentReference docRef = mDatabase.collection("catNamesNums").document("nums");
++                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
++                            @Override
++                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
++                                if (task.isSuccessful()) {
++                                    Map<String, Object> getDB = task.getResult().getData();
++                                    DocumentSnapshot document = task.getResult();
++                                    if (document.exists()) {
++//                                        catNum[0] = document.get(catName[0]).toString();
++//                                        Log.d("favoritesDB", "Document exists" + document.getData());
++
++                                        //catnumcatNamesNums/nums에서 고양이 수 가져오기_start
++                                        Object ob;
++                                        if( (ob = getDB.get(topic)) != null ){
++                                            catNum = (Long)ob;
++                                        }
++                                        //catnumcatNamesNums/nums에서 고양이 수 가져오기_end
++
++                                        //DB에 저장
++                                        Map<String, Object> favorite = new HashMap<>();
++                                        favorite.put("catNum", catNum);
++                                        favorite.put("catName", topic);
++                                        mDatabase.document("favorites/"+uid).set(favorite);
++
++                                        // Log and toast
++                                        Toast.makeText(showAlbum.this,  "즐겨찾기에 추가 성공!", Toast.LENGTH_SHORT).show();
++
++                                        Log.d("favoritesDB", "Document exists " + catNum );
++
++
++
++                                    } else {
++                                        Log.d("favoritesDB", "Document not exists");
++                                    }
++                                } else {
++                                    Log.d("favoritesDB", "get failed with ", task.getException());
++                                }
++                            }
++                        });
++                        // [END get_document]
++                    }
++                });
++    }
++    // [END favoritesDB]
++
+     /*
+     DB에서 대표 이미지 들고 와서 리사이클러뷰 보여주기
+      */
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(date 1622362069027)
++++ .idea/misc.xml	(date 1622362069027)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/build/classes" />
++  </component>
++  <component name="ProjectType">
++    <option name="id" value="Android" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(date 1622362069048)
++++ .idea/modules.xml	(date 1622362069048)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/vcs.xml	(date 1622362069038)
++++ .idea/vcs.xml	(date 1622362069038)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/.gitignore	(date 1622362071978)
++++ .idea/.gitignore	(date 1622362071978)
+@@ -0,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(date 1622362069059)
++++ .idea/gradle.xml	(date 1622362069059)
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="GradleSettings">
++    <option name="linkedExternalProjectsSettings">
++      <GradleProjectSettings>
++        <option name="testRunner" value="PLATFORM" />
++        <option name="distributionType" value="DEFAULT_WRAPPED" />
++        <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="gradleJvm" value="1.8" />
++        <option name="resolveModulePerSourceSet" value="false" />
++        <option name="useQualifiedModuleNames" value="true" />
++      </GradleProjectSettings>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+diff --git ../sdk/build/intermediates/incremental/packageDebugResources/merged.dir/values/values.xml ../sdk/build/intermediates/incremental/packageDebugResources/merged.dir/values/values.xml
+diff --git ../sdk/build/intermediates/packaged_res/debug/values/values.xml ../sdk/build/intermediates/packaged_res/debug/values/values.xml
+diff --git ../sdk/build/intermediates/incremental/packageDebugResources/merger.xml ../sdk/build/intermediates/incremental/packageDebugResources/merger.xml

@@ -1,0 +1,9 @@
+<changelist name="Uncommitted_changes_before_Checkout_at_2021-05-30_오후_5_24_[Default_Changelist]" date="1622363110050" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2021-05-30_오후_5_24_[Default_Changelist]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 2021-05-30 오후 5:24 [Default Changelist]" />
+  <binary>
+    <option name="BEFORE_PATH" value="../sdk/build/intermediates/cmake/debug/obj/arm64-v8a/libopencv_jni_shared.a" />
+    <option name="AFTER_PATH" value="../sdk/build/intermediates/cmake/debug/obj/arm64-v8a/libopencv_jni_shared.a" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2021-05-30_오후_5_24_[Default_Changelist]/libopencv_jni_shared.a" />
+  </binary>
+</changelist>

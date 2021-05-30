@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +19,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,7 +27,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +41,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.text.SimpleDateFormat;
@@ -59,7 +56,6 @@ public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationClient;
     private int clickedcnt = 0;
     private String clickedname = "?";
     public static ArrayList<String> catNames;
@@ -72,17 +68,10 @@ public class MainActivity extends AppCompatActivity
     private TextView tvEmailId;
     private Boolean checking;
 
-    // 마지막으로 뒤로가기 버튼을 눌렀던 시간 저장
-    private long backKeyPressedTime = 0;
-    // 첫 번째 뒤로가기 버튼을 누를때 표시
-    private Toast toast;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         setTheme(R.style.Theme_MyApplication);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -91,21 +80,7 @@ public class MainActivity extends AppCompatActivity
         mDatabase = FirebaseFirestore.getInstance();
         catNames = new ArrayList<>();
         namesAndTypes = new HashMap<>();
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionCheck();
-            return;
-        }
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if(location != null) {
-                            Log.d("LOCATIONTEST", "위도: " + String.valueOf(location.getLatitude()) + ", 경도: " + String.valueOf(location.getLongitude()));
-                        }
-                    }
-                });
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelectedListener());
         bottomNavigationView.setItemIconTintList(null);
@@ -179,10 +154,8 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(getApplicationContext(), "로그인 안되어 있습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 return true;
             }
-
         });
         smallMarkerChecking();
 
@@ -453,24 +426,5 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onBackPressed() {
-
-        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)){
-            mDrawerLayout.closeDrawers();
-        } else{
-            if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-                backKeyPressedTime = System.currentTimeMillis();
-                toast = Toast.makeText(this, "종료하려면 한번 더 누르세요.", Toast.LENGTH_SHORT);
-                toast.show();
-                return;
-            }
-            if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-                finish();
-                toast.cancel();
-            }
-        }
-
-    }
 
 }

@@ -1,0 +1,52 @@
+Index: ../sdk/build/intermediates/incremental/packageDebugResources/compile-file-map.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Sun May 30 16:21:15 KST 2021\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>x-windows-949
+===================================================================
+--- ../sdk/build/intermediates/incremental/packageDebugResources/compile-file-map.properties	(revision 7a94dfe7fb587bc6fa8accf8d015c6c6187d1c2c)
++++ ../sdk/build/intermediates/incremental/packageDebugResources/compile-file-map.properties	(date 1622361807195)
+@@ -1,1 +1,1 @@
+-#Sun May 30 16:21:15 KST 2021
++#Sun May 30 17:03:27 KST 2021
+Index: src/main/res/layout/activity_edit_info.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:background=\"#FFFFFF\"\r\n    android:orientation=\"vertical\"\r\n    android:layout_width=\"300dp\"\r\n    android:layout_gravity=\"center\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:padding=\"20dp\"\r\n    tools:context=\".editInfo\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <androidx.appcompat.widget.AppCompatButton\r\n            android:id=\"@+id/btn_addName\"\r\n            android:layout_width=\"236dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_margin=\"10dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:background=\"@android:color/transparent\"\r\n            android:text=\"이름\"\r\n            android:textColor=\"#C0C0C0\"\r\n            android:textStyle=\"bold\" />\r\n    </LinearLayout>\r\n    <HorizontalScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"60dp\"\r\n        android:scrollbars=\"none\"\r\n        android:padding=\"10dp\">\r\n        <LinearLayout\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/namesSpace\"\r\n            android:orientation=\"horizontal\">\r\n        </LinearLayout>\r\n    </HorizontalScrollView>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <androidx.appcompat.widget.AppCompatButton\r\n            android:id=\"@+id/btn_addFeature\"\r\n            android:layout_width=\"236dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_margin=\"10dp\"\r\n            android:background=\"@android:color/transparent\"\r\n            android:text=\"특징\"\r\n            android:textColor=\"#C0C0C0\"\r\n            android:textStyle=\"bold\" />\r\n    </LinearLayout>\r\n\r\n    <HorizontalScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"60dp\"\r\n        android:scrollbars=\"none\"\r\n        android:padding=\"10dp\">\r\n        <LinearLayout\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:id=\"@+id/featuresSpace\"\r\n            android:orientation=\"horizontal\">\r\n        </LinearLayout>\r\n    </HorizontalScrollView>\r\n\r\n    <HorizontalScrollView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:scrollbars=\"none\"\r\n        android:padding=\"10dp\">\r\n        <LinearLayout\r\n            android:id=\"@+id/imageSpace\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\">\r\n\r\n            <androidx.appcompat.widget.AppCompatButton\r\n                android:id=\"@+id/btn_addImg\"\r\n                android:layout_width=\"216dp\"\r\n                android:layout_height=\"41dp\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_margin=\"10dp\"\r\n                android:background=\"@drawable/round_btn_2\"\r\n                android:gravity=\"center\"\r\n                android:text=\"갤러리에서 사진 추가\"\r\n                android:textColor=\"#FFFFFF\"\r\n                android:textStyle=\"bold\" />\r\n            \r\n        </LinearLayout>\r\n    </HorizontalScrollView>\r\n\r\n\r\n    <View\r\n        android:layout_width=\"match_parent\"\r\n        android:background=\"#eeeeee\"\r\n        android:layout_height=\"1dp\"/>\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\">\r\n        <Button\r\n            android:id=\"@+id/btn_cancel\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"#00FF0000\"\r\n            android:textColor=\"#9F9F9F\"\r\n            android:text=\"CANCEL\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:layout_weight=\"1\"/>\r\n        <Button\r\n            android:id=\"@+id/btn_submit\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"#00FF0000\"\r\n            android:textColor=\"#FFC01F\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:text=\"SUBMIT\"\r\n            android:layout_weight=\"1\"/>\r\n    </LinearLayout>\r\n\r\n\r\n</LinearLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/res/layout/activity_edit_info.xml	(revision 7a94dfe7fb587bc6fa8accf8d015c6c6187d1c2c)
++++ src/main/res/layout/activity_edit_info.xml	(date 1622361898741)
+@@ -81,7 +81,7 @@
+ 
+             <androidx.appcompat.widget.AppCompatButton
+                 android:id="@+id/btn_addImg"
+-                android:layout_width="216dp"
++                android:layout_width="55dp"
+                 android:layout_height="41dp"
+                 android:layout_gravity="center"
+                 android:layout_margin="10dp"
+@@ -90,7 +90,17 @@
+                 android:text="갤러리에서 사진 추가"
+                 android:textColor="#FFFFFF"
+                 android:textStyle="bold" />
+-            
++
++            <TextView
++                android:id="@+id/addImgInfo"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_margin="10dp"
++                android:layout_weight="1"
++                android:gravity="center"
++                android:padding="10dp"
++                android:text="갤러리에서 사진 추가" />
++
+         </LinearLayout>
+     </HorizontalScrollView>
+ 
+diff --git ../sdk/build/intermediates/incremental/packageDebugResources/merged.dir/values/values.xml ../sdk/build/intermediates/incremental/packageDebugResources/merged.dir/values/values.xml
+diff --git ../sdk/build/intermediates/packaged_res/debug/values/values.xml ../sdk/build/intermediates/packaged_res/debug/values/values.xml
+diff --git ../sdk/build/intermediates/incremental/packageDebugResources/merger.xml ../sdk/build/intermediates/incremental/packageDebugResources/merger.xml
