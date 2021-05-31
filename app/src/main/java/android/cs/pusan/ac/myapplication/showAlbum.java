@@ -58,9 +58,11 @@ public class showAlbum extends AppCompatActivity {
     boolean searched = false;
     int cnt = 0;
 
+
     //구독하는 uid저장 -> 즐겨찾기 구현
     String[] uids;
     long catNum= 0; //favoritesDB 함수에서 사용
+    long favoritesCatNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class showAlbum extends AppCompatActivity {
         mArrayUri = new ArrayList<>();
         IndexArray = new Object[catNames.size()];
         cnt = 0;
+        favoritesCatNum = 0;   // favoritesDB에서 각 고양이 구독 수를 나타냄
 
         manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(manager);
@@ -192,7 +195,8 @@ public class showAlbum extends AppCompatActivity {
     } // End onCreate();
 
     // [START delete_favoritesDB]
-    private void delete_favoritesDB(String topic) {//topic은 고양이 이름// [START delete_document]
+    private void delete_favoritesDB(String topic) {//topic은 고양이 이름
+        // [START delete_document]
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         mDatabase.collection("favorites/"+uid+"/favorites_list").document(topic)
                 .delete()
@@ -224,7 +228,6 @@ public class showAlbum extends AppCompatActivity {
                             Toast.makeText(showAlbum.this, "즐겨찾기에 추가 실패!.", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                         // [START get_document]
@@ -246,7 +249,7 @@ public class showAlbum extends AppCompatActivity {
                                         }
                                         //catnumcatNamesNums/nums에서 고양이 수 가져오기_end
 
-                                        //DB에 저장
+                                        //DB에 각 고양이 이름과 고양이 등록된 사진 수 저장
                                         Map<String, Object> favorites_list = new HashMap<>();
                                         favorites_list.put("catNum", catNum);
                                         favorites_list.put("catName", topic);
@@ -278,6 +281,61 @@ public class showAlbum extends AppCompatActivity {
                             }
                         });
                         // [END get_document]
+
+                        // [START get_document2]
+                        DocumentReference docRef2 = mDatabase.collection("favorites").document(uid);
+                        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    Map<String, Object> getDB = task.getResult().getData();
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+
+                                        //favorites/uid에서 고양이 수 가져오기_start
+                                        Object ob;
+                                        if( (ob = getDB.get("favoritesNum")) != null ){ //favoritesNum값이 존재한다면
+                                            favoritesCatNum = (Long)ob;
+                                            Log.d("favoritesNum", "Document에서 기존 구독 고양이수 가져오기 성공: " + favoritesCatNum);
+                                        }else{//favoritesNum값이 존재하지 않는다면
+                                            favoritesCatNum=0;
+                                            Log.d("favoritesNum", "Document에서 기존 구독 고양이수 가져오기 처음: " + favoritesCatNum);
+                                        }
+                                        //favorites/uid에서 고양이 수 가져오기_end
+
+                                        //DB에 구독 고양이 수 저장
+                                        Map<String, Object> favoritesNum = new HashMap<>();
+                                        favoritesNum.put("favoritesNum", ++favoritesCatNum);
+                                        mDatabase.collection("favorites/").document(uid)
+                                                .set(favoritesNum)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d("favoritesNum", "DocumentSnapshot written with ID: " + aVoid);
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("favoritesNum", "Error adding document", e);
+                                                    }
+                                                });
+
+                                        // Log and toast
+//                                        Toast.makeText(showAlbum.this,  "즐겨찾기에 추가 성공!", Toast.LENGTH_SHORT).show();
+//                                        Log.d("favoritesDB", "Document exists " + catNum );
+
+                                    } else {
+                                        Log.d("favoritesNum", "Document not exists");
+                                    }
+                                } else {
+                                    Log.d("favoritesNum", "get failed with ", task.getException());
+                                }
+                            }
+                        });
+                        // [END get_document2]
+
+
                     }
                 });
     }
