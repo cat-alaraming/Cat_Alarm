@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,15 +33,32 @@ public class Interesting_Cat extends AppCompatActivity {
     String catName;
     long catNum;
 
+    private ListView listview ;
+    private ListViewAdapter adapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pick_cat);
+        setContentView(R.layout.acitivity_list);
 
         mDatabase = FirebaseFirestore.getInstance();
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid(); //사용자 개별 uid 받아오기
 
-        favorites_show(uid);
+        // Adapter 생성
+        adapter = new ListViewAdapter(); // 리스트뷰 참조 및 Adapter 달기
+        listview = (ListView) findViewById(R.id.listView);
+        listview.setAdapter(adapter);
+        //listview.setOnItemClickListener(listener);
+
+        adapter.addItem("제목1", R.drawable.cat_logo_icon, "내용1");  //(제목 부분, 이미지, 내용)
+        adapter.addItem("제목2", R.drawable.cat_logo_icon, "내용2");
+        adapter.addItem("제목3", R.drawable.cat_logo_icon, "내용3");
+        adapter.addItem("제목4", R.drawable.cat_logo_icon, "내용4");
+        adapter.addItem("제목5", R.drawable.cat_logo_icon, "내용5");
+
+        adapter.notifyDataSetChanged(); //어댑터의 변경을 알림.
+
+//        favorites_show(uid);
     }
     /*
    DB에서 정보 들고 와서 즐겨찾기 탭에서 구독 고양이 보여주기
