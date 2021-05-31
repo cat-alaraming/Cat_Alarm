@@ -242,7 +242,7 @@ public class editInfo extends Activity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
-        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 0);
         btn_addImg.setVisibility(View.GONE);
     }
