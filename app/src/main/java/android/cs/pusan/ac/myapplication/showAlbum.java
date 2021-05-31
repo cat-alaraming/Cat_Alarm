@@ -77,7 +77,7 @@ public class showAlbum extends AppCompatActivity {
 
         catNames = new ArrayList<>();
         catNames = MainActivity.catNames;
-        if( catNames == null ){
+        if( catNames.isEmpty() ){
             Log.d("EMPTYLIST", "load it");
             mDatabase.document("catNamesNums/names")
                     .get()
