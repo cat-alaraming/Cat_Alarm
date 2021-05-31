@@ -284,9 +284,7 @@ public class showAlbum extends AppCompatActivity {
                         });
                         // [END get_document]
 
-                        // [START get_document2]
-                        DocumentReference docRef2 = mDatabase.collection("favorites").document(uid);
-
+                        // [START get_all_document]
                         mDatabase.collection("favorites/"+uid+"/favorites_list")
                                 .get()
                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -301,59 +299,7 @@ public class showAlbum extends AppCompatActivity {
                                         }
                                     }
                                 });
-
-                        docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    Map<String, Object> getDB = task.getResult().getData();
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-
-                                        //favorites/uid에서 고양이 수 가져오기_start
-                                        Object ob;
-                                        if( (ob = getDB.get("favoritesNum")) != null ){ //favoritesNum값이 존재한다면
-                                            favoritesCatNum = (Long)ob;
-                                            Log.d("favoritesNum", "Document에서 기존 구독 고양이수 가져오기 성공: " + favoritesCatNum);
-                                        }else{//favoritesNum값이 존재하지 않는다면
-                                            favoritesCatNum=0;
-                                            Log.d("favoritesNum", "Document에서 기존 구독 고양이수 가져오기 처음: " + favoritesCatNum);
-                                        }
-                                        //favorites/uid에서 고양이 수 가져오기_end
-
-                                        //DB에 구독 고양이 수 저장
-                                        Map<String, Object> favoritesNum = new HashMap<>();
-                                        favoritesNum.put("favoritesNum", ++favoritesCatNum);
-                                        mDatabase.collection("favorites/").document(uid)
-                                                .set(favoritesNum)
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Log.d("favoritesNum", "DocumentSnapshot written with ID: " + aVoid);
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.w("favoritesNum", "Error adding document", e);
-                                                    }
-                                                });
-
-                                        // Log and toast
-//                                        Toast.makeText(showAlbum.this,  "즐겨찾기에 추가 성공!", Toast.LENGTH_SHORT).show();
-//                                        Log.d("favoritesDB", "Document exists " + catNum );
-
-                                    } else {
-                                        Log.d("favoritesNum", "Document not exists");
-                                    }
-                                } else {
-                                    Log.d("favoritesNum", "get failed with ", task.getException());
-                                }
-                            }
-                        });
-                        // [END get_document2]
-
-
+                        // [END get_all_document]
                     }
                 });
     }

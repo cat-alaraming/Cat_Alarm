@@ -12,10 +12,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -50,60 +54,82 @@ public class Interesting_Cat extends AppCompatActivity {
         listview.setAdapter(adapter);
         //listview.setOnItemClickListener(listener);
 
-        adapter.addItem("제목1", R.drawable.cat_logo_icon, "내용1");  //(제목 부분, 이미지, 내용)
-        adapter.addItem("제목2", R.drawable.cat_logo_icon, "내용2");
-        adapter.addItem("제목3", R.drawable.cat_logo_icon, "내용3");
-        adapter.addItem("제목4", R.drawable.cat_logo_icon, "내용4");
-        adapter.addItem("제목5", R.drawable.cat_logo_icon, "내용5");
-
-        adapter.notifyDataSetChanged(); //어댑터의 변경을 알림.
-
+        showallFavorites();
 //        favorites_show(uid);
     }
-    /*
-   DB에서 정보 들고 와서 즐겨찾기 탭에서 구독 고양이 보여주기
-   showCatInfo.java에서 showInfoFromDB 함수 수정
-    */
-    public void favorites_show(String uid){
-        tv_catName = findViewById(R.id.tv_catName); //고양이 이름 보여줄 textView
-        String docPath = "favorites/" + uid;    //DB에 접근
 
-        mDatabase.document(docPath)
+    public void showallFavorites(){
+        // [START get_all_document]
+        mDatabase.collection("favorites/"+uid+"/favorites_list")
                 .get()
-                .addOnCompleteListener(task -> {
-                    if( task.isSuccessful() ){
-                        Map<String, Object> getDB = task.getResult().getData();
-                        if( getDB == null ){
-                            Log.d("favorites_show Error", "Error get DB no data", task.getException());
-                            return;
-                        }
-                        Object ob;
-                        if( (ob = getDB.get("catName")) != null ){  //DB에서 catName 필드 가져오기
-                            catName = ob.toString();
-                            //pick_cat에 있는 텍스트뷰에 이름을 보여주기
-                            tv_catName.setText(catName);
-                        }
-                        Log.d("favorites_show DB", catName+" " );
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> getDB = document.getData();
 
-                        if( (ob = getDB.get("catNum")) != null ){  //DB에서 catNum 필드 가져오기
-                            catNum = (Long)ob;
+                                Object ob;
+                                if( (ob = getDB.get("catName")) != null ){  //DB에서 catName 필드 가져오기
+                                    catName = ob.toString();
+                                }
+                                adapter.addItem( catName, R.drawable.cat_logo_icon, "내용2");
+                                Log.d("favor_all", document.getId() + " => " + document.getData());
+                            }
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            Log.d("favor_all", "Error getting documents: ", task.getException());
                         }
-                        Log.d("favorites_show DB", "가장 최근 고양이 사진 no."+ catNum );
-
-//                        if( catNum > 0 ){
-//                            noInfo.setVisibility(View.INVISIBLE);
-//                            mRecyclerView.setVisibility(View.VISIBLE);
-//                        }
-
-                        show_recent_img();
-                    }
-                    else{
-                        Log.d("SHOW", "Error show DB", task.getException());
                     }
                 });
+        // [END get_all_document]
+    }
 
 
-    } // End favorites_show();
+//    /*
+//   DB에서 정보 들고 와서 즐겨찾기 탭에서 구독 고양이 보여주기
+//   showCatInfo.java에서 showInfoFromDB 함수 수정
+//    */
+//    public void favorites_show(String uid){
+//        tv_catName = findViewById(R.id.tv_catName); //고양이 이름 보여줄 textView
+//        String docPath = "favorites/" + uid;    //DB에 접근
+//
+//        mDatabase.document(docPath)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if( task.isSuccessful() ){
+//                        Map<String, Object> getDB = task.getResult().getData();
+//                        if( getDB == null ){
+//                            Log.d("favorites_show Error", "Error get DB no data", task.getException());
+//                            return;
+//                        }
+//                        Object ob;
+//                        if( (ob = getDB.get("catName")) != null ){  //DB에서 catName 필드 가져오기
+//                            catName = ob.toString();
+//                            //pick_cat에 있는 텍스트뷰에 이름을 보여주기
+//                            tv_catName.setText(catName);
+//                        }
+//                        Log.d("favorites_show DB", catName+" " );
+//
+//                        if( (ob = getDB.get("catNum")) != null ){  //DB에서 catNum 필드 가져오기
+//                            catNum = (Long)ob;
+//                        }
+//                        Log.d("favorites_show DB", "가장 최근 고양이 사진 no."+ catNum );
+//
+////                        if( catNum > 0 ){
+////                            noInfo.setVisibility(View.INVISIBLE);
+////                            mRecyclerView.setVisibility(View.VISIBLE);
+////                        }
+//
+//                        show_recent_img();
+//                    }
+//                    else{
+//                        Log.d("SHOW", "Error show DB", task.getException());
+//                    }
+//                });
+//
+//
+//    } // End favorites_show();
 
     /*
     Storage에서 가장 최근 고양이 이미지 들고 와서 즐겨찾기 탭에서 사진 보여주기
