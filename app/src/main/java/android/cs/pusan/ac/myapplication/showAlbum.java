@@ -75,6 +75,7 @@ public class showAlbum extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
         storageRef = storage.getReference();
 
+        catNames = new ArrayList<>();
         catNames = MainActivity.catNames;
         if( catNames.isEmpty() ){
             Log.d("EMPTYLIST", "load it");
