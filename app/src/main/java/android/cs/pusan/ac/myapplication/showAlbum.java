@@ -19,12 +19,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
+
+import static android.os.SystemClock.sleep;
 
 
 public class showAlbum extends AppCompatActivity {
@@ -71,7 +76,38 @@ public class showAlbum extends AppCompatActivity {
         storageRef = storage.getReference();
 
         catNames = MainActivity.catNames;
+        if( catNames.isEmpty() ){
+            Log.d("EMPTYLIST", "load it");
+            mDatabase.document("catNamesNums/names")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if( task.isSuccessful() ){
+                            Map<String, Object> getDB = task.getResult().getData();
+                            if( getDB == null ){
+                                Log.d("DB Error", "Error get DB no data", task.getException());
+                                return;
+                            }
+                            Object ob;
+                            if( (ob = getDB.get("allNames")) != null ){
+                                String names = ob.toString();
+                                String[] Names = names.split(",");
+                                Collections.addAll(catNames, Names);
+                                myInit();
+                            }
 
+                        }
+                        else{
+                            Log.d("SHOW", "Error show DB", task.getException());
+                        }
+                    });
+        }
+        else{
+            myInit();
+        }
+
+    } // End onCreate();
+
+    public void myInit(){
         Log.d("SHOWALBUM", catNames.get(0) + ' ' + catNames.size());
         mArrayUri = new ArrayList<>();
         IndexArray = new Object[catNames.size()];
@@ -174,7 +210,8 @@ public class showAlbum extends AppCompatActivity {
                 }
             }
         });
-    } // End onCreate();
+    }
+
 
     /*
     DB에서 대표 이미지 들고 와서 리사이클러뷰 보여주기
