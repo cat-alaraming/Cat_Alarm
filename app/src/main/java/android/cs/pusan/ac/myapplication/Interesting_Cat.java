@@ -32,7 +32,6 @@ public class Interesting_Cat extends AppCompatActivity {
     private String uid;
 
 
-    TextView tv_catName;
     ImageView cat_imgView;
     String catName;
     long catNum;
@@ -73,7 +72,11 @@ public class Interesting_Cat extends AppCompatActivity {
                                 if( (ob = getDB.get("catName")) != null ){  //DB에서 catName 필드 가져오기
                                     catName = ob.toString();
                                 }
-                                adapter.addItem( catName, R.drawable.cat_logo_icon, "내용2");
+                                if( (ob = getDB.get("catNum")) != null ) {  //DB에서 catNum 필드 가져오기
+                                    catNum = (Long) ob;
+                                }
+
+                                adapter.addItem( catName, R.drawable.cat_logo_icon , "내용2");
                                 Log.d("favor_all", document.getId() + " => " + document.getData());
                             }
                             adapter.notifyDataSetChanged();
@@ -138,6 +141,7 @@ public class Interesting_Cat extends AppCompatActivity {
         // 가장 최근 구독고양이 이미지 파일 가지고 오기
         cat_imgView = findViewById(R.id.cat_imgView);
 
+        Log.d("favorites_show storage", "");
         String filename = catNum + ".jpg";
 
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
