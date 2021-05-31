@@ -76,7 +76,7 @@ public class showAlbum extends AppCompatActivity {
         storageRef = storage.getReference();
 
         catNames = new ArrayList<>();
-        catNames = MainActivity.catNames;
+        if( MainActivity.catNames != null && !(MainActivity.catNames.isEmpty()) ) catNames = MainActivity.catNames;
         if( catNames.isEmpty() ){
             Log.d("EMPTYLIST", "load it");
             mDatabase.document("catNamesNums/names")
