@@ -34,7 +34,7 @@ public class Interesting_Cat extends AppCompatActivity {
     ImageView cat_imgView;
     String catName;
     long catNum;
-    Uri uri_ = null;
+    static Uri uri_ = null;
 
     private ListView listview ;
     private ListViewAdapter adapter;
