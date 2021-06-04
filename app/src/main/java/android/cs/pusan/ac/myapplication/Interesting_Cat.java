@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Interesting_Cat extends AppCompatActivity {
@@ -62,6 +63,7 @@ public class Interesting_Cat extends AppCompatActivity {
     public void get_recent_imgUri(){
         // 가장 최근 구독고양이 이미지 파일 가지고 오기
         String filename = catNum + ".jpg";
+        Log.d("imgUri_catNum", "catNum : " + catNum);
 
 //        uri_ = Uri.parse("https://firebasestorage.googleapis.com/v0/b/db-7a416.appspot.com/o/blackcat%2F6.jpg?alt=media&token=9870cf64-db50-4b47-a04b-70dac1f98df0");
 
@@ -82,9 +84,10 @@ public class Interesting_Cat extends AppCompatActivity {
             public void onFailure(@NonNull Exception exception) {
                 //이미지 로드 실패시
                 Log.d("get_recent_imgUri", catName + "/" + filename + " Fail");
+                Log.d("get_recent_imgUri_fail", "Uri : " + uri_);
             }
         });
-//        Log.d("before_ReturnUri", "Uri : " + uri_);
+        Log.d("before_ReturnUri", "Uri : " + uri_);
     }// End show_recent_img();
 
     public void showallFavorites(){
@@ -102,12 +105,10 @@ public class Interesting_Cat extends AppCompatActivity {
                                 if( (ob = getDB.get("catName")) != null ){  //DB에서 catName 필드 가져오기
                                     catName = ob.toString();
                                 }
-                                if( (ob = getDB.get("catNum")) != null ) {  //DB에서 catNum 필드 가져오기
-                                    catNum = (Long) ob;
-                                }
                                 get_recent_imgUri();
+                                Log.d("somewhere", catName + " => " + uri_ );
 
-                                adapter.addItem( catName, uri_ , "업데이트 시간");
+                                adapter.addItem( catName, uri_ , "");
                                 Log.d("favor_all", catName + " => " + uri_ );
                             }
                             adapter.notifyDataSetChanged();

@@ -1,6 +1,7 @@
 package android.cs.pusan.ac.myapplication;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.net.URI;
 
@@ -25,6 +26,7 @@ public class ListViewItem {
         return this.titleStr ;
     }
     public Uri getImage() {
+        Log.d("getImage_uri", uri_.toString());
         return this.uri_ ;
     }
 }

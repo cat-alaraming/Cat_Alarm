@@ -62,7 +62,8 @@ public class ListViewAdapter extends BaseAdapter {
 //        Log.d("favorite_uri1", listViewItem.getImage().toString());
         try {
             Glide.with(context).load( listViewItem.getImage() ).into(imageView);
-            Log.d("favorite_uri1", listViewItem.getImage().toString());
+//            Log.d("favorite_uri1", listViewItem.getImage().toString());
+            Log.d("favorite_uri", "uri 갸져오기 성공");
         }catch (Exception e){
             e.printStackTrace();
             Log.d("favorite_uri", "uri 갸져오기 실패");
