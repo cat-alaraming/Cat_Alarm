@@ -3,6 +3,7 @@ package android.cs.pusan.ac.myapplication;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -54,6 +55,8 @@ public class showAlbum extends AppCompatActivity {
     private Spinner spinnerTopics;
     private String topicSelected;
 
+    BaseApplication base_Activity = new BaseApplication(this);
+
     EditText editText;
     Button btn_search;
     View noInfo;
@@ -92,6 +95,7 @@ public class showAlbum extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
         storageRef = storage.getReference();
 
+        startProgress();
         catNames = new ArrayList<>();
         if( MainActivity.catNames != null && !(MainActivity.catNames.isEmpty()) ) catNames = MainActivity.catNames;
         if( catNames.isEmpty() ){
@@ -451,6 +455,32 @@ public class showAlbum extends AppCompatActivity {
                     }
                 });
     } // End searchName();
+
+
+    private void startProgress() {
+
+        progressON("로딩중...");
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressOFF();
+            }
+        }, 3500);
+
+    }
+
+    public void progressON() {
+        base_Activity.progressON(null);
+    }
+
+    public void progressON(String message) {
+        base_Activity.progressON(message);
+    }
+
+    public void progressOFF() {
+        base_Activity.progressOFF();
+    }
 
 
 }

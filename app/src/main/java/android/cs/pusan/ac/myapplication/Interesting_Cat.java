@@ -2,6 +2,7 @@ package android.cs.pusan.ac.myapplication;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -37,6 +38,8 @@ public class Interesting_Cat extends AppCompatActivity {
     private ListView listview ;
     private ListViewAdapter adapter;
 
+    BaseApplication base_Activity = new BaseApplication(this);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,7 @@ public class Interesting_Cat extends AppCompatActivity {
         String filename = catNum + ".jpg";
 
 //        uri_ = Uri.parse("https://firebasestorage.googleapis.com/v0/b/db-7a416.appspot.com/o/blackcat%2F6.jpg?alt=media&token=9870cf64-db50-4b47-a04b-70dac1f98df0");
-
+        startProgress();
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
         storageRef = storage.getReference();
         storageRef.child(cat_name + "/"+ filename).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -112,6 +115,31 @@ public class Interesting_Cat extends AppCompatActivity {
                     }
                 });
         // [END get_all_document]
+    }
+
+    private void startProgress() {
+
+        progressON("로딩중...");
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressOFF();
+            }
+        }, 2500);
+
+    }
+
+    public void progressON() {
+        base_Activity.progressON(null);
+    }
+
+    public void progressON(String message) {
+        base_Activity.progressON(message);
+    }
+
+    public void progressOFF() {
+        base_Activity.progressOFF();
     }
 
 }

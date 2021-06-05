@@ -6,8 +6,8 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="23"
-8-->C:\Users\eyi\AndroidStudioProjects\Cat_Alarm\sdk\java\AndroidManifest.xml
+8-->C:\Users\User\Desktop\test\sdk\java\AndroidManifest.xml
 9        android:targetSdkVersion="30" />
-9-->C:\Users\eyi\AndroidStudioProjects\Cat_Alarm\sdk\java\AndroidManifest.xml
+9-->C:\Users\User\Desktop\test\sdk\java\AndroidManifest.xml
 10
 11</manifest>

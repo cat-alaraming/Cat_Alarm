@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,7 +54,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener{
 
     private GoogleMap mMap;
     private int clickedcnt = 0;
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout mDrawerLayout;
     private TextView tvEmailId;
     private Boolean checking;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -425,6 +425,5 @@ public class MainActivity extends AppCompatActivity
             permission.requestPermission();
         }
     }
-
 
 }
