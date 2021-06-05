@@ -126,7 +126,7 @@ public class Interesting_Cat extends AppCompatActivity {
             public void run() {
                 progressOFF();
             }
-        }, 2500);
+        }, 1800);
 
     }
 
