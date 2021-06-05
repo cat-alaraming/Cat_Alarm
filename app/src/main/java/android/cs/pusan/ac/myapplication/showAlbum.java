@@ -21,6 +21,16 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -54,6 +64,12 @@ public class showAlbum extends AppCompatActivity {
     ArrayList<String> searchedUriName;
     boolean searched = false;
     int cnt = 0;
+
+
+    //구독하는 uid저장 -> 즐겨찾기 구현
+    String[] uids;
+    long catNum= 0; //favoritesDB 함수에서 사용
+    long favoritesCatNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +129,7 @@ public class showAlbum extends AppCompatActivity {
         mArrayUri = new ArrayList<>();
         IndexArray = new Object[catNames.size()];
         cnt = 0;
+        favoritesCatNum = 0;   // favoritesDB에서 각 고양이 구독 수를 나타냄
 
         manager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(manager);
@@ -161,6 +178,7 @@ public class showAlbum extends AppCompatActivity {
                 FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
                         .addOnCompleteListener(task ->{
                             if(task.isSuccessful()){
+                                delete_favoritesDB(topic);
                                 Toast.makeText(showAlbum.this, topic + " 구독취소 성공", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(showAlbum.this, topic + " 구독취소 실패", Toast.LENGTH_SHORT).show();
@@ -211,6 +229,115 @@ public class showAlbum extends AppCompatActivity {
                 }
             }
         });
+    } // End onCreate();
+
+    // [START delete_favoritesDB]
+    private void delete_favoritesDB(String topic) {//topic은 고양이 이름
+        // [START delete_document]
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase.collection("favorites/"+uid+"/favorites_list").document(topic)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(showAlbum.this,  "즐겨찾기에 삭제 성공!", Toast.LENGTH_SHORT).show();
+                        Log.d("delete_favoritesDB", "subDocument successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("delete_favoritesDB", "Error deleting subdocument", e);
+                    }
+                });
+        // [END delete_document]
+    }
+    // [END delete_favoritesDB]
+
+
+    // [START add_favoritesDB]
+    private void add_favoritesDB(String topic){//topic은 고양이 이름
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(showAlbum.this, "즐겨찾기에 추가 실패!.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                        // [START get_document]
+                        DocumentReference docRef = mDatabase.collection("catNamesNums").document("nums");
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    Map<String, Object> getDB = task.getResult().getData();
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+//                                        catNum[0] = document.get(catName[0]).toString();
+//                                        Log.d("favoritesDB", "Document exists" + document.getData());
+
+                                        //catnumcatNamesNums/nums에서 고양이 수 가져오기_start
+                                        Object ob;
+                                        if( (ob = getDB.get(topic)) != null ){
+                                            catNum = (Long)ob;
+                                            Log.d("f_getDB", topic+ "=>"+ "catNum: " + catNum );
+                                        }
+                                        //catnumcatNamesNums/nums에서 고양이 수 가져오기_end
+
+                                        //DB에 각 고양이 이름과 고양이 등록된 사진 수 저장
+                                        Map<String, Object> favorites_list = new HashMap<>();
+                                        favorites_list.put("catNum", catNum);
+                                        favorites_list.put("catName", topic);
+
+                                        mDatabase.collection("favorites/"+uid+"/favorites_list").document(topic)
+                                                .set(favorites_list)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Log.d("favorites_list", "DocumentSnapshot written with ID: " + aVoid);
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w("favorites_list", "Error adding document", e);
+                                                    }
+                                                });
+                                        // Log and toast
+//                                        Toast.makeText(showAlbum.this,  "즐겨찾기에 추가 성공!", Toast.LENGTH_SHORT).show();
+//                                        Log.d("favoritesDB", "Document exists " + catNum );
+
+                                    } else {
+                                        Log.d("favoritesDB", "Document not exists");
+                                    }
+                                } else {
+                                    Log.d("favoritesDB", "get failed with ", task.getException());
+                                }
+                            }
+                        });
+                        // [END get_document]
+
+                        // [START get_all_document]
+                        mDatabase.collection("favorites/"+uid+"/favorites_list")
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Log.d("favor_all", document.getId() + " => " + document.getData());
+                                            }
+                                        } else {
+                                            Log.d("favor_all", "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+                        // [END get_all_document]
+                    }
+                });
     }
 
 

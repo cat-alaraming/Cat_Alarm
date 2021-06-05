@@ -2,6 +2,7 @@ package android.cs.pusan.ac.myapplication;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,6 +91,7 @@ public class CustomImageAdapter extends RecyclerView.Adapter<CustomImageAdapter.
             }
             Glide.with(mContext).load(mArrayUri.get(position))
                     .transform(new FitCenter(), new RoundedCorners(convertDPtoPX(11))).into(holder.image);
+            Log.d("test_uri", mArrayUri.get(position).toString() );
         }
         else{
             Glide.with(mContext).load(mArrayUri.get(position)).into(holder.image);
