@@ -69,12 +69,8 @@ public class Interesting_Cat extends AppCompatActivity {
         storageRef.child(cat_name + "/"+ filename).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                //이미지 로드 성공시
-//                Glide.with(getApplicationContext())
-//                        .load(uri)
-//                        .into(cat_imgView);
                 uri_ = uri;
-                adapter.addItem( cat_name, uri_ , "업데이트 시간");
+                adapter.addItem( cat_name, uri_ , "");
                 adapter.notifyDataSetChanged();
                 Log.d("get_recent_imgUri", "Uri : " + uri_);
             }
@@ -107,11 +103,8 @@ public class Interesting_Cat extends AppCompatActivity {
                                     catNum = (Long) ob;
                                 }
                                 get_recent_imgUri(catName);
-
-//                                adapter.addItem( catName, uri_ , "업데이트 시간");
 //                                Log.d("favor_all", catName + " => " + uri_ );
                             }
-//                            adapter.notifyDataSetChanged();
 //
                         } else {
                             Log.d("favor_all", "Error getting documents: ", task.getException());
@@ -120,52 +113,5 @@ public class Interesting_Cat extends AppCompatActivity {
                 });
         // [END get_all_document]
     }
-
-
-//    /*
-//   DB에서 정보 들고 와서 즐겨찾기 탭에서 구독 고양이 보여주기
-//   showCatInfo.java에서 showInfoFromDB 함수 수정
-//    */
-//    public void favorites_show(String uid){
-//        tv_catName = findViewById(R.id.tv_catName); //고양이 이름 보여줄 textView
-//        String docPath = "favorites/" + uid;    //DB에 접근
-//
-//        mDatabase.document(docPath)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if( task.isSuccessful() ){
-//                        Map<String, Object> getDB = task.getResult().getData();
-//                        if( getDB == null ){
-//                            Log.d("favorites_show Error", "Error get DB no data", task.getException());
-//                            return;
-//                        }
-//                        Object ob;
-//                        if( (ob = getDB.get("catName")) != null ){  //DB에서 catName 필드 가져오기
-//                            catName = ob.toString();
-//                            //pick_cat에 있는 텍스트뷰에 이름을 보여주기
-//                            tv_catName.setText(catName);
-//                        }
-//                        Log.d("favorites_show DB", catName+" " );
-//
-//                        if( (ob = getDB.get("catNum")) != null ){  //DB에서 catNum 필드 가져오기
-//                            catNum = (Long)ob;
-//                        }
-//                        Log.d("favorites_show DB", "가장 최근 고양이 사진 no."+ catNum );
-//
-////                        if( catNum > 0 ){
-////                            noInfo.setVisibility(View.INVISIBLE);
-////                            mRecyclerView.setVisibility(View.VISIBLE);
-////                        }
-//
-//                        show_recent_img();
-//                    }
-//                    else{
-//                        Log.d("SHOW", "Error show DB", task.getException());
-//                    }
-//                });
-//
-//
-//    } // End favorites_show();
-
 
 }
