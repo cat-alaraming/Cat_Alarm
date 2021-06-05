@@ -30,8 +30,6 @@ public class Interesting_Cat extends AppCompatActivity {
     private FirebaseFirestore mDatabase;
     private String uid;
 
-
-    ImageView cat_imgView;
     String catName;
     long catNum;
     static Uri uri_ = null;
@@ -59,15 +57,16 @@ public class Interesting_Cat extends AppCompatActivity {
     /*
     Storage에서 가장 최근 고양이 이미지 들고 와서 즐겨찾기 탭에서 사진 보여주기
      */
-    public void get_recent_imgUri(){
+    public void get_recent_imgUri(String catName){
         // 가장 최근 구독고양이 이미지 파일 가지고 오기
+        String cat_name = catName;
         String filename = catNum + ".jpg";
 
 //        uri_ = Uri.parse("https://firebasestorage.googleapis.com/v0/b/db-7a416.appspot.com/o/blackcat%2F6.jpg?alt=media&token=9870cf64-db50-4b47-a04b-70dac1f98df0");
 
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://db-7a416.appspot.com/");
         storageRef = storage.getReference();
-        storageRef.child(catName + "/"+ filename).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        storageRef.child(cat_name + "/"+ filename).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 //이미지 로드 성공시
@@ -75,7 +74,7 @@ public class Interesting_Cat extends AppCompatActivity {
 //                        .load(uri)
 //                        .into(cat_imgView);
                 uri_ = uri;
-                adapter.addItem( catName, uri_ , "업데이트 시간");
+                adapter.addItem( cat_name, uri_ , "업데이트 시간");
                 adapter.notifyDataSetChanged();
                 Log.d("get_recent_imgUri", "Uri : " + uri_);
             }
@@ -107,10 +106,10 @@ public class Interesting_Cat extends AppCompatActivity {
                                 if( (ob = getDB.get("catNum")) != null ) {  //DB에서 catNum 필드 가져오기
                                     catNum = (Long) ob;
                                 }
-                                get_recent_imgUri();
+                                get_recent_imgUri(catName);
 
 //                                adapter.addItem( catName, uri_ , "업데이트 시간");
-                                Log.d("favor_all", catName + " => " + uri_ );
+//                                Log.d("favor_all", catName + " => " + uri_ );
                             }
 //                            adapter.notifyDataSetChanged();
 //
