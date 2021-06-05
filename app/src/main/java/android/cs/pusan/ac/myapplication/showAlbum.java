@@ -248,6 +248,7 @@ public class showAlbum extends AppCompatActivity {
                                         Object ob;
                                         if( (ob = getDB.get(topic)) != null ){
                                             catNum = (Long)ob;
+                                            Log.d("f_getDB", topic+ "=>"+ "catNum: " + catNum );
                                         }
                                         //catnumcatNamesNums/nums에서 고양이 수 가져오기_end
 

@@ -1,26 +1,34 @@
 package android.cs.pusan.ac.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.net.URI;
 import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter {
-    private ImageView iconImageView;
+    private ImageView imageView;
     private TextView titleTextView;
     private TextView contentTextView;
 
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>();
+    ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>();
+    Context mContext;
 
-    // ListViewAdapter의 생성자
-    public ListViewAdapter() {
-
+    public ListViewAdapter(Context context){
+        this.mContext = context;
     }
 
     // Adapter에 사용되는 데이터의 개수를 리턴
@@ -43,15 +51,42 @@ public class ListViewAdapter extends BaseAdapter {
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         titleTextView = (TextView) convertView.findViewById(R.id.title1);
-        iconImageView = (ImageView) convertView.findViewById(R.id.icon1);
+        imageView = (ImageView) convertView.findViewById(R.id.icon1);
         contentTextView = (TextView) convertView.findViewById(R.id.text1);
 
         ListViewItem listViewItem = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
         titleTextView.setText(listViewItem.getTitle());
-        iconImageView.setImageResource(listViewItem.getIcon());
+
+//        Log.d("favorite_uri1", listViewItem.getImage().toString());
+        try {
+            Glide.with(context).load( listViewItem.getImage() ).into(imageView);
+//            Log.d("favorite_uri1", listViewItem.getImage().toString());
+            Log.d("favorite_uri", "uri 갸져오기 성공");
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d("favorite_uri", "uri 갸져오기 실패");
+        }
+
         contentTextView.setText(listViewItem.getContent());
+
+//        LinearLayout cmdArea= (LinearLayout)convertView.findViewById(R.id.cmdArea);
+//        cmdArea.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v){
+//                //해당 리스트 클릭시 이벤트
+//                Intent intent = new Intent(getApplicationContext(), showCatInfo.class);
+////                if( searched ){
+////                    intent1.putExtra("catName", searchedUriName.get(position));
+////                }
+////                else{
+////                    intent1.putExtra("catName", IndexArray[position].toString());
+////                }
+//                startActivity(intent);
+//
+//                Toast.makeText(v.getContext(), listViewItemList.get(pos).getContent(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         return convertView;
     }
@@ -68,14 +103,13 @@ public class ListViewAdapter extends BaseAdapter {
         return listViewItemList.get(position);
     }
 
-    // 아이템 데이터 추가를 위한 함수.
-    public void addItem(String title, int icon, String content) {
+    // 아이템 데이터 추가를 위한 함수 -> image가져옴
+    public void addItem(String title, Uri image , String content) {
         ListViewItem item = new ListViewItem();
 
         item.setTitle(title);
-        item.setIcon(icon);
+        item.setImage(image);
         item.setContent(content);
-
         listViewItemList.add(item);
     }
 }
