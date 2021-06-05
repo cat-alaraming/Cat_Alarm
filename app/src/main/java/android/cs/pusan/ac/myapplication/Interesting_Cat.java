@@ -75,6 +75,8 @@ public class Interesting_Cat extends AppCompatActivity {
 //                        .load(uri)
 //                        .into(cat_imgView);
                 uri_ = uri;
+                adapter.addItem( catName, uri_ , "업데이트 시간");
+                adapter.notifyDataSetChanged();
                 Log.d("get_recent_imgUri", "Uri : " + uri_);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -107,10 +109,10 @@ public class Interesting_Cat extends AppCompatActivity {
                                 }
                                 get_recent_imgUri();
 
-                                adapter.addItem( catName, uri_ , "업데이트 시간");
+//                                adapter.addItem( catName, uri_ , "업데이트 시간");
                                 Log.d("favor_all", catName + " => " + uri_ );
                             }
-                            adapter.notifyDataSetChanged();
+//                            adapter.notifyDataSetChanged();
 //
                         } else {
                             Log.d("favor_all", "Error getting documents: ", task.getException());
