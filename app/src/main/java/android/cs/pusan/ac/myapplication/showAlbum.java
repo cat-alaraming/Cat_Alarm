@@ -162,6 +162,7 @@ public class showAlbum extends AppCompatActivity {
                 FirebaseMessaging.getInstance().subscribeToTopic(topic)
                         .addOnCompleteListener(task ->{
                             if(task.isSuccessful()){
+                                add_favoritesDB(topic);
                                 Toast.makeText(showAlbum.this, topic + " 구독 성공", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(showAlbum.this, topic + " 구독 실패", Toast.LENGTH_SHORT).show();
