@@ -188,12 +188,18 @@ public class MainActivity extends AppCompatActivity
     public void smallMarkerChecking(){
         SharedPreferences pref = getSharedPreferences("Setting",0);
         checking = pref.getBoolean("checking",true);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
         if(checking == true){
             ImageButton btn_addSmall = findViewById(R.id.addSmallMarker);
             btn_addSmall.setVisibility(View.VISIBLE);
             btn_addSmall.setOnClickListener(v -> {
-                Intent intent1 = new Intent(getApplicationContext(), addSmallMarkers.class);
-                startActivity(intent1);
+                if(user != null){
+                    Intent add_smallmarkers = new Intent(getApplicationContext(), addSmallMarkers.class);
+                    startActivity(add_smallmarkers);
+                } else{
+                    Toast.makeText(getApplicationContext(),  "로그인이 안되어 위치 표시를 하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+                }
             });
             if(mMap != null){
                 mMap.clear();
@@ -212,20 +218,37 @@ public class MainActivity extends AppCompatActivity
     }
 
     class ItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
+
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+
             switch (menuItem.getItemId()) {
                 case R.id.a: //Item의 Id값에 해당하는 것을 누를 시
-                    Intent information = new Intent(getApplicationContext(), Add_Information.class);
-                    startActivity(information);
+                    if(user!=null){
+                        Intent information = new Intent(getApplicationContext(), Add_Information.class);
+                        startActivity(information);
+                    } else {
+                        Toast.makeText(getApplicationContext(),  "로그인이 안되어 정보 추가를 하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case R.id.b: //Item의 Id값에 해당하는 것을 누를 시
-                    Intent album = new Intent(getApplicationContext(), showAlbum.class);
-                    startActivity(album);
+                    if(user!=null){
+                        Intent album = new Intent(getApplicationContext(), showAlbum.class);
+                        startActivity(album);
+                    } else {
+                        Toast.makeText(getApplicationContext(),  "로그인이 안되어 사진첩을 보실 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case R.id.c:
-                    Intent interesting = new Intent(getApplicationContext(), Interesting_Cat.class);
-                    startActivity(interesting);
+                    if(user!=null){
+                        Intent interesting = new Intent(getApplicationContext(), Interesting_Cat.class);
+                        startActivity(interesting);
+                    } else {
+                        Toast.makeText(getApplicationContext(),  "로그인이 안되어 구독 고양이를 보실 수 없습니다.", Toast.LENGTH_SHORT).show();
+                    }
                     break;
             }
             return true;
