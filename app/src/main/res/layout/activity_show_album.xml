@@ -52,8 +52,10 @@
 
         <Spinner
             android:id="@+id/spinnerTopics"
-            android:layout_width="222dp"
-            android:layout_height="51dp" />
+            android:textAlignment="center"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:background="@drawable/spinner_background"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/subscribeButton"
