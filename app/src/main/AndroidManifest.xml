@@ -67,7 +67,8 @@
         <activity android:name=".CustomImageAdapter" />
         <activity android:name=".editInfo" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".addSmallMarkers" android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".setting" />
+        <activity android:name=".setting"
+            android:theme="@style/PreferencesTheme" />
 
         <activity android:name=".BaseApplication" />
 

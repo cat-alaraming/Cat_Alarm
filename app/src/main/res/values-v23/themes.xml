@@ -16,4 +16,15 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="PreferencesTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/catfoot</item>
+
+        <item name="colorPrimaryDark">@color/gold</item>
+        <item name="colorPrimaryVariant">@color/gold</item>
+        <item name="colorPrimary">@color/gold</item>
+<!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
 </resources>

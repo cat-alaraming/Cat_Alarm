@@ -15,6 +15,6 @@
     <item
         android:id="@+id/c"
         android:icon="@drawable/cat"
-        android:title="관심 고양이"
+        android:title="구독 고양이"
         app:showAsAction="always" />
 </menu>
