@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".Add_Photo">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:scrollbars="none"
+        android:padding="10dp">
+        <LinearLayout
+            android:id="@+id/images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="#eeeeee"
+        android:layout_height="1dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FF0000"
+            android:textColor="#9F9F9F"
+            android:text="등록 취소"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btn_opencv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FF0000"
+            android:textColor="#FFC01F"
+            android:layout_marginTop="10dp"
+            android:text="고양이 탐지하기"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#00FF0000"
+            android:textColor="#FFC01F"
+            android:layout_marginTop="10dp"
+            android:text="등록하기"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/checktext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:text="고양이 얼굴 탐지 후 등록 가능합니다."
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        android:layout_marginTop="10dp"
+        android:textSize="15dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:id="@+id/tv_result"
+        />
+
+</LinearLayout>

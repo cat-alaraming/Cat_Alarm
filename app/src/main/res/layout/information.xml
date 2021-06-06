@@ -2,90 +2,125 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@drawable/catfoot"
+    tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/nametag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:text="이       름"
-        android:textSize="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/name"
-        app:layout_constraintEnd_toStartOf="@+id/name"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="201dp"
-        android:ems="10"
-        android:hint="나 비"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/nametag"
+        android:id="@+id/tv_catName"
+        android:layout_width="180dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="1dp"
+        android:textColor="@color/black"
+        android:text="   업로드할 고양이를 골라주세요"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toStartOf="@+id/btn_uploadCameraImages"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:textAlignment="center"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="148dp"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintBottom_toTopOf="@+id/spinner2"
+        app:layout_constraintEnd_toStartOf="@+id/btn_uploadImages"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_catName"></Spinner>
+
+    <Button
+        android:id="@+id/btn_uploadCameraImages"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="4dp"
+        android:text="카메라 찍기"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_catName" />
+
+    <Button
+        android:id="@+id/btn_uploadImages"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="40dp"
+        android:text="사진 올리기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinner"
+        app:layout_constraintTop_toBottomOf="@+id/btn_uploadCameraImages" />
+
     <TextView
-        android:id="@+id/agetag"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/black"
+        android:text=" 고양이 무늬를 선택한 뒤 \n 이름과 특징을 적어주세요"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/spinner2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:textAlignment="center"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/spinner_background"
+        app:layout_constraintBottom_toTopOf="@+id/editText_name"
+        app:layout_constraintEnd_toEndOf="@+id/editText_name"
+        app:layout_constraintStart_toStartOf="@+id/editText_name"
+        app:layout_constraintTop_toBottomOf="@+id/spinner"></Spinner>
+
+
+    <EditText
+        android:id="@+id/editText_name"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="8dp"
-        android:text="나       이"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/age"
-        app:layout_constraintEnd_toStartOf="@+id/age"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginEnd="10dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="     등록할 고양이 이름"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/editText_features"
+        app:layout_constraintEnd_toStartOf="@+id/btn_uploadNewCat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner2" />
 
     <EditText
-        android:id="@+id/age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:id="@+id/editText_features"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="154dp"
+        android:layout_weight="1"
         android:ems="10"
-        android:hint="3"
-        android:inputType="number"
+        android:hint="     등록할 고양이 특징"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editText_name"
+        app:layout_constraintStart_toStartOf="@+id/editText_name"
+        app:layout_constraintTop_toBottomOf="@+id/editText_name" />
+
+    <Button
+        android:id="@+id/btn_uploadNewCat"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="35dp"
+        android:text="정보 올리기"
+        app:layout_constraintBaseline_toBaselineOf="@+id/editText_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/agetag"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
-
-    <TextView
-        android:id="@+id/healthtag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="8dp"
-        android:text="건  강  정  보"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/health"
-        app:layout_constraintEnd_toStartOf="@+id/health"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/health"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:ems="10"
-        android:hint="이상 없음"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/healthtag"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
-
+        app:layout_constraintStart_toEndOf="@+id/editText_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

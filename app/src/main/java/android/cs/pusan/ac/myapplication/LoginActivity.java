@@ -63,24 +63,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-//        mAuthListener = new FirebaseAuth.AuthStateListener() {   //이거 없어도 일단 작동은 함
-//            @Override
-//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                FirebaseUser user = firebaseAuth.getCurrentUser();
-//                if(user != null) {
-//                    //User is signed in
-//                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                }else{
-//                    //User is signed out
-//                    Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
-//                    startActivity(intent);
-//
-//                }
-//            }
-//        };
-
     }
 
     private void loginUser(String email, String password) {
@@ -93,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             if(firebaseAuth.getCurrentUser().isEmailVerified()){
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                Toast.makeText(LoginActivity.this, "로그인 완료", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
                             }
@@ -104,19 +87,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-        // [END sign_in_with_email]
     }
-
-//    private void updateUI(FirebaseUser user) {
-//        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-//    }
 
     @Override
     public void onStart(){
         super.onStart();
-
-        // 활동을 초기화할 때 사용자가 현재 로그인되어 있는지 확인합니다. -> 제대로 작동안함
-//        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
     }
 
     @Override
@@ -126,6 +101,5 @@ public class LoginActivity extends AppCompatActivity {
             firebaseAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
 
 }

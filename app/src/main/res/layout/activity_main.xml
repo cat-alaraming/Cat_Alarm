@@ -5,7 +5,11 @@
     android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00FFFFFF"
+    android:backgroundTint="#00FFFFFF"
+    android:visibility="visible"
     tools:context=".MainActivity">
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -25,10 +29,43 @@
             android:orientation="vertical"
             tools:ignore="Suspicious0dp">
 
-            <FrameLayout
-                android:id="@+id/main_Frag"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="51dp">
+
+                <View
+                    android:id="@+id/view_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/toolbar"
+                    android:backgroundTint="#00000000" />
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorPrimary"
+                    app:menu="@menu/navi_menu2">
+
+                </androidx.appcompat.widget.Toolbar>
+
+                <ImageButton
+                    android:id="@+id/addSmallMarker"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="260dp"
+                    android:layout_marginTop="3dp"
+                    android:backgroundTint="#00000000"
+                    android:src="@android:drawable/ic_menu_add"
+                    android:text="addSmall"
+                    android:textColor="@color/black" />
+            </RelativeLayout>
+
+            <androidx.drawerlayout.widget.DrawerLayout
+                android:id="@+id/drawer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent">
 
                 <fragment
                     android:id="@+id/map"
@@ -37,22 +74,29 @@
                     android:layout_height="match_parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/linearLayout"
+                    app:layout_constraintTop_toTopOf="@+id/toolbar"
                     tools:context=".MapsActivity" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
 
-                <Button
-                    android:id="@+id/login_button2"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="로그인" />
+                    android:layout_height="wrap_content">
 
-            </FrameLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.navigation.NavigationView
+                    android:id="@+id/navi_View"
+                    android:layout_width="wrap_content"
+                    android:layout_height="500dp"
+                    android:layout_gravity="start"
+                    app:headerLayout="@layout/navi_header"
+                    app:menu="@menu/navi_menu" />
+
+            </androidx.drawerlayout.widget.DrawerLayout>
+
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,6 +105,7 @@
             android:layout_weight="0.7"
             android:orientation="horizontal"
             tools:ignore="Suspicious0dp">
+
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/navigationView"

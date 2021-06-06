@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">고양이 알리미</string>
+    <string name="default_notification_channel_id">default_notification_channel_id</string>
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
+    <string name="s_marker"></string>
+
+<!--    <array name="topics">-->
+<!--        <item>hurricane</item>-->
+<!--        <item>blackcat</item>-->
+<!--        <item>cheese</item>-->
+<!--        <item>cccat</item>-->
+<!--        <item>chaos</item>-->
+<!--    </array>-->
+
 </resources>
+
