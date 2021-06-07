@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,13 +70,20 @@ public class MainActivity extends AppCompatActivity
     private TextView tvEmailId;
     private Boolean checking;
 
+    static MediaPlayer mediaPlayer;
+    private Boolean checking_music;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_MyApplication);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         permissionCheck();
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.mainmusic);
+        mediaPlayer.setLooping(true);
 
         mDatabase = FirebaseFirestore.getInstance();
         catNames = new ArrayList<>();
@@ -183,6 +191,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         smallMarkerChecking();
+        mainMusicChecking();
     }
 
     public void smallMarkerChecking(){
@@ -214,6 +223,26 @@ public class MainActivity extends AppCompatActivity
                 setMarkersFromDB();
             }
 
+        }
+    }
+
+    public void mainMusicChecking(){
+        SharedPreferences pref = getSharedPreferences("Setting_music",0);
+        checking_music = pref.getBoolean("checking_music",true);
+
+        if(checking_music == true){
+            mediaPlayer.start();
+        } else{
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(mediaPlayer!=null){
+            mediaPlayer.release();
+            mediaPlayer=null;
         }
     }
 
