@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity
 
         mediaPlayer = MediaPlayer.create(this, R.raw.mainmusic);
         mediaPlayer.setLooping(true);
+        mediaPlayer.setVolume(0.2f,0.2f);
 
         mDatabase = FirebaseFirestore.getInstance();
         catNames = new ArrayList<>();
