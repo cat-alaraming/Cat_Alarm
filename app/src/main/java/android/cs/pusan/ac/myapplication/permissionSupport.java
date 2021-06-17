@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -49,7 +50,11 @@ public class permissionSupport {
     }
 
     public void requestPermission(){
-        ActivityCompat.requestPermissions(activity, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
+        String[] PL = permissionList.toArray(new String[permissionList.size()]);
+        for(String pm : PL){
+            Log.d("!!", pm);
+        }
+        ActivityCompat.requestPermissions(activity, PL, MULTIPLE_PERMISSIONS);
     }
 
     public boolean permissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
