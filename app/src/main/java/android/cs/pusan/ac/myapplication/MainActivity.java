@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        permissionCheck();
+
         mediaPlayer = MediaPlayer.create(this, R.raw.mainmusic);
         mediaPlayer.setLooping(true);
         mediaPlayer.setVolume(0.2f,0.2f);
@@ -477,9 +480,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        if( permission.permissionResult(requestCode, permissions, grantResults) ){
+        if( permission.permissionResult(requestCode, permissions, grantResults) == false ){
             permission.requestPermission();
         }
+        onMapReady(mMap);
     }
 
 }
