@@ -71,22 +71,15 @@ public class ListViewAdapter extends BaseAdapter {
 
         contentTextView.setText(listViewItem.getContent());
 
-//        LinearLayout cmdArea= (LinearLayout)convertView.findViewById(R.id.cmdArea);
-//        cmdArea.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v){
-//                //해당 리스트 클릭시 이벤트
-//                Intent intent = new Intent(getApplicationContext(), showCatInfo.class);
-////                if( searched ){
-////                    intent1.putExtra("catName", searchedUriName.get(position));
-////                }
-////                else{
-////                    intent1.putExtra("catName", IndexArray[position].toString());
-////                }
-//                startActivity(intent);
-//
-//                Toast.makeText(v.getContext(), listViewItemList.get(pos).getContent(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        LinearLayout cmdArea= (LinearLayout)convertView.findViewById(R.id.cmdArea);
+        cmdArea.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                //해당 리스트 클릭시 이벤트
+                Intent intent = new Intent(context, showCatInfo.class);
+                intent.putExtra("catName", listViewItem.getTitle());
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }
