@@ -483,7 +483,6 @@ public class MainActivity extends AppCompatActivity
         if( permission.permissionResult(requestCode, permissions, grantResults) == false ){
             permission.requestPermission();
         }
-        onMapReady(mMap);
     }
 
 }
