@@ -8,9 +8,12 @@
             android:summary="지도에 작은 마커를 생성합니다"
             android:key="small_marker"
             android:defaultValue="true"/>
-        <RingtonePreference
-            android:title="아무거나 추가하세요"
-            />
+        <CheckBoxPreference
+            android:id="@+id/background_music"
+            android:title="배경 음악"
+            android:summary="배경 음악을 켜고 끌 수 있습니다."
+            android:key="background_music"
+            android:defaultValue="true"/>
         <SwitchPreference
             android:title="아무거나 추가하세요"
             />

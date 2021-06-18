@@ -141,7 +141,6 @@ public class Add_Photo extends AppCompatActivity {
                     Uri imageuri = mArrayUri.get(i);
                     if( imageuri != null ){
                         try {
-//                            아래의 비트맵이 문제인거 같습니다....
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageuri);
                             mArrayIsOpenCV.set(i, imageprocess(bitmap, i));
                             check_text.setText("검사 결과");

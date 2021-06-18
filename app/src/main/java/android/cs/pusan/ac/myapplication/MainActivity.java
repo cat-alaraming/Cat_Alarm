@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,13 +70,21 @@ public class MainActivity extends AppCompatActivity
     private TextView tvEmailId;
     private Boolean checking;
 
+    static MediaPlayer mediaPlayer;
+    private Boolean checking_music;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_MyApplication);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         permissionCheck();
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.mainmusic);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.setVolume(0.2f,0.2f);
 
         mDatabase = FirebaseFirestore.getInstance();
         catNames = new ArrayList<>();
@@ -183,6 +192,7 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         smallMarkerChecking();
+        mainMusicChecking();
     }
 
     public void smallMarkerChecking(){
@@ -214,6 +224,26 @@ public class MainActivity extends AppCompatActivity
                 setMarkersFromDB();
             }
 
+        }
+    }
+
+    public void mainMusicChecking(){
+        SharedPreferences pref = getSharedPreferences("Setting_music",0);
+        checking_music = pref.getBoolean("checking_music",true);
+
+        if(checking_music == true){
+            mediaPlayer.start();
+        } else{
+            mediaPlayer.pause();
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(mediaPlayer!=null){
+            mediaPlayer.release();
+            mediaPlayer=null;
         }
     }
 
@@ -305,12 +335,18 @@ public class MainActivity extends AppCompatActivity
             clickedcnt++;
         }
         else if( clickedname.equals(marker.getTitle()) ){
-            clickedname = "?";
-            clickedcnt = 0;
-            Intent intent = new Intent(getApplicationContext(), showCatInfo.class);
-            intent.putExtra("catName", marker.getTitle());
-            Log.d("Marker", "send intent");
-            startActivity(intent);
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if(user!=null){
+                clickedname = "?";
+                clickedcnt = 0;
+                Intent intent = new Intent(getApplicationContext(), showCatInfo.class);
+                intent.putExtra("catName", marker.getTitle());
+                Log.d("Marker", "send intent");
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(),  "로그인이 안되어 고양이 정보를 보실 수 없습니다.", Toast.LENGTH_SHORT).show();
+            }
         }
         else{
             clickedname = marker.getTitle();
@@ -444,7 +480,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        if( permission.permissionResult(requestCode, permissions, grantResults) ){
+        if( permission.permissionResult(requestCode, permissions, grantResults) == false ){
             permission.requestPermission();
         }
     }

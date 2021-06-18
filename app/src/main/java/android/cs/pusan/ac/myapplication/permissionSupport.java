@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -15,6 +16,7 @@ import java.util.List;
 public class permissionSupport {
     private Context context;
     private Activity activity;
+    private boolean check = false;
 
     private String[] permissions = {
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -49,14 +51,19 @@ public class permissionSupport {
     }
 
     public void requestPermission(){
-        ActivityCompat.requestPermissions(activity, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
+        if( check == false ){
+            check = true;
+            ActivityCompat.requestPermissions(activity, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
+        }
     }
 
     public boolean permissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        check = false;
         if( requestCode == MULTIPLE_PERMISSIONS && (grantResults.length > 0) ){
             for(int i = 0; i < grantResults.length; i++){
-                if( grantResults[i] == -1 )
+                if( grantResults[i] == -1 ){
                     return false;
+                }
             }
         }
         return true;

@@ -1,9 +1,12 @@
 package android.cs.pusan.ac.myapplication;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,8 +24,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -48,6 +56,7 @@ public class addSmallMarkers extends Activity {
     ArrayList<String> catNames;
     public static Map<String, String> namesAndTypes;
     String selected = "??";
+    private permissionSupport permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,54 +94,78 @@ public class addSmallMarkers extends Activity {
 
         btn_cancel.setOnClickListener(v -> onBackPressed() );
         btn_submit.setOnClickListener(v -> {
-            Map<String, Object> data = new HashMap<>();
-            data.put("name", selected);
-            if( selected.equals("??") ){
-                data.put("type", "white");
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionCheck();
+                return;
             }
-            else {
-                data.put("type", namesAndTypes.get(selected));
-            }
-            int pm = 1; int pm2 = 1;
-            if( Math.random() < 0.5 ) pm = -1;
-            if( Math.random() < 0.5 ) pm2 = -1;
-            data.put("latitude", 35.233 + pm * Math.random()*0.005);
-            data.put("longitude", 129.08 + pm2 * Math.random()*0.005);
-            Date currentTime = Calendar.getInstance().getTime();
-            String yyyyMM = new SimpleDateFormat("yyyyMM", Locale.getDefault()).format(currentTime);
-            String dd = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
-            String detectedTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(currentTime);
-            data.put("detectedTime", detectedTime);
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                double latitude = location.getLatitude();
+                                double longitude = location.getLongitude();
+                                Log.d("LOCATIONTEST", "위도: " + String.valueOf(latitude) + ", 경도: " + String.valueOf(longitude));
 
-            Map<String, Object> newDoc = new HashMap<>();
-            newDoc.put("date", yyyyMM);
-            mDatabase.document("catSmallMarkers/" + yyyyMM)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if( task.isSuccessful() ){
-                            Map<String, Object> getDB = task.getResult().getData();
-                            if( getDB == null ){
-                                Log.d("DB Error", "Error get DB no data", task.getException());
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("name", selected);
+                                if( selected.equals("??") ){
+                                    data.put("type", "white");
+                                }
+                                else {
+                                    data.put("type", namesAndTypes.get(selected));
+                                }
+                                data.put("latitude", latitude);
+                                data.put("longitude", longitude);
+                                Date currentTime = Calendar.getInstance().getTime();
+                                String yyyyMM = new SimpleDateFormat("yyyyMM", Locale.getDefault()).format(currentTime);
+                                String dd = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
+                                String detectedTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(currentTime);
+                                data.put("detectedTime", detectedTime);
+
+                                Map<String, Object> newDoc = new HashMap<>();
+                                newDoc.put("date", yyyyMM);
                                 mDatabase.document("catSmallMarkers/" + yyyyMM)
-                                        .set(newDoc)
-                                        .addOnSuccessListener(documentReference -> Log.d("ADD","new Doc"))
+                                        .get()
+                                        .addOnCompleteListener(task -> {
+                                            if( task.isSuccessful() ){
+                                                Map<String, Object> getDB = task.getResult().getData();
+                                                if( getDB == null ){
+                                                    Log.d("DB Error", "Error get DB no data", task.getException());
+                                                    mDatabase.document("catSmallMarkers/" + yyyyMM)
+                                                            .set(newDoc)
+                                                            .addOnSuccessListener(documentReference -> Log.d("ADD","new Doc"))
+                                                            .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
+                                                }
+                                            }
+                                            else{
+                                                Log.d("SHOW", "Error show DB", task.getException());
+                                            }
+                                        });
+                                mDatabase.collection("catSmallMarkers/" + yyyyMM + "/" + dd)
+                                        .add(data)
+                                        .addOnSuccessListener(documentReference -> Log.d("ADD","Document added ID: "+yyyyMM))
                                         .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
+                                onBackPressed();
+
                             }
                         }
-                        else{
-                            Log.d("SHOW", "Error show DB", task.getException());
-                        }
                     });
-            mDatabase.collection("catSmallMarkers/" + yyyyMM + "/" + dd)
-                    .add(data)
-                    .addOnSuccessListener(documentReference -> Log.d("ADD","Document added ID: "+yyyyMM))
-                    .addOnFailureListener(e -> Log.d("ADD","Error adding: ",e));
-            onBackPressed();
         });
 
 
     }
 
+
+    private void permissionCheck(){
+        if( Build.VERSION.SDK_INT >= 23 ){
+            permission = new permissionSupport(this, this);
+            if( !permission.checkPermission() ){
+                permission.requestPermission();
+            }
+        }
+    }
 
 
 }
